@@ -41,6 +41,7 @@ export default function GameBoard({
   onMoveFocus,
   onSetFocus,
   onActivateCell,
+  className = "",
 }) {
   function handleKeyDown(event) {
     if (event.key === "ArrowUp") {
@@ -62,7 +63,7 @@ export default function GameBoard({
   }
 
   return (
-    <section className="glass-panel rounded-[2rem] p-4 sm:p-5">
+    <section className={`glass-panel rounded-[2rem] p-4 sm:p-5 ${className}`}>
       <div className="mb-4 flex items-end justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">{boardId}</p>

@@ -1,26 +1,12 @@
 import { useRef, useState } from "react";
+import { loadBooleanPreference, saveBooleanPreference } from "../utils/preferences";
 
 const STORAGE_KEY = "sea-battle-sound-enabled-v1";
 
-function loadPreference() {
-  if (typeof window === "undefined") {
-    return true;
-  }
-
-  const storedValue = window.localStorage.getItem(STORAGE_KEY);
-  return storedValue === null ? true : storedValue === "true";
-}
-
-function storePreference(value) {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  window.localStorage.setItem(STORAGE_KEY, String(value));
-}
-
 export default function useSoundEffects() {
-  const [soundEnabled, setSoundEnabled] = useState(loadPreference);
+  const [soundEnabled, setSoundEnabled] = useState(() =>
+    loadBooleanPreference(STORAGE_KEY, true)
+  );
   const contextRef = useRef(null);
 
   function ensureContext() {
@@ -117,7 +103,7 @@ export default function useSoundEffects() {
   function toggleSound() {
     setSoundEnabled((current) => {
       const nextValue = !current;
-      storePreference(nextValue);
+      saveBooleanPreference(STORAGE_KEY, nextValue);
       return nextValue;
     });
   }

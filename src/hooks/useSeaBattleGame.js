@@ -40,9 +40,11 @@ import {
   saveHistory,
   summarizeHistory,
 } from "../utils/history";
+import { loadBooleanPreference, saveBooleanPreference } from "../utils/preferences";
 
 const DEFAULT_DIFFICULTY = DIFFICULTY_LEVELS[1].id;
 const MAX_EVENT_LOG = 6;
+const ONBOARDING_KEY = "sea-battle-onboarding-dismissed-v1";
 
 function createFocusState() {
   return {
@@ -89,6 +91,9 @@ export default function useSeaBattleGame() {
   const [matchEndTime, setMatchEndTime] = useState(null);
   const [resultsStats, setResultsStats] = useState(null);
   const [history, setHistory] = useState(() => loadHistory());
+  const [showOnboarding, setShowOnboarding] = useState(
+    () => !loadBooleanPreference(ONBOARDING_KEY, false)
+  );
   const [eventLog, setEventLog] = useState(() => [
     createSystemEvent("Awaiting deployment orders."),
   ]);
@@ -155,7 +160,18 @@ export default function useSeaBattleGame() {
       buildBoardMatrix({
         fleet: enemyFleet,
         shots: playerShots,
-        revealShips: false,
+        revealShips: phase === GAME_PHASES.GAME_OVER,
+        recentShot: playerShots.at(-1) ?? null,
+      }),
+    [enemyFleet, phase, playerShots]
+  );
+
+  const revealedEnemyBoard = useMemo(
+    () =>
+      buildBoardMatrix({
+        fleet: enemyFleet,
+        shots: playerShots,
+        revealShips: true,
         recentShot: playerShots.at(-1) ?? null,
       }),
     [enemyFleet, playerShots]
@@ -478,6 +494,15 @@ export default function useSeaBattleGame() {
     resetState(difficulty);
   }
 
+  function dismissOnboarding() {
+    saveBooleanPreference(ONBOARDING_KEY, true);
+    setShowOnboarding(false);
+  }
+
+  function reopenOnboarding() {
+    setShowOnboarding(true);
+  }
+
   function handlePlayerBoardAction(x, y) {
     if (phase !== GAME_PHASES.SETUP) {
       return false;
@@ -520,6 +545,7 @@ export default function useSeaBattleGame() {
     availableShips,
     playerBoard,
     enemyBoard,
+    revealedEnemyBoard,
     preview,
     winner,
     announcement,
@@ -528,6 +554,7 @@ export default function useSeaBattleGame() {
     resultsStats,
     history,
     historySummary,
+    showOnboarding,
     eventLog,
     soundEnabled: soundEffects.soundEnabled,
     isAiThinking,
@@ -548,6 +575,8 @@ export default function useSeaBattleGame() {
     confirmPlayerFleet,
     fireAtEnemy,
     restartMatch,
+    dismissOnboarding,
+    reopenOnboarding,
     clearHistory,
     toggleSound: soundEffects.toggleSound,
     moveBoardFocus,
