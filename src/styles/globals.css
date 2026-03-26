@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top, rgba(0, 212, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 20% 20%, rgba(17, 138, 178, 0.18), transparent 30%),
+    linear-gradient(180deg, #07101e 0%, #030712 100%);
+  color: #e2f3ff;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.ocean-background {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 107, 107, 0.16), transparent 20%),
+    radial-gradient(circle at 80% 0%, rgba(0, 212, 255, 0.18), transparent 24%),
+    radial-gradient(circle at 50% 80%, rgba(17, 138, 178, 0.12), transparent 28%);
+  pointer-events: none;
+}
+
+.glass-panel {
+  background: rgba(9, 17, 31, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 60px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.ripple-dot::after {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 212, 255, 0.35);
+}
