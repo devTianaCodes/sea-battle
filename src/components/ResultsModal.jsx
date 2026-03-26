@@ -34,6 +34,7 @@ export default function ResultsModal({
   historySummary,
   revealedBoard,
   onReplay,
+  onReplayStep,
 }) {
   if (!open) {
     return null;
@@ -54,6 +55,11 @@ export default function ResultsModal({
             ? "Your targeting held under pressure and the opposing fleet went under."
             : "The AI found enough openings to sink your fleet. Reset and try a different deployment."}
         </p>
+        {stats?.performanceLabel ? (
+          <div className="mt-4 inline-flex rounded-full border border-cyan/20 bg-cyan/10 px-3 py-1 text-xs uppercase tracking-[0.3em] text-cyan-50">
+            {stats.performanceLabel}
+          </div>
+        ) : null}
         {stats ? (
           <>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -61,6 +67,9 @@ export default function ResultsModal({
               <StatCard label="Player shots" value={stats.playerShots} />
               <StatCard label="Opponent shots" value={stats.aiShots} />
               <StatCard label="Mission time" value={formatDuration(stats.durationMs)} />
+              <StatCard label="Ships sunk" value={stats.playerSinks} />
+              <StatCard label="Best streak" value={stats.playerBestStreak} />
+              <StatCard label="First hit" value={stats.playerFirstHitShot ? `Shot ${stats.playerFirstHitShot}` : "-"} />
               <StatCard label="Archive wins" value={historySummary?.wins ?? 0} />
               <StatCard label="Archive best acc" value={`${historySummary?.bestAccuracy ?? 0}%`} />
             </div>
@@ -75,6 +84,12 @@ export default function ResultsModal({
         <div className="mt-8 flex flex-wrap gap-3">
           <IconButton onClick={onReplay} tone="success">
             Play Again
+          </IconButton>
+          <IconButton onClick={() => onReplayStep(-1)} disabled={difficulty === "easy"}>
+            Ease Down
+          </IconButton>
+          <IconButton onClick={() => onReplayStep(1)} disabled={difficulty === "hard"}>
+            Push Harder
           </IconButton>
         </div>
       </div>

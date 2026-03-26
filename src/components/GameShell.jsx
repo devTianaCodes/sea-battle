@@ -169,6 +169,7 @@ export default function GameShell() {
         historySummary={game.historySummary}
         revealedBoard={game.revealedEnemyBoard}
         onReplay={game.restartMatch}
+        onReplayStep={game.changeDifficultyByStep}
       />
       <OnboardingModal open={game.showOnboarding} onClose={game.dismissOnboarding} />
     </div>

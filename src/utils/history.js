@@ -41,6 +41,7 @@ export function summarizeHistory(history) {
       bestAccuracy: 0,
       averageAccuracy: 0,
       averageDurationMs: 0,
+      difficultyBreakdown: {},
     };
   }
 
@@ -58,6 +59,7 @@ export function summarizeHistory(history) {
       accuracyTotal: 0,
       bestAccuracy: 0,
       durationTotal: 0,
+      difficultyBreakdown: {},
     }
   );
 
@@ -68,5 +70,13 @@ export function summarizeHistory(history) {
     bestAccuracy: totals.bestAccuracy,
     averageAccuracy: Math.round(totals.accuracyTotal / history.length),
     averageDurationMs: Math.round(totals.durationTotal / history.length),
+    difficultyBreakdown: history.reduce((breakdown, match) => {
+      const current = breakdown[match.difficulty] ?? { matches: 0, wins: 0 };
+      breakdown[match.difficulty] = {
+        matches: current.matches + 1,
+        wins: current.wins + (match.winner === "player" ? 1 : 0),
+      };
+      return breakdown;
+    }, {}),
   };
 }

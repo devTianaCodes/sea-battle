@@ -35,6 +35,27 @@ export default function HistoryPanel({ history, summary, onClearHistory }) {
       </div>
 
       <div className="mt-5">
+        <h3 className="mb-3 text-sm font-medium text-foam">Difficulty Breakdown</h3>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {["easy", "medium", "hard"].map((level) => {
+            const data = summary.difficultyBreakdown?.[level] ?? { matches: 0, wins: 0 };
+            return (
+              <div
+                key={level}
+                className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3"
+              >
+                <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">
+                  {level}
+                </div>
+                <div className="mt-2 text-sm text-foam">{data.matches} matches</div>
+                <div className="text-xs text-slate-400">{data.wins} wins</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-5">
         <h3 className="mb-3 text-sm font-medium text-foam">Recent Matches</h3>
         {history.length ? (
           <div className="space-y-2">
@@ -49,13 +70,13 @@ export default function HistoryPanel({ history, summary, onClearHistory }) {
                     <span className="uppercase">{match.difficulty}</span>
                   </div>
                   <div className="text-xs text-slate-400">
-                    {new Date(match.playedAt).toLocaleString()}
+                    {new Date(match.playedAt).toLocaleString()} • {match.performanceLabel}
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm text-foam">{match.accuracy}% acc</div>
                   <div className="text-xs text-slate-400">
-                    {formatDuration(match.durationMs)}
+                    {formatDuration(match.durationMs)} • streak {match.playerBestStreak ?? 0}
                   </div>
                 </div>
               </div>

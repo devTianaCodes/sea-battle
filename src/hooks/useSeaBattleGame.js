@@ -41,6 +41,7 @@ import {
   summarizeHistory,
 } from "../utils/history";
 import { loadBooleanPreference, saveBooleanPreference } from "../utils/preferences";
+import { buildShotMetrics } from "../utils/stats";
 
 const DEFAULT_DIFFICULTY = DIFFICULTY_LEVELS[1].id;
 const MAX_EVENT_LOG = 6;
@@ -58,18 +59,6 @@ function createSystemEvent(message, tone = "system") {
     id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     message,
     tone,
-  };
-}
-
-function buildShotMetrics(shots) {
-  const hits = shots.filter((shot) => shot.result !== "miss").length;
-  const misses = shots.length - hits;
-
-  return {
-    shots: shots.length,
-    hits,
-    misses,
-    accuracy: shots.length ? Math.round((hits / shots.length) * 100) : 0,
   };
 }
 
@@ -254,6 +243,15 @@ export default function useSeaBattleGame() {
 
   function setDifficulty(nextDifficulty) {
     resetState(nextDifficulty);
+  }
+
+  function changeDifficultyByStep(step) {
+    const currentIndex = DIFFICULTY_LEVELS.findIndex((level) => level.id === difficulty);
+    const nextIndex = Math.min(
+      DIFFICULTY_LEVELS.length - 1,
+      Math.max(0, currentIndex + step)
+    );
+    resetState(DIFFICULTY_LEVELS[nextIndex].id);
   }
 
   function selectShip(shipId) {
@@ -567,6 +565,7 @@ export default function useSeaBattleGame() {
     remainingPlayerShips,
     startNewGame,
     setDifficulty,
+    changeDifficultyByStep,
     selectShip,
     toggleOrientation,
     placeSelectedShip,
