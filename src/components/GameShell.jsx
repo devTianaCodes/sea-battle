@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { GAME_PHASES } from "../data/constants";
 import { useGameContext } from "../context/GameContext";
 import { formatDuration } from "../utils/stats";
+import BattleIntelPanel from "./BattleIntelPanel";
 import FleetSidebar from "./FleetSidebar";
 import GameBoard from "./GameBoard";
+import HistoryPanel from "./HistoryPanel";
 import ResultsModal from "./ResultsModal";
 import ShipPlacementPanel from "./ShipPlacementPanel";
 import StatusBar from "./StatusBar";
@@ -68,40 +70,55 @@ export default function GameShell() {
               onSelectShip={game.selectShip}
             />
             <ShipPlacementPanel
+              phase={game.phase}
               canConfirm={canConfirm}
               onConfirm={game.confirmPlayerFleet}
               onRandomize={game.randomizePlayerFleet}
               onRotate={game.toggleOrientation}
               selectedShipName={selectedShipName}
             />
+            <HistoryPanel
+              history={game.history}
+              summary={game.historySummary}
+              onClearHistory={game.clearHistory}
+            />
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-2">
-            <GameBoard
-              title="Your Waters"
-              subtitle="Ships visible"
-              boardId="Player Grid"
-              board={game.playerBoard}
-              focusCell={game.focus.player}
-              interactive={game.phase === GAME_PHASES.SETUP}
-              onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
-              onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
-              onActivateCell={(x, y) => game.placeSelectedShip(x, y)}
-            />
-            <GameBoard
-              title="Enemy Waters"
-              subtitle="Fog of war active"
-              boardId="Target Grid"
-              board={game.enemyBoard}
-              focusCell={game.focus.enemy}
-              interactive={
-                game.phase === GAME_PHASES.BATTLE &&
-                game.turn === "player" &&
-                !game.isAiThinking
-              }
-              onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
-              onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
-              onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
+          <div className="space-y-6">
+            <div className="grid gap-6 xl:grid-cols-2">
+              <GameBoard
+                title="Your Waters"
+                subtitle="Ships visible"
+                boardId="Player Grid"
+                board={game.playerBoard}
+                focusCell={game.focus.player}
+                interactive={game.phase === GAME_PHASES.SETUP}
+                onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
+                onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
+                onActivateCell={(x, y) => game.placeSelectedShip(x, y)}
+              />
+              <GameBoard
+                title="Enemy Waters"
+                subtitle="Fog of war active"
+                boardId="Target Grid"
+                board={game.enemyBoard}
+                focusCell={game.focus.enemy}
+                interactive={
+                  game.phase === GAME_PHASES.BATTLE &&
+                  game.turn === "player" &&
+                  !game.isAiThinking
+                }
+                onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
+                onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
+                onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
+              />
+            </div>
+            <BattleIntelPanel
+              playerMetrics={game.playerMetrics}
+              enemyMetrics={game.enemyMetrics}
+              playerFleetStatus={game.playerFleetStatus}
+              enemyFleetStatus={game.enemyFleetStatus}
+              eventLog={game.eventLog}
             />
           </div>
         </section>
@@ -111,6 +128,8 @@ export default function GameShell() {
         open={game.phase === GAME_PHASES.GAME_OVER}
         winner={game.winner}
         stats={game.resultsStats}
+        difficulty={game.difficulty}
+        historySummary={game.historySummary}
         onReplay={game.restartMatch}
       />
     </div>

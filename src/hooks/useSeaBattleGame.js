@@ -25,17 +25,47 @@ import {
 } from "../utils/gameRules";
 import {
   getPlacedShipById,
+  formatCoordinate,
+  formatShipSpan,
   getRemainingShips,
   getShipCells,
   getShipDefinition,
+  isShipSunk,
 } from "../utils/ships";
+import {
+  appendHistoryEntry,
+  loadHistory,
+  saveHistory,
+  summarizeHistory,
+} from "../utils/history";
 
 const DEFAULT_DIFFICULTY = DIFFICULTY_LEVELS[1].id;
+const MAX_EVENT_LOG = 6;
 
 function createFocusState() {
   return {
     player: { x: 0, y: 0 },
     enemy: { x: 0, y: 0 },
+  };
+}
+
+function createSystemEvent(message, tone = "system") {
+  return {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    message,
+    tone,
+  };
+}
+
+function buildShotMetrics(shots) {
+  const hits = shots.filter((shot) => shot.result !== "miss").length;
+  const misses = shots.length - hits;
+
+  return {
+    shots: shots.length,
+    hits,
+    misses,
+    accuracy: shots.length ? Math.round((hits / shots.length) * 100) : 0,
   };
 }
 
@@ -55,6 +85,11 @@ export default function useSeaBattleGame() {
   );
   const [matchStartTime, setMatchStartTime] = useState(Date.now());
   const [matchEndTime, setMatchEndTime] = useState(null);
+  const [resultsStats, setResultsStats] = useState(null);
+  const [history, setHistory] = useState(() => loadHistory());
+  const [eventLog, setEventLog] = useState(() => [
+    createSystemEvent("Awaiting deployment orders."),
+  ]);
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [focus, setFocus] = useState(createFocusState);
   const aiTimeoutRef = useRef(null);
@@ -81,6 +116,10 @@ export default function useSeaBattleGame() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    saveHistory(history);
+  }, [history]);
 
   const preview = useMemo(() => {
     if (phase !== GAME_PHASES.SETUP || !selectedShipId) {
@@ -127,19 +166,38 @@ export default function useSeaBattleGame() {
     [playerFleet]
   );
 
-  const resultsStats = useMemo(() => {
-    if (phase !== GAME_PHASES.GAME_OVER || !winner || !matchEndTime) {
-      return null;
-    }
+  const playerMetrics = useMemo(() => buildShotMetrics(playerShots), [playerShots]);
+  const enemyMetrics = useMemo(() => buildShotMetrics(aiShots), [aiShots]);
 
-    return buildResultsStats({
-      startTime: matchStartTime,
-      endTime: matchEndTime,
-      playerShots,
-      aiShots,
-      winner,
-    });
-  }, [aiShots, matchEndTime, matchStartTime, phase, playerShots, winner]);
+  const playerFleetStatus = useMemo(
+    () =>
+      playerFleet.map((ship) => ({
+        id: ship.id,
+        name: ship.name,
+        size: ship.size,
+        isSunk: isShipSunk(ship),
+        hits: ship.hits.length,
+      })),
+    [playerFleet]
+  );
+
+  const enemyFleetStatus = useMemo(
+    () =>
+      enemyFleet.map((ship) => ({
+        id: ship.id,
+        name: ship.name,
+        size: ship.size,
+        isSunk: isShipSunk(ship),
+        hits: ship.hits.length,
+      })),
+    [enemyFleet]
+  );
+
+  const historySummary = useMemo(() => summarizeHistory(history), [history]);
+
+  function pushEvent(message, tone = "system") {
+    setEventLog((current) => [createSystemEvent(message, tone), ...current].slice(0, MAX_EVENT_LOG));
+  }
 
   function clearAiTimeout() {
     if (aiTimeoutRef.current) {
@@ -163,6 +221,8 @@ export default function useSeaBattleGame() {
     setAnnouncement("Place your fleet and prepare for contact.");
     setMatchStartTime(Date.now());
     setMatchEndTime(null);
+    setResultsStats(null);
+    setEventLog([createSystemEvent("Awaiting deployment orders.")]);
     setIsAiThinking(false);
     setFocus(createFocusState());
   }
@@ -222,6 +282,7 @@ export default function useSeaBattleGame() {
     }
 
     const nextFleet = placeShip(playerFleet, ship, x, y, orientation);
+    const deployedShip = nextFleet.find((candidate) => candidate.id === ship.id);
     const remaining = SHIP_DEFINITIONS.filter(
       (candidate) => !nextFleet.some((placedShip) => placedShip.id === candidate.id)
     );
@@ -229,6 +290,7 @@ export default function useSeaBattleGame() {
     setPlayerFleet(nextFleet);
     setSelectedShipId(remaining[0]?.id ?? null);
     setAnnouncement(`${ship.name} locked in.`);
+    pushEvent(`Deployed ${ship.name} across ${formatShipSpan(deployedShip.cells)}.`, "player");
     return true;
   }
 
@@ -240,6 +302,7 @@ export default function useSeaBattleGame() {
     setPlayerFleet(randomizeFleet(SHIP_DEFINITIONS));
     setSelectedShipId(null);
     setAnnouncement("Fleet randomized. Confirm when ready.");
+    pushEvent("Fleet randomized for a faster launch.", "system");
   }
 
   function confirmPlayerFleet() {
@@ -252,19 +315,44 @@ export default function useSeaBattleGame() {
     setTurn(TURN_STATES.PLAYER);
     setMatchStartTime(Date.now());
     setAnnouncement("Battle stations. Fire when ready.");
+    pushEvent(`Battle started on ${difficulty.toUpperCase()} difficulty.`, "system");
     return true;
   }
 
-  function finishGame(nextWinner) {
+  function finishGame(nextWinner, nextPlayerShots, nextAiShots) {
+    const endTime = Date.now();
+    const nextResults = buildResultsStats({
+      startTime: matchStartTime,
+      endTime,
+      playerShots: nextPlayerShots,
+      aiShots: nextAiShots,
+      winner: nextWinner,
+    });
+
     setWinner(nextWinner);
     setPhase(GAME_PHASES.GAME_OVER);
     setTurn(TURN_STATES.TRANSITION);
     setIsAiThinking(false);
-    setMatchEndTime(Date.now());
+    setMatchEndTime(endTime);
+    setResultsStats(nextResults);
     setAnnouncement(
       nextWinner === "player"
         ? "Enemy fleet neutralized."
         : "Your fleet has been lost."
+    );
+    pushEvent(
+      nextWinner === "player"
+        ? "Mission success. The enemy fleet has been sunk."
+        : "Mission failed. Your fleet was destroyed.",
+      nextWinner === "player" ? "player" : "enemy"
+    );
+    setHistory((current) =>
+      appendHistoryEntry(current, {
+        id: `${endTime}-${nextWinner}-${difficulty}`,
+        difficulty,
+        playedAt: endTime,
+        ...nextResults,
+      })
     );
   }
 
@@ -284,14 +372,26 @@ export default function useSeaBattleGame() {
       ? getPlacedShipById(outcome.fleet, outcome.shot.shipId)?.name
       : null;
 
+    const nextPlayerShots = [...playerShots, outcome.shot];
+
     setEnemyFleet(outcome.fleet);
-    setPlayerShots((current) => [...current, outcome.shot]);
+    setPlayerShots(nextPlayerShots);
     setAnnouncement(
       getAnnouncementForShot(outcome.shot, shipName, "You")
     );
+    pushEvent(
+      `You fired at ${formatCoordinate(x, y)}: ${
+        outcome.shot.result === "miss"
+          ? "miss"
+          : outcome.shot.result === "sunk"
+            ? `${shipName} sunk`
+            : `${shipName} hit`
+      }.`,
+      "player"
+    );
 
     if (allShipsSunk(outcome.fleet)) {
-      finishGame("player");
+      finishGame("player", nextPlayerShots, aiShots);
       return true;
     }
 
@@ -321,14 +421,25 @@ export default function useSeaBattleGame() {
         : null;
 
       aiPlayer.notifyShotResult(outcome.shot);
+      const nextAiShots = [...aiShots, outcome.shot];
       setPlayerFleet(outcome.fleet);
-      setAiShots((current) => [...current, outcome.shot]);
+      setAiShots(nextAiShots);
       setAnnouncement(
         getAnnouncementForShot(outcome.shot, shipName, "Opponent")
       );
+      pushEvent(
+        `Opponent fired at ${formatCoordinate(nextShot.x, nextShot.y)}: ${
+          outcome.shot.result === "miss"
+            ? "miss"
+            : outcome.shot.result === "sunk"
+              ? `${shipName} sunk`
+              : `${shipName} hit`
+        }.`,
+        "enemy"
+      );
 
       if (allShipsSunk(outcome.fleet)) {
-        finishGame("ai");
+        finishGame("ai", playerShots, nextAiShots);
         return;
       }
 
@@ -341,6 +452,11 @@ export default function useSeaBattleGame() {
 
   function restartMatch() {
     resetState(difficulty);
+  }
+
+  function clearHistory() {
+    setHistory([]);
+    pushEvent("Local battle history cleared.", "system");
   }
 
   const phaseLabel = getPhaseLabel(phase);
@@ -367,8 +483,15 @@ export default function useSeaBattleGame() {
     matchStartTime,
     matchEndTime,
     resultsStats,
+    history,
+    historySummary,
+    eventLog,
     isAiThinking,
     focus,
+    playerMetrics,
+    enemyMetrics,
+    playerFleetStatus,
+    enemyFleetStatus,
     remainingEnemyShips,
     remainingPlayerShips,
     startNewGame,
@@ -380,6 +503,7 @@ export default function useSeaBattleGame() {
     confirmPlayerFleet,
     fireAtEnemy,
     restartMatch,
+    clearHistory,
     moveBoardFocus,
     setBoardFocus,
   };

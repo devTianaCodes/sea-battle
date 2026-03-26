@@ -1,7 +1,14 @@
 import { formatDuration } from "../utils/stats";
 import IconButton from "./IconButton";
 
-export default function ResultsModal({ open, winner, stats, onReplay }) {
+export default function ResultsModal({
+  open,
+  winner,
+  stats,
+  difficulty,
+  historySummary,
+  onReplay,
+}) {
   if (!open) {
     return null;
   }
@@ -13,6 +20,9 @@ export default function ResultsModal({ open, winner, stats, onReplay }) {
         <h2 className="mt-3 font-display text-4xl text-foam">
           {winner === "player" ? "Victory" : "Defeat"}
         </h2>
+        <div className="mt-3 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.3em] text-slate-300">
+          {difficulty} difficulty
+        </div>
         <p className="mt-2 max-w-lg text-sm leading-6 text-slate-300">
           {winner === "player"
             ? "Your targeting held under pressure and the opposing fleet went under."
@@ -24,6 +34,8 @@ export default function ResultsModal({ open, winner, stats, onReplay }) {
             <StatCard label="Player shots" value={stats.playerShots} />
             <StatCard label="Opponent shots" value={stats.aiShots} />
             <StatCard label="Mission time" value={formatDuration(stats.durationMs)} />
+            <StatCard label="Archive wins" value={historySummary?.wins ?? 0} />
+            <StatCard label="Archive best acc" value={`${historySummary?.bestAccuracy ?? 0}%`} />
           </div>
         ) : null}
         <div className="mt-8 flex flex-wrap gap-3">

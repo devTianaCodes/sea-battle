@@ -1,7 +1,11 @@
-import { GRID_SIZE, ORIENTATIONS, SHIP_DEFINITIONS } from "../data/constants";
+import { GRID_SIZE, LETTERS, ORIENTATIONS, SHIP_DEFINITIONS } from "../data/constants";
 
 export function coordinateKey(x, y) {
   return `${x},${y}`;
+}
+
+export function formatCoordinate(x, y) {
+  return `${LETTERS[x]}${y + 1}`;
 }
 
 export function parseCoordinateKey(key) {
@@ -70,4 +74,16 @@ export function isSameCoordinate(a, b) {
 
 export function sortCoordinates(coords) {
   return [...coords].sort((left, right) => left.y - right.y || left.x - right.x);
+}
+
+export function formatShipSpan(cells) {
+  if (!cells?.length) {
+    return "";
+  }
+
+  const ordered = sortCoordinates(cells);
+  return `${formatCoordinate(ordered[0].x, ordered[0].y)}-${formatCoordinate(
+    ordered.at(-1).x,
+    ordered.at(-1).y
+  )}`;
 }
