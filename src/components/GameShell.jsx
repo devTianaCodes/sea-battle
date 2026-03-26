@@ -57,6 +57,8 @@ export default function GameShell() {
           announcement={game.announcement}
           timerLabel={timerLabel}
           onRestart={game.restartMatch}
+          soundEnabled={game.soundEnabled}
+          onToggleSound={game.toggleSound}
           difficultyLocked={game.phase === GAME_PHASES.BATTLE}
         />
 
@@ -95,7 +97,7 @@ export default function GameShell() {
                 interactive={game.phase === GAME_PHASES.SETUP}
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
-                onActivateCell={(x, y) => game.placeSelectedShip(x, y)}
+                onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
               />
               <GameBoard
                 title="Enemy Waters"

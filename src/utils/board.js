@@ -18,6 +18,7 @@ export function createEmptyBoard() {
       isHit: false,
       isMiss: false,
       isSunkReveal: false,
+      isRecentShot: false,
     }))
   );
 }
@@ -140,7 +141,13 @@ export function getSunkShip(fleet, shipId) {
   return ship && isShipSunk(ship) ? ship : null;
 }
 
-export function buildBoardMatrix({ fleet, shots, revealShips = false, preview = null }) {
+export function buildBoardMatrix({
+  fleet,
+  shots,
+  revealShips = false,
+  preview = null,
+  recentShot = null,
+}) {
   const board = createEmptyBoard();
   const shipMap = getShipCoverageMap(fleet);
 
@@ -158,6 +165,10 @@ export function buildBoardMatrix({ fleet, shots, revealShips = false, preview = 
       if (shot) {
         cell.isHit = shot.result === SHOT_RESULTS.HIT || shot.result === SHOT_RESULTS.SUNK;
         cell.isMiss = shot.result === SHOT_RESULTS.MISS;
+      }
+
+      if (recentShot?.x === cell.x && recentShot?.y === cell.y) {
+        cell.isRecentShot = true;
       }
 
       if (!revealShips && !cell.isHit) {

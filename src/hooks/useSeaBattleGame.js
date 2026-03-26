@@ -8,6 +8,7 @@ import {
   TURN_STATES,
 } from "../data/constants";
 import useAIPlayer from "./useAIPlayer";
+import useSoundEffects from "./useSoundEffects";
 import {
   allShipsSunk,
   buildBoardMatrix,
@@ -28,6 +29,7 @@ import {
   formatCoordinate,
   formatShipSpan,
   getRemainingShips,
+  getShipAtCoordinate,
   getShipCells,
   getShipDefinition,
   isShipSunk,
@@ -94,6 +96,7 @@ export default function useSeaBattleGame() {
   const [focus, setFocus] = useState(createFocusState);
   const aiTimeoutRef = useRef(null);
   const aiPlayer = useAIPlayer(difficulty);
+  const soundEffects = useSoundEffects();
 
   const availableShips = useMemo(
     () =>
@@ -142,6 +145,7 @@ export default function useSeaBattleGame() {
         shots: aiShots,
         revealShips: true,
         preview,
+        recentShot: aiShots.at(-1) ?? null,
       }),
     [aiShots, playerFleet, preview]
   );
@@ -152,6 +156,7 @@ export default function useSeaBattleGame() {
         fleet: enemyFleet,
         shots: playerShots,
         revealShips: false,
+        recentShot: playerShots.at(-1) ?? null,
       }),
     [enemyFleet, playerShots]
   );
@@ -239,6 +244,19 @@ export default function useSeaBattleGame() {
     if (phase !== GAME_PHASES.SETUP) {
       return;
     }
+
+    const placedShip = getPlacedShipById(playerFleet, shipId);
+
+    if (placedShip) {
+      setPlayerFleet((current) => current.filter((ship) => ship.id !== shipId));
+      setSelectedShipId(shipId);
+      setOrientation(placedShip.orientation);
+      setAnnouncement(`${placedShip.name} recalled for repositioning.`);
+      pushEvent(`Recalled ${placedShip.name} for repositioning.`, "system");
+      soundEffects.play("recall");
+      return;
+    }
+
     setSelectedShipId(shipId);
   }
 
@@ -291,6 +309,7 @@ export default function useSeaBattleGame() {
     setSelectedShipId(remaining[0]?.id ?? null);
     setAnnouncement(`${ship.name} locked in.`);
     pushEvent(`Deployed ${ship.name} across ${formatShipSpan(deployedShip.cells)}.`, "player");
+    soundEffects.play("place");
     return true;
   }
 
@@ -303,6 +322,7 @@ export default function useSeaBattleGame() {
     setSelectedShipId(null);
     setAnnouncement("Fleet randomized. Confirm when ready.");
     pushEvent("Fleet randomized for a faster launch.", "system");
+    soundEffects.play("randomize");
   }
 
   function confirmPlayerFleet() {
@@ -316,6 +336,7 @@ export default function useSeaBattleGame() {
     setMatchStartTime(Date.now());
     setAnnouncement("Battle stations. Fire when ready.");
     pushEvent(`Battle started on ${difficulty.toUpperCase()} difficulty.`, "system");
+    soundEffects.play("start");
     return true;
   }
 
@@ -346,6 +367,7 @@ export default function useSeaBattleGame() {
         : "Mission failed. Your fleet was destroyed.",
       nextWinner === "player" ? "player" : "enemy"
     );
+    soundEffects.play(nextWinner === "player" ? "win" : "lose");
     setHistory((current) =>
       appendHistoryEntry(current, {
         id: `${endTime}-${nextWinner}-${difficulty}`,
@@ -389,6 +411,7 @@ export default function useSeaBattleGame() {
       }.`,
       "player"
     );
+    soundEffects.play(outcome.shot.result);
 
     if (allShipsSunk(outcome.fleet)) {
       finishGame("player", nextPlayerShots, aiShots);
@@ -437,6 +460,7 @@ export default function useSeaBattleGame() {
         }.`,
         "enemy"
       );
+      soundEffects.play(outcome.shot.result);
 
       if (allShipsSunk(outcome.fleet)) {
         finishGame("ai", playerShots, nextAiShots);
@@ -452,6 +476,25 @@ export default function useSeaBattleGame() {
 
   function restartMatch() {
     resetState(difficulty);
+  }
+
+  function handlePlayerBoardAction(x, y) {
+    if (phase !== GAME_PHASES.SETUP) {
+      return false;
+    }
+
+    if (selectedShipId) {
+      return placeSelectedShip(x, y);
+    }
+
+    const placedShip = getShipAtCoordinate(playerFleet, x, y);
+
+    if (!placedShip) {
+      return false;
+    }
+
+    selectShip(placedShip.id);
+    return true;
   }
 
   function clearHistory() {
@@ -486,6 +529,7 @@ export default function useSeaBattleGame() {
     history,
     historySummary,
     eventLog,
+    soundEnabled: soundEffects.soundEnabled,
     isAiThinking,
     focus,
     playerMetrics,
@@ -499,11 +543,13 @@ export default function useSeaBattleGame() {
     selectShip,
     toggleOrientation,
     placeSelectedShip,
+    handlePlayerBoardAction,
     randomizePlayerFleet,
     confirmPlayerFleet,
     fireAtEnemy,
     restartMatch,
     clearHistory,
+    toggleSound: soundEffects.toggleSound,
     moveBoardFocus,
     setBoardFocus,
   };

@@ -21,7 +21,7 @@ export default function ShipPlacementPanel({
           ? "Track the live intel, watch the enemy rhythm, and restart when you want a fresh tactical puzzle."
           : selectedShipName
           ? `Selected ship: ${selectedShipName}. Move across the grid with the mouse or arrow keys, then press Enter to place.`
-          : "All ships are placed. Confirm deployment to begin the match."}
+          : "All ships are placed. Confirm deployment to begin the match, or click any placed ship to reposition it."}
       </p>
       <div className="flex flex-wrap gap-3">
         <IconButton onClick={onRotate} tone="accent" disabled={phase !== "setup"}>

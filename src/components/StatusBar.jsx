@@ -9,6 +9,8 @@ export default function StatusBar({
   announcement,
   timerLabel,
   onRestart,
+  soundEnabled,
+  onToggleSound,
   difficultyLocked,
 }) {
   return (
@@ -38,9 +40,14 @@ export default function StatusBar({
             onChange={onDifficultyChange}
             disabled={difficultyLocked}
           />
-          <IconButton onClick={onRestart} tone="warm">
-            Restart Match
-          </IconButton>
+          <div className="flex flex-wrap gap-3 lg:justify-end">
+            <IconButton onClick={onToggleSound} tone={soundEnabled ? "accent" : "default"}>
+              {soundEnabled ? "Sound On" : "Sound Off"}
+            </IconButton>
+            <IconButton onClick={onRestart} tone="warm">
+              Restart Match
+            </IconButton>
+          </div>
         </div>
       </div>
     </div>
