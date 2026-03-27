@@ -246,6 +246,7 @@ export default function GameShell() {
                 board={game.playerBoard}
                 focusCell={game.focus.player}
                 interactive={game.phase === GAME_PHASES.SETUP}
+                cursorMode="placement"
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
                 onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
@@ -262,6 +263,8 @@ export default function GameShell() {
                   game.turn === "player" &&
                   !game.isAiThinking
                 }
+                isThinking={game.isAiThinking}
+                cursorMode="battle"
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
                 onActivateCell={(x, y) => game.fireAtEnemy(x, y)}

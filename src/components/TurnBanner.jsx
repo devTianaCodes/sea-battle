@@ -5,7 +5,10 @@ export default function TurnBanner({ visible, label }) {
 
   return (
     <div className="pointer-events-none fixed left-1/2 top-6 z-40 -translate-x-1/2 animate-banner-in">
-      <div className="glass-panel rounded-full px-5 py-3 text-sm font-medium tracking-[0.3em] text-cyan-100 shadow-glow">
+      <div className="glass-panel glass-glow-cyan flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium tracking-[0.3em] text-cyan-100 shadow-glow">
+        <span className="thinking-dot" />
+        <span className="thinking-dot" />
+        <span className="thinking-dot" />
         {label}
       </div>
     </div>

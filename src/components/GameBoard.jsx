@@ -42,6 +42,8 @@ export default function GameBoard({
   board,
   focusCell,
   interactive,
+  isThinking = false,
+  cursorMode = "default",
   onMoveFocus,
   onSetFocus,
   onActivateCell,
@@ -67,7 +69,15 @@ export default function GameBoard({
   }
 
   return (
-    <section className={`glass-panel rounded-[2rem] p-4 sm:p-5 ${className}`}>
+    <section
+      className={`glass-panel rounded-[2rem] p-4 sm:p-5 ${
+        cursorMode === "battle"
+          ? "cursor-battle"
+          : cursorMode === "placement"
+            ? "cursor-placement"
+            : ""
+      } ${className}`}
+    >
       <div className="mb-4 flex items-end justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">{boardId}</p>
@@ -99,7 +109,7 @@ export default function GameBoard({
             ))}
           </div>
           <div
-            className="grid grid-cols-10 gap-2"
+            className="relative grid grid-cols-10 gap-2"
             onKeyDown={handleKeyDown}
             role="grid"
             aria-label={title}
@@ -123,6 +133,16 @@ export default function GameBoard({
                 />
               );
             })}
+            {isThinking ? (
+              <div className="glass-light absolute inset-0 flex items-center justify-center rounded-[1.25rem] border border-cyan/15">
+                <div className="flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/80 px-4 py-2 text-xs uppercase tracking-[0.3em] text-cyan-50">
+                  <span className="thinking-dot" />
+                  <span className="thinking-dot" />
+                  <span className="thinking-dot" />
+                  Opponent scanning
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

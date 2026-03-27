@@ -1,4 +1,5 @@
 import IconButton from "./IconButton";
+import useBodyScrollLock from "../hooks/useBodyScrollLock";
 
 function ShortcutRow({ keys, description }) {
   return (
@@ -19,13 +20,15 @@ function ShortcutRow({ keys, description }) {
 }
 
 export default function PauseModal({ open, onResume, onOpenInstructions, onMainMenu }) {
+  useBodyScrollLock(open);
+
   if (!open) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 z-[57] flex items-center justify-center bg-[#020817]/80 px-4 backdrop-blur-md animate-fade-in">
-      <div className="glass-panel w-full max-w-2xl rounded-[2rem] p-6 sm:p-8">
+      <div className="glass-frosted w-full max-w-2xl rounded-[2rem] p-6 sm:p-8">
         <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Paused</p>
         <h2 className="mt-3 font-display text-4xl text-foam">Battle on hold</h2>
         <p className="mt-3 max-w-xl text-sm leading-7 text-slate-300">

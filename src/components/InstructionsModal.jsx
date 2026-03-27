@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import IconButton from "./IconButton";
 
 function Section({ title, children }) {
@@ -11,6 +12,8 @@ function Section({ title, children }) {
 }
 
 export default function InstructionsModal({ open, onClose }) {
+  useBodyScrollLock(open);
+
   return (
     <AnimatePresence>
       {open ? (
@@ -25,7 +28,7 @@ export default function InstructionsModal({ open, onClose }) {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 18, scale: 0.98 }}
             transition={{ duration: 0.25 }}
-            className="glass-panel max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] p-6 sm:p-8"
+            className="glass-frosted max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] p-6 sm:p-8"
           >
             <div className="flex items-start justify-between gap-4">
               <div>

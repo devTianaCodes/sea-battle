@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DIFFICULTY_LEVELS } from "../data/constants";
+import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import IconButton from "./IconButton";
 
 function TabButton({ active, onClick, children }) {
@@ -54,6 +55,7 @@ export default function SettingsModal({
   onResetToMenu,
 }) {
   const [tab, setTab] = useState(defaultTab);
+  useBodyScrollLock(open);
 
   if (!open) {
     return null;
@@ -61,7 +63,7 @@ export default function SettingsModal({
 
   return (
     <div className="fixed inset-0 z-[58] flex items-center justify-center bg-[#020817]/80 px-4 py-6 backdrop-blur-md animate-fade-in">
-      <div className="glass-panel max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] p-6 sm:p-8">
+      <div className="glass-frosted max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Control Room</p>

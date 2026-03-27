@@ -1,4 +1,5 @@
 import { formatDuration } from "../utils/stats";
+import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import IconButton from "./IconButton";
 
 function MiniBoard({ board }) {
@@ -38,13 +39,15 @@ export default function ResultsModal({
   onChangeDifficulty,
   onMainMenu,
 }) {
+  useBodyScrollLock(open);
+
   if (!open) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#020817]/70 px-4 backdrop-blur-md animate-fade-in">
-      <div className="glass-panel animate-modal-in w-full max-w-xl rounded-[2rem] p-8">
+      <div className="glass-frosted animate-modal-in w-full max-w-xl rounded-[2rem] p-6 sm:p-8">
         <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Results</p>
         <h2 className="mt-3 font-display text-4xl text-foam">
           {winner === "player" ? "Victory" : "Defeat"}

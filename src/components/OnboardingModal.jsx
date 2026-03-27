@@ -1,4 +1,5 @@
 import IconButton from "./IconButton";
+import useBodyScrollLock from "../hooks/useBodyScrollLock";
 
 function TipCard({ title, body }) {
   return (
@@ -10,13 +11,15 @@ function TipCard({ title, body }) {
 }
 
 export default function OnboardingModal({ open, onClose }) {
+  useBodyScrollLock(open);
+
   if (!open) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#020817]/80 px-4 backdrop-blur-md animate-fade-in">
-      <div className="glass-panel animate-modal-in w-full max-w-3xl rounded-[2rem] p-6 sm:p-8">
+      <div className="glass-frosted animate-modal-in w-full max-w-3xl rounded-[2rem] p-6 sm:p-8">
         <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Welcome Aboard</p>
         <h2 className="mt-3 font-display text-3xl text-foam sm:text-4xl">
           Command the fleet in three phases
