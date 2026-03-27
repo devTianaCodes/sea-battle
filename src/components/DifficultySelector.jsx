@@ -97,8 +97,8 @@ export default function DifficultySelector({
   }
 
   return (
-    <div className="mx-auto flex h-full w-full min-w-0 max-w-6xl flex-col justify-between overflow-hidden py-0.5 sm:justify-center sm:py-2">
-      <div className="mb-2 flex min-w-0 flex-wrap items-center justify-between gap-2 px-0.5 sm:mb-8 sm:gap-3 sm:px-0">
+    <div className="mx-auto flex h-auto w-full min-w-0 max-w-6xl flex-col justify-start overflow-hidden pt-0 pb-0.5 sm:h-full sm:justify-center sm:py-2">
+      <div className="mb-1.5 flex min-w-0 flex-wrap items-center justify-between gap-2 px-0.5 sm:mb-8 sm:gap-3 sm:px-0">
         <div>
           <p className="text-[0.65rem] uppercase tracking-[0.22em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">
             Difficulty

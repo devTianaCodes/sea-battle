@@ -8,7 +8,7 @@ function TabButton({ active, onClick, children }) {
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-4 py-2 text-sm transition ${
+      className={`rounded-full px-3 py-1.5 text-[0.78rem] transition sm:px-4 sm:py-2 sm:text-sm ${
         active
           ? "bg-cyan/15 text-foam shadow-[0_0_0_1px_rgba(0,212,255,0.3)]"
           : "bg-white/[0.05] text-slate-300 hover:bg-white/[0.08] hover:text-foam"
@@ -21,10 +21,10 @@ function TabButton({ active, onClick, children }) {
 
 function SettingRow({ label, description, control }) {
   return (
-    <div className="flex flex-col gap-3 rounded-3xl border border-white/10 bg-white/[0.04] p-4 md:flex-row md:items-center md:justify-between">
+    <div className="flex flex-col gap-2 rounded-[1rem] border border-white/10 bg-white/[0.04] p-3 sm:rounded-3xl sm:p-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <div className="text-sm font-medium text-foam">{label}</div>
-        <div className="mt-1 text-sm leading-6 text-slate-300">{description}</div>
+        <div className="text-[0.85rem] font-medium text-foam sm:text-sm">{label}</div>
+        <div className="mt-1 text-[0.8rem] leading-5 text-slate-300 sm:text-sm sm:leading-6">{description}</div>
       </div>
       <div>{control}</div>
     </div>
@@ -33,9 +33,9 @@ function SettingRow({ label, description, control }) {
 
 function StatsCard({ label, value }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.04] px-4 py-4">
-      <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">{label}</div>
-      <div className="mt-2 text-2xl font-semibold text-foam">{value}</div>
+    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3 sm:rounded-3xl sm:px-4 sm:py-4">
+      <div className="text-[0.58rem] uppercase tracking-[0.16em] text-slate-400 sm:text-[0.65rem] sm:tracking-[0.3em]">{label}</div>
+      <div className="mt-1.5 text-lg font-semibold text-foam sm:mt-2 sm:text-2xl">{value}</div>
     </div>
   );
 }
@@ -62,17 +62,17 @@ export default function SettingsModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[58] flex items-center justify-center bg-[#020817]/80 px-4 py-6 backdrop-blur-md animate-fade-in">
-      <div className="glass-frosted max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] p-6 sm:p-8">
+    <div className="fixed inset-[15px] z-[58] flex items-center justify-center rounded-[20px] bg-[#020817]/80 p-2 backdrop-blur-md animate-fade-in sm:p-3">
+      <div className="glass-frosted flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[2rem] sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Control Room</p>
-            <h2 className="mt-3 font-display text-3xl text-foam">Settings & Statistics</h2>
+            <p className="text-[0.62rem] uppercase tracking-[0.18em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">Control Room</p>
+            <h2 className="mt-2 font-display text-[1.45rem] text-foam sm:mt-3 sm:text-3xl">Settings & Statistics</h2>
           </div>
-          <IconButton onClick={onClose}>Close</IconButton>
+          <IconButton onClick={onClose} className="px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm">Close</IconButton>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2 sm:mt-6">
           <TabButton active={tab === "settings"} onClick={() => setTab("settings")}>
             Settings
           </TabButton>
@@ -82,7 +82,7 @@ export default function SettingsModal({
         </div>
 
         {tab === "settings" ? (
-          <div className="mt-6 space-y-4">
+          <div className="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
             <SettingRow
               label="Sound Effects"
               description="Toggle battle and interface audio cues."
@@ -128,17 +128,17 @@ export default function SettingsModal({
             />
           </div>
         ) : (
-          <div className="mt-6 space-y-5">
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-4 space-y-4 sm:mt-6 sm:space-y-5">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 sm:gap-3">
               <StatsCard label="Matches" value={historySummary.totalMatches} />
               <StatsCard label="Wins" value={historySummary.wins} />
               <StatsCard label="Best Accuracy" value={`${historySummary.bestAccuracy}%`} />
               <StatsCard label="Avg Accuracy" value={`${historySummary.averageAccuracy}%`} />
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-              <div className="text-sm font-medium text-foam">Win Rate By Difficulty</div>
-              <div className="mt-4 space-y-3">
+            <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] p-3 sm:rounded-3xl sm:p-4">
+              <div className="text-[0.85rem] font-medium text-foam sm:text-sm">Win Rate By Difficulty</div>
+              <div className="mt-3 space-y-3 sm:mt-4">
                 {["easy", "medium", "hard"].map((level) => {
                   const data = historySummary.difficultyBreakdown?.[level] ?? {
                     matches: 0,
@@ -148,7 +148,7 @@ export default function SettingsModal({
 
                   return (
                     <div key={level}>
-                      <div className="mb-1 flex items-center justify-between text-sm text-slate-300">
+                      <div className="mb-1 flex items-center justify-between text-[0.8rem] text-slate-300 sm:text-sm">
                         <span className="uppercase">{level}</span>
                         <span>{rate}% ({data.wins}/{data.matches})</span>
                       </div>

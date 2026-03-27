@@ -67,18 +67,18 @@ export default function MainMenu({
   }, [onInstructionsClick, onPlayClick, onSettingsClick, onStatsClick]);
 
   return (
-    <section className="relative flex flex-1 flex-col items-center justify-center px-4 py-8 text-center sm:px-6 sm:py-10">
+    <section className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-2 py-3 text-center sm:px-6 sm:py-10">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-3xl"
+        className="flex w-full max-w-3xl flex-1 flex-col justify-center"
       >
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="text-xs uppercase tracking-[0.32em] text-cyan/70"
+          className="text-[0.62rem] uppercase tracking-[0.24em] text-cyan/70 sm:text-xs sm:tracking-[0.32em]"
         >
           Tactical Launch
         </motion.p>
@@ -86,7 +86,7 @@ export default function MainMenu({
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.05 }}
-          className="mt-5 font-display text-4xl font-semibold tracking-[0.14em] text-cyan-100 drop-shadow-[0_0_14px_rgba(0,212,255,0.18)] sm:text-6xl"
+          className="mt-3 font-display text-[2rem] font-semibold tracking-[0.1em] text-cyan-100 drop-shadow-[0_0_14px_rgba(0,212,255,0.18)] sm:mt-5 sm:text-6xl sm:tracking-[0.14em]"
         >
           SEA BATTLE
         </motion.h1>
@@ -94,13 +94,13 @@ export default function MainMenu({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.14 }}
-          className="mt-10 flex justify-center"
+          className="mt-5 flex justify-center sm:mt-10"
         >
           <IconButton
             onClick={onPlayClick}
             tone="accent"
             size="lg"
-            className="animate-pulse-subtle min-h-14 min-w-[180px] px-8 text-base font-semibold uppercase tracking-[0.28em] sm:min-w-[240px]"
+            className="animate-pulse-subtle min-h-11 min-w-[150px] px-5 text-sm font-semibold uppercase tracking-[0.18em] sm:min-h-14 sm:min-w-[240px] sm:px-8 sm:text-base sm:tracking-[0.28em]"
           >
             Play
           </IconButton>
@@ -109,7 +109,7 @@ export default function MainMenu({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.24 }}
-          className="mt-12 flex items-center justify-center gap-3"
+          className="mt-6 flex items-center justify-center gap-2 sm:mt-12 sm:gap-3"
         >
           <IconButton
             onClick={onInstructionsClick}
@@ -150,7 +150,7 @@ export default function MainMenu({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.34 }}
-          className="mt-8 px-4 text-[0.68rem] uppercase tracking-[0.18em] text-slate-400"
+          className="mt-5 px-2 text-[0.58rem] uppercase tracking-[0.08em] text-slate-400 sm:mt-8 sm:px-4 sm:text-[0.68rem] sm:tracking-[0.18em]"
         >
           {historySummary.totalMatches} matches | {historySummary.wins} wins | best accuracy {historySummary.bestAccuracy}%
         </motion.div>

@@ -174,18 +174,35 @@
   }
 }
 
-@keyframes bubbleRise {
+@keyframes causticSweep {
   0% {
-    transform: translateY(0) scale(0.8);
-    opacity: 0;
+    transform: translate3d(-6%, 0, 0) scale(1);
+    opacity: 0.18;
   }
 
-  15% {
-    opacity: 0.55;
+  50% {
+    transform: translate3d(4%, -2%, 0) scale(1.04);
+    opacity: 0.34;
   }
 
   100% {
-    transform: translateY(-120vh) scale(1.15);
+    transform: translate3d(-3%, 1%, 0) scale(1.02);
+    opacity: 0.2;
+  }
+}
+
+@keyframes bubbleRise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.72);
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translate3d(var(--bubble-drift, 0.8rem), -120vh, 0) scale(1.18);
     opacity: 0;
   }
 }
@@ -235,6 +252,13 @@
 
 .bubble-particle {
   animation: bubbleRise linear infinite;
+  border: 1px solid rgba(199, 240, 255, 0.18);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.28) 26%, rgba(102, 229, 255, 0.16) 52%, rgba(102, 229, 255, 0.02) 72%);
+  box-shadow:
+    inset -0.12rem -0.16rem 0.3rem rgba(115, 225, 255, 0.1),
+    inset 0.12rem 0.12rem 0.28rem rgba(255, 255, 255, 0.22),
+    0 0 16px rgba(86, 214, 255, 0.16);
 }
 
 .wave-layer {
@@ -249,25 +273,37 @@
 
 .wave-back {
   bottom: -1.5rem;
-  opacity: 0.35;
-  background: linear-gradient(180deg, rgba(17, 138, 178, 0.08), rgba(17, 138, 178, 0.18));
+  opacity: 0.42;
+  background: linear-gradient(180deg, rgba(75, 48, 124, 0.08), rgba(28, 60, 125, 0.26));
 }
 
 .wave-mid {
   bottom: -0.75rem;
-  opacity: 0.45;
-  background: linear-gradient(180deg, rgba(0, 212, 255, 0.08), rgba(0, 212, 255, 0.16));
+  opacity: 0.56;
+  background: linear-gradient(180deg, rgba(89, 74, 156, 0.08), rgba(0, 153, 255, 0.19));
   animation-duration: 11s;
 }
 
 .wave-front {
-  opacity: 0.55;
-  background: linear-gradient(180deg, rgba(223, 247, 255, 0.06), rgba(0, 212, 255, 0.12));
+  opacity: 0.68;
+  background: linear-gradient(180deg, rgba(223, 247, 255, 0.08), rgba(98, 198, 255, 0.18));
   animation-duration: 9s;
 }
 
 .wave-energetic {
-  filter: saturate(1.15);
+  filter: saturate(1.2) brightness(1.05);
+}
+
+.underwater-caustics {
+  position: absolute;
+  inset: -8%;
+  background:
+    radial-gradient(circle at 20% 16%, rgba(140, 214, 255, 0.18), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(164, 120, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 55% 62%, rgba(68, 221, 255, 0.12), transparent 22%);
+  mix-blend-mode: screen;
+  filter: blur(18px);
+  animation: causticSweep 18s ease-in-out infinite alternate;
 }
 
 .thinking-dot {

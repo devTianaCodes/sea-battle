@@ -5,7 +5,7 @@ import IconButton from "./IconButton";
 
 function MiniBoard({ board }) {
   return (
-    <div className="grid grid-cols-10 gap-1 rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-2.5">
+    <div className="mx-auto grid w-full max-w-[11rem] grid-cols-10 gap-0.5 rounded-[1rem] border border-white/10 bg-white/[0.04] p-1.5 sm:max-w-[12.5rem] sm:gap-1 sm:rounded-[1.35rem] sm:p-2.5">
       {board.flat().map((cell) => {
         const classes = cell.isHit
           ? cell.isSunkReveal
@@ -48,63 +48,78 @@ export default function ResultsModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#020817]/70 px-4 backdrop-blur-md animate-fade-in">
-      <div className="glass-frosted animate-modal w-full max-w-5xl rounded-[2rem] p-5 sm:p-6">
-        <div className="grid gap-5 lg:grid-cols-[20rem,minmax(0,1fr)]">
-          <div className="flex flex-col justify-between gap-4">
+    <div className="animate-fade-in fixed inset-[15px] z-50 flex items-center justify-center rounded-[20px] bg-[#020817]/70 p-2 backdrop-blur-md sm:p-3">
+      <div className="glass-frosted animate-modal flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[1.7rem] sm:p-4">
+        <div className="grid gap-3 lg:grid-cols-[16rem,minmax(0,1fr)] lg:gap-4">
+          <div className="flex flex-col justify-between gap-3">
             <div className="text-center lg:text-left">
-              <div className="text-4xl">{winner === "player" ? "O" : "X"}</div>
-              <p className="mt-2 text-xs uppercase tracking-[0.24em] text-cyan/70">Results</p>
-              <h2 className={`mt-2 font-display text-3xl ${winner === "player" ? "text-mint" : "text-coral"}`}>
+              <div className="text-3xl sm:text-4xl">{winner === "player" ? "O" : "X"}</div>
+              <p className="mt-1.5 text-[0.62rem] uppercase tracking-[0.18em] text-cyan/70 sm:mt-2 sm:text-xs sm:tracking-[0.24em]">
+                Results
+              </p>
+              <h2
+                className={`mt-1.5 font-display text-2xl sm:mt-2 sm:text-3xl ${winner === "player" ? "text-mint" : "text-coral"}`}
+              >
                 {winner === "player" ? "Victory" : "Defeat"}
               </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-300">
+              <p className="mt-1.5 text-[0.8rem] leading-5 text-slate-300 sm:mt-2 sm:text-sm sm:leading-6">
                 {winner === "player"
                   ? "Your targeting held under pressure and the opposing fleet went under."
                   : "The enemy found enough openings to sink your fleet. Reset and try a different deployment."}
               </p>
-              <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
-                <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[0.68rem] uppercase tracking-[0.18em] text-slate-300">
+              <div className="mt-2.5 flex flex-wrap justify-center gap-1.5 lg:justify-start sm:mt-3 sm:gap-2">
+                <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.12em] text-slate-300 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.18em]">
                   {difficulty} difficulty
                 </span>
                 {stats?.performanceLabel ? (
-                  <span className="inline-flex rounded-full border border-cyan/20 bg-cyan/[0.08] px-3 py-1 text-[0.68rem] uppercase tracking-[0.18em] text-cyan-100">
+                  <span className="inline-flex rounded-full border border-cyan/20 bg-cyan/[0.08] px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.12em] text-cyan-100 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.18em]">
                     {stats.performanceLabel}
                   </span>
                 ) : null}
               </div>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-              <IconButton onClick={onReplay} tone="success" className="w-full justify-center">
+            <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
+              <IconButton
+                onClick={onReplay}
+                tone="success"
+                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
+              >
                 Play Again
               </IconButton>
-              <IconButton onClick={onChangeDifficulty} tone="accent" className="w-full justify-center">
+              <IconButton
+                onClick={onChangeDifficulty}
+                tone="accent"
+                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
+              >
                 Difficulty
               </IconButton>
               <IconButton
                 onClick={() => onReplayStep(-1)}
                 disabled={difficulty === "easy"}
-                className="w-full justify-center"
+                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
               >
                 Ease Down
               </IconButton>
               <IconButton
                 onClick={() => onReplayStep(1)}
                 disabled={difficulty === "hard"}
-                className="w-full justify-center"
+                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
               >
                 Push Harder
               </IconButton>
-              <IconButton onClick={onMainMenu} className="w-full justify-center sm:col-span-2 lg:col-span-1">
+              <IconButton
+                onClick={onMainMenu}
+                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:col-span-2 sm:text-xs lg:col-span-1"
+              >
                 Main Menu
               </IconButton>
             </div>
           </div>
 
           {stats ? (
-            <div className="grid gap-4">
-              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-3">
+              <div className="grid gap-1.5 grid-cols-2 xl:grid-cols-4 sm:gap-2">
                 <StatCard label="Accuracy" value={`${animatedStats.accuracy}%`} />
                 <StatCard label="Moves" value={animatedStats.playerShots} />
                 <StatCard label="Hits" value={animatedStats.playerHits} />
@@ -118,7 +133,7 @@ export default function ResultsModal({
                 />
               </div>
               <div>
-                <div className="mb-2 text-center text-[0.68rem] uppercase tracking-[0.18em] text-slate-400">
+                <div className="mb-1.5 text-center text-[0.6rem] uppercase tracking-[0.14em] text-slate-400 sm:mb-2 sm:text-[0.68rem] sm:tracking-[0.18em]">
                   Enemy Fleet Reveal
                 </div>
                 <MiniBoard board={revealedBoard} />
@@ -202,9 +217,11 @@ function useAnimatedStats(open, stats, historySummary) {
 
 function StatCard({ label, value }) {
   return (
-    <div className="animate-count rounded-[1.1rem] border border-white/10 bg-white/[0.06] px-3 py-3 text-center">
-      <div className="text-[0.62rem] uppercase tracking-[0.18em] text-slate-400">{label}</div>
-      <div className="mt-1.5 text-xl font-semibold text-foam">{value}</div>
+    <div className="animate-count rounded-[0.9rem] border border-white/10 bg-white/[0.06] px-2 py-2 text-center sm:rounded-[1.1rem] sm:px-3 sm:py-3">
+      <div className="text-[0.54rem] uppercase tracking-[0.12em] text-slate-400 sm:text-[0.62rem] sm:tracking-[0.18em]">
+        {label}
+      </div>
+      <div className="mt-1 text-base font-semibold text-foam sm:mt-1.5 sm:text-xl">{value}</div>
     </div>
   );
 }

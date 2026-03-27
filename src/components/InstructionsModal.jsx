@@ -4,9 +4,13 @@ import IconButton from "./IconButton";
 
 function Section({ title, children }) {
   return (
-    <section className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-      <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-50">{title}</h3>
-      <div className="mt-3 space-y-2 text-sm leading-6 text-slate-300">{children}</div>
+    <section className="rounded-[1rem] border border-white/10 bg-white/[0.04] p-3 sm:rounded-3xl sm:p-4">
+      <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-cyan-50 sm:text-sm sm:tracking-[0.28em]">
+        {title}
+      </h3>
+      <div className="mt-2 space-y-1.5 text-[0.8rem] leading-5 text-slate-300 sm:mt-3 sm:space-y-2 sm:text-sm sm:leading-6">
+        {children}
+      </div>
     </section>
   );
 }
@@ -21,24 +25,30 @@ export default function InstructionsModal({ open, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[55] flex items-center justify-center bg-[#020817]/80 px-4 py-6 backdrop-blur-md"
+          className="fixed inset-[15px] z-[55] flex items-center justify-center rounded-[20px] bg-[#020817]/80 p-2 backdrop-blur-md sm:p-3"
         >
           <motion.div
             initial={{ opacity: 0, x: 18, scale: 0.98 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 18, scale: 0.98 }}
             transition={{ duration: 0.25 }}
-            className="glass-frosted max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] p-6 sm:p-8"
+            className="glass-frosted flex max-h-full w-full max-w-3xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[2rem] sm:p-8"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Instructions</p>
-                <h2 className="mt-3 font-display text-3xl text-foam">How to command the fleet</h2>
+                <p className="text-[0.62rem] uppercase tracking-[0.18em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">
+                  Instructions
+                </p>
+                <h2 className="mt-2 font-display text-[1.45rem] text-foam sm:mt-3 sm:text-3xl">
+                  How to command the fleet
+                </h2>
               </div>
-              <IconButton onClick={onClose}>Close</IconButton>
+              <IconButton onClick={onClose} className="px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm">
+                Close
+              </IconButton>
             </div>
 
-            <div className="mt-6 grid gap-5">
+            <div className="mt-4 grid gap-3 sm:mt-6 sm:gap-5">
               <Section title="Rules">
                 <p>Place your five ships on the player grid without overlap.</p>
                 <p>Click the opponent grid to fire one shot per turn.</p>

@@ -24,9 +24,10 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at top, rgba(0, 212, 255, 0.14), transparent 28%),
-    radial-gradient(circle at 20% 20%, rgba(17, 138, 178, 0.18), transparent 30%),
-    linear-gradient(180deg, #07101e 0%, #030712 100%);
+    radial-gradient(circle at 18% 10%, rgba(126, 86, 255, 0.22), transparent 26%),
+    radial-gradient(circle at 82% 0%, rgba(39, 198, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(59, 26, 91, 0.3), transparent 42%),
+    linear-gradient(180deg, #160922 0%, #09061a 34%, #030712 100%);
   color: #e2f3ff;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   overflow: hidden;
@@ -66,9 +67,21 @@ select {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 10%, rgba(255, 107, 107, 0.16), transparent 20%),
-    radial-gradient(circle at 80% 0%, rgba(0, 212, 255, 0.18), transparent 24%),
-    radial-gradient(circle at 50% 80%, rgba(17, 138, 178, 0.12), transparent 28%);
+    radial-gradient(circle at 18% 8%, rgba(173, 108, 255, 0.22), transparent 22%),
+    radial-gradient(circle at 78% 4%, rgba(73, 220, 255, 0.2), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(37, 116, 204, 0.14), transparent 30%),
+    linear-gradient(180deg, rgba(21, 7, 38, 0.86) 0%, rgba(7, 10, 31, 0.72) 48%, rgba(2, 8, 23, 0.92) 100%);
+  pointer-events: none;
+}
+
+.underwater-haze {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% -8%, rgba(188, 155, 255, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(132, 92, 255, 0.06) 0%, rgba(21, 28, 73, 0.06) 38%, rgba(0, 0, 0, 0.12) 100%);
+  mix-blend-mode: screen;
+  opacity: 0.95;
   pointer-events: none;
 }
 
@@ -159,7 +172,9 @@ select {
   padding: var(--viewport-padding);
   border: 1px solid rgba(0, 212, 255, 0.18);
   border-radius: 20px;
-  background: rgba(9, 17, 31, 0.34);
+  background:
+    linear-gradient(180deg, rgba(16, 10, 31, 0.44), rgba(7, 16, 35, 0.36)),
+    rgba(9, 17, 31, 0.34);
   background-clip: padding-box;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
