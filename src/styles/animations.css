@@ -92,6 +92,18 @@
   }
 }
 
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -113,6 +125,30 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealCell {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -185,6 +221,10 @@
   animation: slideIn 0.3s ease-out both;
 }
 
+.animate-modal {
+  animation: slideInBottom 0.3s ease-out both;
+}
+
 .animate-panel-in {
   animation: slideIn 0.45s ease-out both;
 }
@@ -252,4 +292,12 @@
 
 .animate-miss {
   animation: missRipple 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-count {
+  animation: countUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-reveal-cell {
+  animation: revealCell 0.26s ease-out both;
 }

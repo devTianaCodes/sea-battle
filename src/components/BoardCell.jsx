@@ -77,10 +77,13 @@ function BoardCell({
       title={coordinateLabel}
       data-state={cellState}
       data-interactive={isInteractive ? "true" : "false"}
+      style={{ animationDelay: `${Math.min(index * 12, 180)}ms` }}
       className={clsx(
-        "board-cell group focus:outline-none focus:ring-2 focus:ring-cyan/70 focus:ring-inset",
+        "board-cell animate-reveal-cell group focus:outline-none focus:ring-2 focus:ring-cyan/70 focus:ring-inset",
         cell.preview === "invalid" && "border-coral/50 bg-coral/20",
         cell.preview === "valid" && "border-cyan/[0.55] bg-cyan/[0.18]",
+        cell.isRecentShot && cell.isHit && "animate-hit",
+        cell.isRecentShot && cell.isMiss && "animate-miss",
         cell.isRecentShot &&
           "after:absolute after:inset-1 after:rounded-[inherit] after:border after:border-cyan/40 after:content-['']",
         active && "ring-2 ring-cyan/80 ring-offset-1 ring-offset-[#071120]",

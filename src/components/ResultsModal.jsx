@@ -49,7 +49,7 @@ export default function ResultsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#020817]/70 px-4 backdrop-blur-md animate-fade-in">
-      <div className="glass-frosted animate-modal-in w-full max-w-2xl rounded-[2rem] p-6 sm:p-8">
+      <div className="glass-frosted animate-modal w-full max-w-2xl rounded-[2rem] p-6 sm:p-8">
         <div className="text-center">
           <div className="text-5xl">{winner === "player" ? "O" : "X"}</div>
           <p className="mt-3 text-xs uppercase tracking-[0.35em] text-cyan/70">Results</p>
@@ -198,7 +198,7 @@ function useAnimatedStats(open, stats, historySummary) {
 
 function StatCard({ label, value }) {
   return (
-    <div className="animate-fade-in-fast rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-4 text-center">
+    <div className="animate-count rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-4 text-center">
       <div className="text-xs uppercase tracking-[0.3em] text-slate-400">{label}</div>
       <div className="mt-2 text-2xl font-semibold text-foam">{value}</div>
     </div>

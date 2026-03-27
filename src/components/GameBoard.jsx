@@ -114,7 +114,9 @@ export default function GameBoard({
             ))}
           </div>
           <div
-            className={`game-board relative ${!interactive ? "opacity-95" : ""}`}
+            className={`game-board relative transition-opacity duration-300 ${!interactive ? "opacity-95" : ""} ${
+              isThinking ? "opacity-85" : ""
+            }`}
             onKeyDown={handleKeyDown}
             role="grid"
             aria-label={title}
@@ -140,11 +142,11 @@ export default function GameBoard({
             })}
             {isThinking ? (
               <div className="glass-light absolute inset-0 flex items-center justify-center rounded-[1rem] border border-cyan/15">
-                <div className="flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.65rem] uppercase tracking-[0.3em] text-cyan-50">
+                <div className="animate-fade-in-fast flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-cyan-50">
                   <span className="thinking-dot" />
                   <span className="thinking-dot" />
                   <span className="thinking-dot" />
-                  Thinking
+                  AI thinking
                 </div>
               </div>
             ) : null}
