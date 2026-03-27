@@ -9,38 +9,59 @@ export default function ShipPlacementPanel({
   onRotate,
   selectedShipName,
 }) {
+  const statusText =
+    phase !== "setup"
+      ? "Battle live."
+      : selectedShipName
+        ? `Place ${selectedShipName}`
+        : "Fleet ready";
+
   return (
-    <div className="glass-light rounded-[1.5rem] p-4 sm:p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Action Bar</p>
-        <div className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-slate-400">
-          {phase === "setup" ? "Placement" : "Battle"}
+    <div className="glass-light rounded-[1.35rem] p-3 sm:p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[0.65rem] uppercase tracking-[0.24em] text-cyan/70">Controls</p>
+          <p className="mt-1 text-sm text-slate-300">{statusText}</p>
+        </div>
+        <div className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[0.58rem] uppercase tracking-[0.16em] text-slate-400">
+          {phase === "setup" ? "Setup" : "Battle"}
         </div>
       </div>
-      <p className="mb-4 text-sm leading-6 text-slate-300">
-        {phase !== "setup"
-          ? "Combat is live. Keep pressure on the enemy grid and use the header controls for pause, sound, and help."
-          : selectedShipName
-            ? `Place ${selectedShipName}. Use arrow keys to move, R to rotate, and Enter to confirm.`
-            : "All ships are placed. Confirm deployment or click any placed ship to reposition it."}
-      </p>
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <IconButton onClick={onRotate} tone="accent" disabled={phase !== "setup"} className="justify-center">
-          Rotate (R)
+
+      <div className="grid grid-cols-2 gap-2">
+        <IconButton
+          onClick={onRotate}
+          tone="accent"
+          disabled={phase !== "setup"}
+          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          size="sm"
+        >
+          Rotate
         </IconButton>
-        <IconButton onClick={onRandomize} disabled={phase !== "setup"} className="justify-center">
-          Randomize
+        <IconButton
+          onClick={onRandomize}
+          disabled={phase !== "setup"}
+          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          size="sm"
+        >
+          Random
         </IconButton>
-        <IconButton onClick={onClear} disabled={phase !== "setup"} className="justify-center">
-          Clear All
+        <IconButton
+          onClick={onClear}
+          disabled={phase !== "setup"}
+          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          size="sm"
+        >
+          Clear
         </IconButton>
         <IconButton
           onClick={onConfirm}
           tone="success"
           disabled={phase !== "setup" || !canConfirm}
-          className="justify-center"
+          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          size="sm"
         >
-          Confirm Fleet
+          Confirm
         </IconButton>
       </div>
     </div>

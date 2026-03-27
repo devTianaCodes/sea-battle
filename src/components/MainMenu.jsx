@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import clsx from "clsx";
 import { motion } from "framer-motion";
 import IconButton from "./IconButton";
 
@@ -8,6 +10,62 @@ export default function MainMenu({
   onSettingsClick,
   onStatsClick,
 }) {
+  const [activeAction, setActiveAction] = useState("instructions");
+
+  useEffect(() => {
+    const actionOrder = ["instructions", "settings", "stats"];
+
+    function handleKeyDown(event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onPlayClick();
+        return;
+      }
+
+      const lowerKey = event.key.toLowerCase();
+
+      if (lowerKey === "i") {
+        event.preventDefault();
+        setActiveAction("instructions");
+        onInstructionsClick();
+        return;
+      }
+
+      if (lowerKey === "s") {
+        event.preventDefault();
+        setActiveAction("settings");
+        onSettingsClick();
+        return;
+      }
+
+      if (lowerKey === "t") {
+        event.preventDefault();
+        setActiveAction("stats");
+        onStatsClick();
+        return;
+      }
+
+      if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault();
+        setActiveAction((current) => {
+          const currentIndex = actionOrder.indexOf(current);
+          return actionOrder[(currentIndex - 1 + actionOrder.length) % actionOrder.length];
+        });
+      }
+
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault();
+        setActiveAction((current) => {
+          const currentIndex = actionOrder.indexOf(current);
+          return actionOrder[(currentIndex + 1) % actionOrder.length];
+        });
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onInstructionsClick, onPlayClick, onSettingsClick, onStatsClick]);
+
   return (
     <section className="relative flex flex-1 flex-col items-center justify-center px-4 py-8 text-center sm:px-6 sm:py-10">
       <motion.div
@@ -58,6 +116,9 @@ export default function MainMenu({
             ariaLabel="Open instructions"
             title="Instructions"
             shape="circle"
+            className={clsx(
+              activeAction === "instructions" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]"
+            )}
           >
             ?
           </IconButton>
@@ -66,6 +127,9 @@ export default function MainMenu({
             ariaLabel="Open settings"
             title="Settings"
             shape="circle"
+            className={clsx(
+              activeAction === "settings" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]"
+            )}
           >
             =
           </IconButton>
@@ -74,6 +138,9 @@ export default function MainMenu({
             ariaLabel="Open statistics"
             title="Statistics"
             shape="circle"
+            className={clsx(
+              activeAction === "stats" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]"
+            )}
           >
             #
           </IconButton>

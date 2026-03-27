@@ -5,6 +5,7 @@ import { formatDuration } from "../utils/stats";
 import BattleIntelPanel from "./BattleIntelPanel";
 import BackgroundEffects from "./BackgroundEffects";
 import DifficultySelector from "./DifficultySelector";
+import FleetSidebar from "./FleetSidebar";
 import GameBoard from "./GameBoard";
 import InstructionsModal from "./InstructionsModal";
 import MainMenu from "./MainMenu";
@@ -12,7 +13,7 @@ import OnboardingModal from "./OnboardingModal";
 import PauseModal from "./PauseModal";
 import ResultsModal from "./ResultsModal";
 import SettingsModal from "./SettingsModal";
-import ShipPlacer from "./ShipPlacer";
+import ShipPlacementPanel from "./ShipPlacementPanel";
 import StatusBar from "./StatusBar";
 import TurnBanner from "./TurnBanner";
 
@@ -158,24 +159,25 @@ export default function GameShell() {
         />
 
         {game.phase === GAME_PHASES.SETUP ? (
-          <ShipPlacer
-            phase={game.phase}
-            availableShips={game.availableShips}
-            playerFleet={game.playerFleet}
-            selectedShipId={game.selectedShipId}
-            orientation={game.orientation}
-            onSelectShip={game.selectShip}
-            canConfirm={canConfirm}
-            onConfirm={game.confirmPlayerFleet}
-            onRandomize={game.randomizePlayerFleet}
-            onClear={game.clearPlayerFleet}
-            onRotate={game.toggleOrientation}
-            selectedShipName={selectedShipName}
-          />
-        ) : null}
-
-        {game.phase === GAME_PHASES.SETUP ? (
-          <section className="viewport-main">
+          <section className="grid gap-4 md:grid-cols-[15rem_minmax(0,1fr)] md:items-start lg:grid-cols-[18rem_minmax(0,1fr)]">
+            <div className="space-y-3">
+              <FleetSidebar
+                availableShips={game.availableShips}
+                playerFleet={game.playerFleet}
+                selectedShipId={game.selectedShipId}
+                orientation={game.orientation}
+                onSelectShip={game.selectShip}
+              />
+              <ShipPlacementPanel
+                phase={game.phase}
+                canConfirm={canConfirm}
+                onConfirm={game.confirmPlayerFleet}
+                onRandomize={game.randomizePlayerFleet}
+                onClear={game.clearPlayerFleet}
+                onRotate={game.toggleOrientation}
+                selectedShipName={selectedShipName}
+              />
+            </div>
             <GameBoard
               title="Your Fleet"
               boardId="Player Grid"
@@ -189,7 +191,7 @@ export default function GameShell() {
             />
           </section>
         ) : (
-          <section className="viewport-main">
+          <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_18rem] xl:items-start">
             <GameBoard
               title="Your Fleet"
               boardId="Player Grid"
@@ -217,20 +219,16 @@ export default function GameShell() {
               onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
               onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
             />
-          </section>
-        )}
-
-        {game.phase !== GAME_PHASES.SETUP ? (
-          <div className="min-h-0">
             <BattleIntelPanel
+              className="h-full"
               playerMetrics={game.playerMetrics}
               enemyMetrics={game.enemyMetrics}
               playerFleetStatus={game.playerFleetStatus}
               enemyFleetStatus={game.enemyFleetStatus}
               eventLog={game.eventLog}
             />
-          </div>
-        ) : null}
+          </section>
+        )}
       </div>
 
       <ResultsModal

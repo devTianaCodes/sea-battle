@@ -70,15 +70,16 @@ export default function BattleIntelPanel({
   playerFleetStatus,
   enemyFleetStatus,
   eventLog,
+  className = "",
 }) {
   return (
-    <div className="glass-panel rounded-[2rem] p-5">
+    <div className={`glass-panel rounded-[1.6rem] p-4 lg:p-4 ${className}`}>
       <div className="mb-4">
         <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Mission Intel</p>
         <h2 className="font-display text-xl text-foam">Battle Snapshot</h2>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
         <MetricCard label="Your accuracy" value={`${playerMetrics.accuracy}%`} accent="text-cyan-50" />
         <MetricCard label="Opponent accuracy" value={`${enemyMetrics.accuracy}%`} accent="text-coral-50" />
         <MetricCard label="Best streak" value={playerMetrics.bestStreak} />
@@ -87,18 +88,18 @@ export default function BattleIntelPanel({
         <MetricCard label="First hit on shot" value={playerMetrics.firstHitShot ?? "-"} />
       </div>
 
-      <div className="mt-5 grid gap-4 xl:grid-cols-2">
+      <div className="mt-4 grid gap-3">
         <FleetRow label="Your fleet" ships={playerFleetStatus} tone="player" />
         <FleetRow label="Enemy fleet" ships={enemyFleetStatus} tone="enemy" />
       </div>
 
-      <div className="mt-5">
+      <div className="mt-4">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-medium text-foam">Recent Action</h3>
           <span className="text-xs uppercase tracking-[0.3em] text-slate-400">Live feed</span>
         </div>
         <ul className="space-y-2">
-          {eventLog.map((event) => (
+          {eventLog.slice(0, 4).map((event) => (
             <ActionItem key={event.id} event={event} />
           ))}
         </ul>

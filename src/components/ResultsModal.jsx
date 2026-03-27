@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { formatDuration } from "../utils/stats";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import IconButton from "./IconButton";
@@ -40,6 +41,7 @@ export default function ResultsModal({
   onMainMenu,
 }) {
   useBodyScrollLock(open);
+  const animatedStats = useAnimatedStats(open, stats, historySummary);
 
   if (!open) {
     return null;
@@ -72,14 +74,17 @@ export default function ResultsModal({
         {stats ? (
           <>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <StatCard label="Accuracy" value={`${stats.accuracy}%`} />
-              <StatCard label="Total Moves" value={stats.playerShots} />
-              <StatCard label="Hits" value={stats.playerHits} />
-              <StatCard label="Misses" value={stats.playerMisses} />
-              <StatCard label="Mission Time" value={formatDuration(stats.durationMs)} />
-              <StatCard label="Best Streak" value={stats.playerBestStreak} />
-              <StatCard label="Archive Wins" value={historySummary?.wins ?? 0} />
-              <StatCard label="Archive Best Accuracy" value={`${historySummary?.bestAccuracy ?? 0}%`} />
+              <StatCard label="Accuracy" value={`${animatedStats.accuracy}%`} />
+              <StatCard label="Total Moves" value={animatedStats.playerShots} />
+              <StatCard label="Hits" value={animatedStats.playerHits} />
+              <StatCard label="Misses" value={animatedStats.playerMisses} />
+              <StatCard label="Mission Time" value={formatDuration(animatedStats.durationMs)} />
+              <StatCard label="Best Streak" value={animatedStats.playerBestStreak} />
+              <StatCard label="Archive Wins" value={animatedStats.archiveWins} />
+              <StatCard
+                label="Archive Best Accuracy"
+                value={`${animatedStats.archiveBestAccuracy}%`}
+              />
             </div>
             <div className="mt-6">
               <div className="mb-3 text-center text-xs uppercase tracking-[0.3em] text-slate-400">
@@ -122,9 +127,78 @@ export default function ResultsModal({
   );
 }
 
+function useAnimatedStats(open, stats, historySummary) {
+  const [animated, setAnimated] = useState({
+    accuracy: 0,
+    playerShots: 0,
+    playerHits: 0,
+    playerMisses: 0,
+    durationMs: 0,
+    playerBestStreak: 0,
+    archiveWins: 0,
+    archiveBestAccuracy: 0,
+  });
+
+  useEffect(() => {
+    if (!open || !stats) {
+      return;
+    }
+
+    const target = {
+      accuracy: stats.accuracy ?? 0,
+      playerShots: stats.playerShots ?? 0,
+      playerHits: stats.playerHits ?? 0,
+      playerMisses: stats.playerMisses ?? 0,
+      durationMs: stats.durationMs ?? 0,
+      playerBestStreak: stats.playerBestStreak ?? 0,
+      archiveWins: historySummary?.wins ?? 0,
+      archiveBestAccuracy: historySummary?.bestAccuracy ?? 0,
+    };
+
+    const startTime = performance.now();
+    let frameId = 0;
+
+    const tick = (timestamp) => {
+      const progress = Math.min((timestamp - startTime) / 900, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+
+      setAnimated({
+        accuracy: Math.round(target.accuracy * eased),
+        playerShots: Math.round(target.playerShots * eased),
+        playerHits: Math.round(target.playerHits * eased),
+        playerMisses: Math.round(target.playerMisses * eased),
+        durationMs: Math.round(target.durationMs * eased),
+        playerBestStreak: Math.round(target.playerBestStreak * eased),
+        archiveWins: Math.round(target.archiveWins * eased),
+        archiveBestAccuracy: Math.round(target.archiveBestAccuracy * eased),
+      });
+
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(tick);
+      }
+    };
+
+    setAnimated({
+      accuracy: 0,
+      playerShots: 0,
+      playerHits: 0,
+      playerMisses: 0,
+      durationMs: 0,
+      playerBestStreak: 0,
+      archiveWins: 0,
+      archiveBestAccuracy: 0,
+    });
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [historySummary, open, stats]);
+
+  return animated;
+}
+
 function StatCard({ label, value }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-4 text-center">
+    <div className="animate-fade-in-fast rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-4 text-center">
       <div className="text-xs uppercase tracking-[0.3em] text-slate-400">{label}</div>
       <div className="mt-2 text-2xl font-semibold text-foam">{value}</div>
     </div>

@@ -302,6 +302,10 @@ select {
     min-height: calc(100vh - 32px);
     width: min(100%, 900px);
   }
+
+  .game-board {
+    max-width: min(100%, 22rem);
+  }
 }
 
 @media (min-width: 1024px) {
@@ -312,7 +316,11 @@ select {
 
   .viewport-main {
     flex-direction: row;
-    gap: 24px;
+    gap: 18px;
+  }
+
+  .game-board {
+    max-width: min(100%, 24rem);
   }
 }
 

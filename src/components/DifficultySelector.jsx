@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { DIFFICULTY_LEVELS } from "../data/constants";
@@ -12,6 +12,61 @@ export default function DifficultySelector({
   disabled = false,
 }) {
   const [selecting, setSelecting] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(() =>
+    Math.max(
+      0,
+      DIFFICULTY_LEVELS.findIndex((level) => level.id === difficulty)
+    )
+  );
+  const selectionTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    setFocusedIndex(
+      Math.max(
+        0,
+        DIFFICULTY_LEVELS.findIndex((level) => level.id === difficulty)
+      )
+    );
+  }, [difficulty]);
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (disabled) {
+        return;
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onBack();
+        return;
+      }
+
+      if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault();
+        setFocusedIndex((current) => (current - 1 + DIFFICULTY_LEVELS.length) % DIFFICULTY_LEVELS.length);
+        return;
+      }
+
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault();
+        setFocusedIndex((current) => (current + 1) % DIFFICULTY_LEVELS.length);
+        return;
+      }
+
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        selectDifficulty(DIFFICULTY_LEVELS[focusedIndex].id);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      if (selectionTimeoutRef.current) {
+        window.clearTimeout(selectionTimeoutRef.current);
+      }
+    };
+  }, [disabled, focusedIndex, onBack]);
 
   function getDifficultyStats(levelId) {
     const data = historySummary?.difficultyBreakdown?.[levelId];
@@ -35,7 +90,7 @@ export default function DifficultySelector({
     }
 
     setSelecting(levelId);
-    window.setTimeout(() => {
+    selectionTimeoutRef.current = window.setTimeout(() => {
       onChange(levelId);
       setSelecting(null);
     }, 200);
@@ -58,6 +113,7 @@ export default function DifficultySelector({
           const active = level.id === difficulty;
           const pending = level.id === selecting;
           const stats = getDifficultyStats(level.id);
+          const focused = index === focusedIndex;
           const toneClass =
             level.accent === "mint"
               ? "border-mint/30 hover:border-mint/70 hover:shadow-[0_0_24px_rgba(74,222,128,0.2)]"
@@ -86,9 +142,12 @@ export default function DifficultySelector({
                       ? "border-coral/80 bg-coral/[0.09] shadow-[0_0_28px_rgba(255,107,107,0.24)]"
                       : "border-cyan/80 bg-cyan/[0.09] shadow-[0_0_28px_rgba(0,212,255,0.22)]"
                   : "bg-white/[0.03]",
+                focused && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]",
                 disabled && "cursor-not-allowed opacity-40"
               )}
               aria-pressed={active || pending}
+              onMouseEnter={() => setFocusedIndex(index)}
+              onFocus={() => setFocusedIndex(index)}
             >
               <div className="flex h-full flex-col items-center justify-between text-center">
                 <div>
