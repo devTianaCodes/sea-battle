@@ -255,6 +255,10 @@ select {
   aspect-ratio: 1;
 }
 
+.battle-board .game-board {
+  max-width: min(100%, 17rem);
+}
+
 .board-cell {
   position: relative;
   aspect-ratio: 1;
@@ -333,6 +337,10 @@ select {
   .game-board {
     max-width: min(100%, 20rem);
   }
+
+  .battle-board .game-board {
+    max-width: min(100%, 22rem);
+  }
 }
 
 @media (min-width: 1024px) {
@@ -348,6 +356,10 @@ select {
 
   .game-board {
     max-width: min(100%, 19.5rem);
+  }
+
+  .battle-board .game-board {
+    max-width: min(100%, 24rem);
   }
 }
 
@@ -367,6 +379,10 @@ select {
 
   .setup-board .game-board {
     max-width: min(100%, clamp(10.5rem, 50vw, 12.75rem));
+  }
+
+  .battle-board .game-board {
+    max-width: min(100%, clamp(11rem, 62vw, 14.25rem));
   }
 
   .setup-board {

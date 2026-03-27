@@ -49,6 +49,8 @@ export default function GameBoard({
   onActivateCell,
   className = "",
 }) {
+  const isBattleTargetBoard = cursorMode === "battle";
+
   function handleKeyDown(event) {
     const nextDelta = getBoardNavigationDelta(event.key);
 
@@ -69,7 +71,7 @@ export default function GameBoard({
           : cursorMode === "placement"
             ? "cursor-placement"
             : ""
-      } ${className}`}
+      } ${interactive && isBattleTargetBoard ? "targetable-board" : ""} ${className}`}
     >
       <div className="mb-1.5 flex w-full items-center justify-between lg:mb-2">
         <p className="text-[0.68rem] uppercase tracking-[0.32em] text-slate-400">{boardId}</p>
@@ -104,8 +106,8 @@ export default function GameBoard({
           );
         })}
         {isThinking ? (
-          <div className="glass-light absolute inset-0 flex items-center justify-center rounded-[1rem] border border-cyan/15">
-            <div className="animate-fade-in-fast flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-cyan-50">
+          <div className="glass-light thinking-overlay absolute inset-0 flex items-center justify-center rounded-[1rem] border border-cyan/15">
+            <div className="animate-fade-in-fast banner-sheen flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-cyan-50">
               <span className="thinking-dot" />
               <span className="thinking-dot" />
               <span className="thinking-dot" />

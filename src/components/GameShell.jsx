@@ -3,7 +3,7 @@ import { GAME_PHASES } from "../data/constants";
 import { useGameContext } from "../context/GameContext";
 import { isRotateKey } from "../utils/keyboard";
 import { formatDuration } from "../utils/stats";
-import BattleIntelPanel from "./BattleIntelPanel";
+import BattleActionBar from "./BattleActionBar";
 import BackgroundEffects from "./BackgroundEffects";
 import DifficultySelector from "./DifficultySelector";
 import FleetSidebar from "./FleetSidebar";
@@ -71,6 +71,7 @@ export default function GameShell() {
   const playerShipsAfloat = game.playerFleetStatus.filter((ship) => !ship.isSunk).length;
   const enemyShipsAfloat = game.enemyFleetStatus.filter((ship) => !ship.isSunk).length;
   const turnCount = Math.max(game.playerShots.length, game.aiShots.length) + 1;
+  const latestEventMessage = game.eventLog[0]?.message ?? game.announcement;
 
   if (game.screen === "menu") {
     return (
@@ -207,45 +208,49 @@ export default function GameShell() {
             </div>
           </section>
         ) : (
-          <section className="grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:justify-items-stretch md:gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_16rem] xl:items-start">
-            <GameBoard
-              title="Your Fleet"
-              boardId="Player Grid"
-              board={game.playerBoard}
-              focusCell={game.focus.player}
-              interactive={false}
-              cursorMode="placement"
-              onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
-              onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
-              onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-              className="w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
+          <div className="flex min-h-0 flex-1 flex-col gap-2 sm:gap-3">
+            <section className="viewport-main grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-3">
+              <GameBoard
+                title="Your Fleet"
+                boardId="Player Grid"
+                board={game.playerBoard}
+                focusCell={game.focus.player}
+                interactive={false}
+                cursorMode="placement"
+                onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
+                onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
+                onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
+                className="battle-board w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
+              />
+              <GameBoard
+                title="Opponent Grid"
+                boardId="Target Grid"
+                board={game.enemyBoard}
+                focusCell={game.focus.enemy}
+                interactive={
+                  game.phase === GAME_PHASES.BATTLE &&
+                  game.turn === "player" &&
+                  !game.isAiThinking
+                }
+                isThinking={game.isAiThinking}
+                cursorMode="battle"
+                onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
+                onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
+                onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
+                className="battle-board w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
+              />
+            </section>
+            <BattleActionBar
+              latestEvent={latestEventMessage}
+              playerAccuracy={game.playerMetrics.accuracy}
+              opponentAccuracy={game.enemyMetrics.accuracy}
+              shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
+              currentTurnLabel={game.turnLabel}
+              onPause={game.togglePause}
+              onOpenGuide={game.openInstructions}
+              onRestart={game.restartMatch}
             />
-            <GameBoard
-              title="Opponent Grid"
-              boardId="Target Grid"
-              board={game.enemyBoard}
-              focusCell={game.focus.enemy}
-              interactive={
-                game.phase === GAME_PHASES.BATTLE &&
-                game.turn === "player" &&
-                !game.isAiThinking
-              }
-              isThinking={game.isAiThinking}
-              cursorMode="battle"
-              onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
-              onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
-              onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
-              className="w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
-            />
-            <BattleIntelPanel
-              className="hidden h-full md:block"
-              playerMetrics={game.playerMetrics}
-              enemyMetrics={game.enemyMetrics}
-              playerFleetStatus={game.playerFleetStatus}
-              enemyFleetStatus={game.enemyFleetStatus}
-              eventLog={game.eventLog}
-            />
-          </section>
+          </div>
         )}
       </div>
 
