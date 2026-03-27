@@ -20,7 +20,10 @@ export default function BattleActionBar({
   onRestart,
 }) {
   return (
-    <footer className="glass-light viewport-footer animate-footer-rise rounded-[1rem] border border-white/10 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-3 sm:py-2.5">
+    <footer
+      aria-label="Battle controls and latest action"
+      className="glass-light viewport-footer animate-footer-rise rounded-[1rem] border border-white/10 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-3 sm:py-2.5"
+    >
       <div className="flex w-full flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -29,7 +32,11 @@ export default function BattleActionBar({
               {currentTurnLabel}
             </span>
           </div>
-          <p className="mt-1 truncate text-[0.76rem] leading-5 text-slate-300 sm:text-[0.82rem]">
+          <p
+            className="mt-1 truncate text-[0.76rem] leading-5 text-slate-300 sm:text-[0.82rem]"
+            role="status"
+            aria-live="polite"
+          >
             {latestEvent}
           </p>
         </div>

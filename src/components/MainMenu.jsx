@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import IconButton from "./IconButton";
@@ -11,6 +11,15 @@ export default function MainMenu({
   onStatsClick,
 }) {
   const [activeAction, setActiveAction] = useState("instructions");
+  const playButtonRef = useRef(null);
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      playButtonRef.current?.focus();
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, []);
 
   useEffect(() => {
     const actionOrder = ["instructions", "settings", "stats"];
@@ -104,10 +113,12 @@ export default function MainMenu({
           className="mt-5 flex justify-center sm:mt-10"
         >
           <IconButton
+            ref={playButtonRef}
             onClick={onPlayClick}
             tone="accent"
             size="lg"
             className="animate-pulse-subtle min-h-11 min-w-[150px] px-5 text-sm font-semibold uppercase tracking-[0.18em] sm:min-h-14 sm:min-w-[240px] sm:px-8 sm:text-base sm:tracking-[0.28em]"
+            ariaLabel="Play Sea Battle"
           >
             Play
           </IconButton>

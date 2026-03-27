@@ -12,6 +12,7 @@ export default function DifficultySelector({
   disabled = false,
 }) {
   const [selecting, setSelecting] = useState(null);
+  const optionRefs = useRef([]);
   const [focusedIndex, setFocusedIndex] = useState(() =>
     Math.max(
       0,
@@ -28,6 +29,14 @@ export default function DifficultySelector({
       )
     );
   }, [difficulty]);
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      optionRefs.current[focusedIndex]?.focus();
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [focusedIndex]);
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -137,6 +146,9 @@ export default function DifficultySelector({
           return (
             <motion.button
               key={level.id}
+              ref={(element) => {
+                optionRefs.current[index] = element;
+              }}
               type="button"
               disabled={disabled}
               initial={{ opacity: 0, y: 18 }}
@@ -159,6 +171,7 @@ export default function DifficultySelector({
                 disabled && "cursor-not-allowed opacity-40"
               )}
               aria-pressed={active || pending}
+              aria-current={active ? "true" : undefined}
               aria-label={`${level.name} difficulty. ${level.description}`}
               onMouseEnter={() => setFocusedIndex(index)}
               onFocus={() => setFocusedIndex(index)}
