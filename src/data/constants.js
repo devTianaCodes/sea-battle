@@ -24,17 +24,26 @@ export const DIFFICULTY_LEVELS = [
   {
     id: "easy",
     name: "Easy",
-    description: "Random shots with simple pacing.",
+    emoji: "😊",
+    accent: "mint",
+    description: "AI plays randomly and leaves space to recover.",
+    detail: "Longer games, forgiving search pattern, best for first runs.",
   },
   {
     id: "medium",
     name: "Medium",
-    description: "Parity search with focused follow-up shots.",
+    emoji: "😎",
+    accent: "cyan",
+    description: "AI uses parity search and follows up on hits.",
+    detail: "Balanced pressure with fair tactical punishment.",
   },
   {
     id: "hard",
     name: "Hard",
-    description: "Probability scanning that still plays fair.",
+    emoji: "🔥",
+    accent: "coral",
+    description: "AI uses probability hunting and closes efficiently.",
+    detail: "Shorter games, tighter punish windows, highest pressure.",
   },
 ];
 

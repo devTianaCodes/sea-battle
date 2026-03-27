@@ -72,6 +72,7 @@ export default function GameShell() {
         <StatusBar
           difficulty={game.difficulty}
           onDifficultyChange={game.setDifficulty}
+          historySummary={game.historySummary}
           phaseLabel={game.phaseLabel}
           turnLabel={game.turnLabel}
           announcement={game.announcement}

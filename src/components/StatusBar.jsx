@@ -4,6 +4,7 @@ import IconButton from "./IconButton";
 export default function StatusBar({
   difficulty,
   onDifficultyChange,
+  historySummary,
   phaseLabel,
   turnLabel,
   announcement,
@@ -62,6 +63,7 @@ export default function StatusBar({
           <DifficultySelector
             difficulty={difficulty}
             onChange={onDifficultyChange}
+            historySummary={historySummary}
             disabled={difficultyLocked}
           />
           <div className="flex flex-wrap gap-3 lg:justify-end">
