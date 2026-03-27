@@ -1,8 +1,17 @@
 {
   "name": "sea-battle",
+  "description": "Modern single-player Battleship game with adaptive AI, glasmorphism styling, and responsive play.",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "keywords": [
+    "sea-battle",
+    "battleship",
+    "react-game",
+    "vite",
+    "framer-motion",
+    "single-player"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
