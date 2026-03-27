@@ -55,6 +55,32 @@
   }
 }
 
+@keyframes waveDrift {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-12%);
+  }
+}
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: translateY(-120vh) scale(1.15);
+    opacity: 0;
+  }
+}
+
 .ripple-dot::before {
   content: "";
   position: absolute;
@@ -82,4 +108,41 @@
 
 .animate-banner-in {
   animation: bannerIn 0.22s ease-out both;
+}
+
+.bubble-particle {
+  animation: bubbleRise linear infinite;
+}
+
+.wave-layer {
+  position: absolute;
+  inset-x: -10%;
+  bottom: 0;
+  height: 100%;
+  border-top-left-radius: 55% 100%;
+  border-top-right-radius: 55% 100%;
+  animation: waveDrift 14s linear infinite alternate;
+}
+
+.wave-back {
+  bottom: -1.5rem;
+  opacity: 0.35;
+  background: linear-gradient(180deg, rgba(17, 138, 178, 0.08), rgba(17, 138, 178, 0.18));
+}
+
+.wave-mid {
+  bottom: -0.75rem;
+  opacity: 0.45;
+  background: linear-gradient(180deg, rgba(0, 212, 255, 0.08), rgba(0, 212, 255, 0.16));
+  animation-duration: 11s;
+}
+
+.wave-front {
+  opacity: 0.55;
+  background: linear-gradient(180deg, rgba(223, 247, 255, 0.06), rgba(0, 212, 255, 0.12));
+  animation-duration: 9s;
+}
+
+.wave-energetic {
+  filter: saturate(1.15);
 }

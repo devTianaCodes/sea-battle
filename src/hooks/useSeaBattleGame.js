@@ -95,6 +95,7 @@ export default function useSeaBattleGame() {
     createSystemEvent("Awaiting deployment orders."),
   ]);
   const [isAiThinking, setIsAiThinking] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [focus, setFocus] = useState(createFocusState);
   const aiTimeoutRef = useRef(null);
   const aiPlayer = useAIPlayer(difficulty);
@@ -242,6 +243,7 @@ export default function useSeaBattleGame() {
     setResultsStats(null);
     setEventLog([createSystemEvent("Awaiting deployment orders.")]);
     setIsAiThinking(false);
+    setIsPaused(false);
     setFocus(createFocusState());
   }
 
@@ -352,7 +354,7 @@ export default function useSeaBattleGame() {
   }
 
   function placeSelectedShip(x, y) {
-    if (phase !== GAME_PHASES.SETUP || !selectedShipId) {
+    if (phase !== GAME_PHASES.SETUP || !selectedShipId || isPaused) {
       return false;
     }
 
@@ -378,7 +380,7 @@ export default function useSeaBattleGame() {
   }
 
   function randomizePlayerFleet() {
-    if (phase !== GAME_PHASES.SETUP) {
+    if (phase !== GAME_PHASES.SETUP || isPaused) {
       return;
     }
 
@@ -390,6 +392,10 @@ export default function useSeaBattleGame() {
   }
 
   function confirmPlayerFleet() {
+    if (isPaused) {
+      return false;
+    }
+
     if (!areAllShipsPlaced(playerFleet, SHIP_DEFINITIONS)) {
       setAnnouncement("Place all ships before you engage.");
       return false;
@@ -443,7 +449,7 @@ export default function useSeaBattleGame() {
   }
 
   function fireAtEnemy(x, y) {
-    if (phase !== GAME_PHASES.BATTLE || turn !== TURN_STATES.PLAYER || isAiThinking) {
+    if (phase !== GAME_PHASES.BATTLE || turn !== TURN_STATES.PLAYER || isAiThinking || isPaused) {
       return false;
     }
 
@@ -487,7 +493,7 @@ export default function useSeaBattleGame() {
   }
 
   useEffect(() => {
-    if (phase !== GAME_PHASES.BATTLE || turn !== TURN_STATES.AI || winner) {
+    if (phase !== GAME_PHASES.BATTLE || turn !== TURN_STATES.AI || winner || isPaused) {
       return;
     }
 
@@ -536,11 +542,32 @@ export default function useSeaBattleGame() {
     }, difficulty === "easy" ? 550 : difficulty === "medium" ? 750 : 900);
 
     return clearAiTimeout;
-  }, [aiPlayer, aiShots, difficulty, phase, playerFleet, remainingPlayerShips, turn, winner]);
+  }, [aiPlayer, aiShots, difficulty, isPaused, phase, playerFleet, remainingPlayerShips, turn, winner]);
 
   function restartMatch() {
     resetState(difficulty);
     setScreen("game");
+  }
+
+  function togglePause() {
+    if (screen !== "game" || phase === GAME_PHASES.GAME_OVER) {
+      return;
+    }
+
+    if (!isPaused) {
+      clearAiTimeout();
+      setIsAiThinking(false);
+    }
+
+    setIsPaused((current) => !current);
+  }
+
+  function resumeGame() {
+    if (screen !== "game") {
+      return;
+    }
+
+    setIsPaused(false);
   }
 
   function dismissOnboarding() {
@@ -612,6 +639,7 @@ export default function useSeaBattleGame() {
     eventLog,
     soundEnabled: soundEffects.soundEnabled,
     isAiThinking,
+    isPaused,
     focus,
     playerMetrics,
     enemyMetrics,
@@ -638,6 +666,8 @@ export default function useSeaBattleGame() {
     confirmPlayerFleet,
     fireAtEnemy,
     restartMatch,
+    togglePause,
+    resumeGame,
     dismissOnboarding,
     reopenOnboarding,
     clearHistory,

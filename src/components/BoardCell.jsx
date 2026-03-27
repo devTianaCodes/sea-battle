@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import BattleEffects from "./BattleEffects";
 
 function getCellClasses(cell, isInteractive) {
   const recentShotClass = cell.isRecentShot
@@ -88,6 +89,7 @@ function BoardCell({
         {coordinateLabel}
       </span>
       {cell.isMiss ? <span className="absolute inset-0 ripple-dot rounded-[inherit]" /> : null}
+      <BattleEffects cell={cell} />
       {getCellContents(cell)}
     </motion.button>
   );

@@ -3,12 +3,15 @@ import { GAME_PHASES } from "../data/constants";
 import { useGameContext } from "../context/GameContext";
 import { formatDuration } from "../utils/stats";
 import BattleIntelPanel from "./BattleIntelPanel";
+import BackgroundEffects from "./BackgroundEffects";
 import BoardStageTabs from "./BoardStageTabs";
 import GameBoard from "./GameBoard";
 import HistoryPanel from "./HistoryPanel";
+import IconButton from "./IconButton";
 import InstructionsModal from "./InstructionsModal";
 import MainMenu from "./MainMenu";
 import OnboardingModal from "./OnboardingModal";
+import PauseModal from "./PauseModal";
 import PhaseCoach from "./PhaseCoach";
 import ResultsModal from "./ResultsModal";
 import SettingsModal from "./SettingsModal";
@@ -31,6 +34,24 @@ export default function GameShell() {
 
   useEffect(() => {
     function handleKeyDown(event) {
+      if ((event.key === "?" || (event.key === "/" && event.shiftKey))) {
+        event.preventDefault();
+        game.openInstructions();
+        return;
+      }
+
+      if (event.key.toLowerCase() === "m") {
+        event.preventDefault();
+        game.toggleSound();
+        return;
+      }
+
+      if (event.key.toLowerCase() === "p") {
+        event.preventDefault();
+        game.togglePause();
+        return;
+      }
+
       if (event.key.toLowerCase() === "r" && game.phase === GAME_PHASES.SETUP) {
         event.preventDefault();
         game.toggleOrientation();
@@ -70,7 +91,7 @@ export default function GameShell() {
   if (game.screen === "menu") {
     return (
       <div className="min-h-screen overflow-hidden bg-[#050b18] text-slate-100">
-        {game.backgroundEffectsEnabled ? <div className="ocean-background" /> : null}
+        {game.backgroundEffectsEnabled ? <BackgroundEffects energetic={false} /> : null}
         <MainMenu
           historySummary={game.historySummary}
           onPlayClick={game.openDifficultyScreen}
@@ -99,7 +120,7 @@ export default function GameShell() {
   if (game.screen === "difficulty") {
     return (
       <div className="min-h-screen overflow-hidden bg-[#050b18] text-slate-100">
-        {game.backgroundEffectsEnabled ? <div className="ocean-background" /> : null}
+        {game.backgroundEffectsEnabled ? <BackgroundEffects energetic={false} /> : null}
         <main className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-center gap-6 px-4 py-10 sm:px-6 lg:px-8">
           <div className="glass-panel rounded-[2rem] p-6 sm:p-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -126,11 +147,13 @@ export default function GameShell() {
                 playerStats={{ accuracy: 0, hits: 0, misses: 0 }}
                 shipsRemaining={{ player: 5, opponent: 5 }}
                 onRestart={game.openMenu}
+                onPause={game.togglePause}
                 onOpenGuide={game.openInstructions}
                 onOpenSettings={() => game.openSettings("settings")}
                 soundEnabled={game.soundEnabled}
                 onToggleSound={game.toggleSound}
                 difficultyLocked={false}
+                isPaused={false}
               />
             </div>
           </div>
@@ -156,7 +179,9 @@ export default function GameShell() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-slate-100">
-      {game.backgroundEffectsEnabled ? <div className="ocean-background" /> : null}
+      {game.backgroundEffectsEnabled ? (
+        <BackgroundEffects energetic={game.phase === GAME_PHASES.BATTLE} />
+      ) : null}
       <TurnBanner visible={game.isAiThinking} label="Opponent Turn" />
       <main className="relative mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
         <StatusBar
@@ -171,11 +196,13 @@ export default function GameShell() {
           playerStats={game.playerMetrics}
           shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
           onRestart={game.restartMatch}
+          onPause={game.togglePause}
           onOpenGuide={game.openInstructions}
           onOpenSettings={() => game.openSettings("settings")}
           soundEnabled={game.soundEnabled}
           onToggleSound={game.toggleSound}
           difficultyLocked={game.phase === GAME_PHASES.BATTLE}
+          isPaused={game.isPaused}
         />
         <PhaseCoach
           phase={game.phase}
@@ -264,6 +291,12 @@ export default function GameShell() {
         onReplay={game.restartMatch}
         onReplayStep={game.changeDifficultyByStep}
         onChangeDifficulty={game.openDifficultyScreen}
+        onMainMenu={game.openMenu}
+      />
+      <PauseModal
+        open={game.isPaused}
+        onResume={game.resumeGame}
+        onOpenInstructions={game.openInstructions}
         onMainMenu={game.openMenu}
       />
       <OnboardingModal open={game.showOnboarding} onClose={game.dismissOnboarding} />

@@ -13,11 +13,13 @@ export default function StatusBar({
   playerStats,
   shipsRemaining,
   onRestart,
+  onPause,
   onOpenGuide,
   onOpenSettings,
   soundEnabled,
   onToggleSound,
   difficultyLocked,
+  isPaused,
 }) {
   return (
     <div className="glass-panel rounded-[2rem] p-4 sm:p-5">
@@ -30,7 +32,7 @@ export default function StatusBar({
               {phaseLabel}
             </span>
             <span className="rounded-full border border-cyan/20 bg-cyan/10 px-3 py-1 text-sm text-cyan-100">
-              {turnLabel}
+              {isPaused ? "Paused" : turnLabel}
             </span>
             <span className="rounded-full border border-white/10 bg-white/6 px-3 py-1 text-sm text-slate-200">
               {timerLabel}
@@ -73,6 +75,9 @@ export default function StatusBar({
             </IconButton>
             <IconButton onClick={onOpenSettings}>
               Settings
+            </IconButton>
+            <IconButton onClick={onPause} tone={isPaused ? "warm" : "default"}>
+              {isPaused ? "Resume" : "Pause"}
             </IconButton>
             <IconButton onClick={onToggleSound} tone={soundEnabled ? "accent" : "default"}>
               {soundEnabled ? "Sound On" : "Sound Off"}
