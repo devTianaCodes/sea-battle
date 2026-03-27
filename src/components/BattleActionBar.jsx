@@ -4,7 +4,7 @@ function StatChip({ label, value, accent = "text-slate-200" }) {
   return (
     <div className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1">
       <span className="text-[0.54rem] uppercase tracking-[0.12em] text-slate-500">{label}</span>
-      <span className={`ml-1.5 text-[0.72rem] font-medium ${accent}`}>{value}</span>
+      <span className={`ml-1.5 text-[0.74rem] font-medium ${accent}`}>{value}</span>
     </div>
   );
 }
@@ -27,13 +27,13 @@ export default function BattleActionBar({
       <div className="flex w-full flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[0.58rem] uppercase tracking-[0.16em] text-cyan/70">Action Bar</span>
+            <span className="text-[0.58rem] uppercase tracking-[0.14em] text-cyan/70">Action Bar</span>
             <span className="rounded-full border border-cyan/15 bg-cyan/[0.06] px-2 py-0.5 text-[0.54rem] uppercase tracking-[0.12em] text-cyan-100">
               {currentTurnLabel}
             </span>
           </div>
           <p
-            className="mt-1 truncate text-[0.76rem] leading-5 text-slate-300 sm:text-[0.82rem]"
+            className="mt-1 truncate text-[0.78rem] leading-5 text-slate-300 sm:text-[0.84rem]"
             role="status"
             aria-live="polite"
           >

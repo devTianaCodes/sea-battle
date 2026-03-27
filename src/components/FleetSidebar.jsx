@@ -12,21 +12,21 @@ export default function FleetSidebar({
   const availableIds = new Set(availableShips.map((ship) => ship.id));
 
   return (
-    <div className="glass-light min-w-0 w-full max-w-full overflow-hidden rounded-[1.1rem] p-2.5 sm:rounded-[1.35rem] sm:p-3">
-      <div className="mb-2 flex items-center justify-between sm:mb-2.5">
+    <div className="glass-light min-w-0 w-full max-w-full overflow-hidden rounded-[1.2rem] p-3 sm:rounded-[1.4rem] sm:p-4">
+      <div className="mb-2.5 flex items-center justify-between sm:mb-3">
         <div>
-          <p className="text-[0.68rem] uppercase tracking-[0.2em] text-cyan/70 sm:text-xs sm:tracking-[0.24em]">
+          <p className="text-[0.74rem] uppercase tracking-[0.18em] text-cyan/70 sm:text-[0.8rem] sm:tracking-[0.24em]">
             Ships
           </p>
-          <h2 className="text-[0.82rem] uppercase tracking-[0.14em] text-slate-300 sm:text-sm sm:tracking-[0.18em]">
+          <h2 className="text-[0.94rem] uppercase tracking-[0.14em] text-slate-300 sm:text-[1rem] sm:tracking-[0.18em]">
             Deployment
           </h2>
         </div>
-        <div className="rounded-full border border-white/10 bg-white/[0.06] px-2 py-0.5 text-[0.52rem] uppercase tracking-[0.12em] text-slate-300 sm:px-2.5 sm:py-1 sm:text-[0.58rem] sm:tracking-[0.16em]">
+        <div className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[0.58rem] uppercase tracking-[0.12em] text-slate-300 sm:px-3 sm:text-[0.62rem] sm:tracking-[0.16em]">
           {orientation === ORIENTATIONS.HORIZONTAL ? "H" : "V"}
         </div>
       </div>
-      <div className="flex min-w-0 w-full max-w-full gap-1 overflow-x-auto pb-1 md:flex-col md:gap-1.5 md:overflow-visible">
+      <div className="flex min-w-0 w-full max-w-full gap-1.5 overflow-x-auto pb-1 md:flex-col md:gap-2 md:overflow-visible">
         {SHIP_DEFINITIONS.map((ship) => {
           const isPlaced = playerFleet.some((placedShip) => placedShip.id === ship.id);
           const isAvailable = availableIds.has(ship.id);
@@ -41,7 +41,7 @@ export default function FleetSidebar({
               whileTap={{ scale: 0.99 }}
               className={clsx(
                 "flex flex-none items-center justify-between rounded-[0.95rem] border text-left transition duration-200 md:min-w-0 md:w-full md:flex-1",
-                "min-w-[6.6rem] max-w-[6.9rem] px-2 py-1.5 sm:min-w-[7.6rem] sm:max-w-[7.9rem] sm:px-2.5 sm:py-2 md:max-w-none",
+                "min-w-[7.1rem] max-w-[7.4rem] px-2.5 py-2 sm:min-w-[8.2rem] sm:max-w-[8.5rem] sm:px-3 sm:py-2.5 md:max-w-none",
                 isSelected
                   ? "border-cyan/60 bg-cyan/[0.12] shadow-[0_0_0_1px_rgba(0,212,255,0.2)]"
                   : isPlaced
@@ -50,10 +50,10 @@ export default function FleetSidebar({
               )}
               >
               <div className="min-w-0">
-                <div className="truncate text-[0.72rem] font-medium text-foam sm:text-[0.8rem]">
+                <div className="truncate text-[0.82rem] font-medium text-foam sm:text-[0.92rem]">
                   {ship.name}
                 </div>
-                <div className="text-[0.52rem] uppercase tracking-[0.04em] text-slate-500 sm:text-[0.58rem] sm:tracking-[0.06em]">
+                <div className="text-[0.56rem] uppercase tracking-[0.04em] text-slate-500 sm:text-[0.62rem] sm:tracking-[0.06em]">
                   {ship.size} cells {isPlaced ? "placed" : isAvailable ? "ready" : ""}
                 </div>
               </div>

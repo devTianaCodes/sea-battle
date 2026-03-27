@@ -65,7 +65,7 @@ export default function GameBoard({
 
   return (
     <section
-      className={`game-board-container glass-panel group min-w-0 w-full max-w-full rounded-[1.35rem] px-2.5 py-2.5 sm:rounded-[1.6rem] sm:px-4 sm:py-4 ${
+      className={`game-board-container glass-panel group min-w-0 w-full max-w-full rounded-[1.45rem] px-3 py-3 sm:rounded-[1.75rem] sm:px-5 sm:py-5 ${
         cursorMode === "battle"
           ? "cursor-battle"
           : cursorMode === "placement"
@@ -73,48 +73,50 @@ export default function GameBoard({
             : ""
       } ${interactive && isBattleTargetBoard ? "targetable-board" : ""} ${className}`}
     >
-      <div className="mb-1.5 flex w-full items-center justify-between lg:mb-2">
-        <p className="text-[0.68rem] uppercase tracking-[0.32em] text-slate-400">{boardId}</p>
-        <p className="text-[0.68rem] uppercase tracking-[0.24em] text-cyan/70">{title}</p>
+      <div className="mb-2 flex w-full items-center justify-between lg:mb-2.5">
+        <p className="text-[0.74rem] uppercase tracking-[0.28em] text-slate-400">{boardId}</p>
+        <p className="text-[0.74rem] uppercase tracking-[0.22em] text-cyan/70">{title}</p>
       </div>
 
-      <div
-        className={`game-board relative w-full transition-opacity duration-300 ${!interactive ? "opacity-95" : ""} ${
-          isThinking ? "opacity-85" : ""
-        }`}
-        onKeyDown={handleKeyDown}
-        role="grid"
-        aria-label={title}
-      >
-        {board.flat().map((cell) => {
-          const active = focusCell.x === cell.x && focusCell.y === cell.y;
-          const isInteractive = interactive && !cell.isHit && !cell.isMiss;
+      <div className="game-board-frame">
+        <div
+          className={`game-board relative w-full transition-opacity duration-300 ${!interactive ? "opacity-95" : ""} ${
+            isThinking ? "opacity-85" : ""
+          }`}
+          onKeyDown={handleKeyDown}
+          role="grid"
+          aria-label={title}
+        >
+          {board.flat().map((cell) => {
+            const active = focusCell.x === cell.x && focusCell.y === cell.y;
+            const isInteractive = interactive && !cell.isHit && !cell.isMiss;
 
-          return (
-            <BoardCell
-              key={`${boardId}-${cell.x}-${cell.y}`}
-              cell={cell}
-              active={active}
-              isInteractive={isInteractive}
-              onFocus={() => onSetFocus(cell.x, cell.y)}
-              onActivate={() => onActivateCell(cell.x, cell.y)}
-              tabIndex={active ? 0 : -1}
-              ariaLabel={describeCell(cell, cell.x, cell.y, title)}
-              coordinateLabel={formatCoordinate(cell.x, cell.y)}
-              index={cell.y * 10 + cell.x}
-            />
-          );
-        })}
-        {isThinking ? (
-          <div className="glass-light thinking-overlay absolute inset-0 flex items-center justify-center rounded-[1rem] border border-cyan/15">
-            <div className="animate-fade-in-fast banner-sheen flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.65rem] uppercase tracking-[0.22em] text-cyan-50">
-              <span className="thinking-dot" />
-              <span className="thinking-dot" />
-              <span className="thinking-dot" />
-              Opponent turn
+            return (
+              <BoardCell
+                key={`${boardId}-${cell.x}-${cell.y}`}
+                cell={cell}
+                active={active}
+                isInteractive={isInteractive}
+                onFocus={() => onSetFocus(cell.x, cell.y)}
+                onActivate={() => onActivateCell(cell.x, cell.y)}
+                tabIndex={active ? 0 : -1}
+                ariaLabel={describeCell(cell, cell.x, cell.y, title)}
+                coordinateLabel={formatCoordinate(cell.x, cell.y)}
+                index={cell.y * 10 + cell.x}
+              />
+            );
+          })}
+          {isThinking ? (
+            <div className="glass-light thinking-overlay absolute inset-0 flex items-center justify-center rounded-[1rem] border border-cyan/15">
+              <div className="animate-fade-in-fast banner-sheen flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.72rem] uppercase tracking-[0.18em] text-cyan-50">
+                <span className="thinking-dot" />
+                <span className="thinking-dot" />
+                <span className="thinking-dot" />
+                Opponent turn
+              </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </div>
     </section>
   );

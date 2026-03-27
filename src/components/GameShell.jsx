@@ -151,7 +151,7 @@ export default function GameShell() {
         <BackgroundEffects energetic={game.phase === GAME_PHASES.BATTLE} />
       ) : null}
       <TurnBanner visible={game.isAiThinking} label="Opponent Turn" />
-      <div className="relative z-10 flex flex-1 flex-col gap-3 overflow-hidden">
+      <div className="relative z-10 flex flex-1 flex-col gap-2 overflow-hidden">
         <StatusBar
           difficulty={game.difficulty}
           turnLabel={game.turnLabel}
@@ -170,8 +170,8 @@ export default function GameShell() {
         />
 
         {game.phase === GAME_PHASES.SETUP ? (
-          <section className="grid min-h-0 w-full max-w-full gap-2 overflow-x-hidden md:grid-cols-[13.5rem_minmax(0,1fr)] md:items-start md:gap-3 lg:grid-cols-[15rem_minmax(0,1fr)]">
-            <div className="min-w-0 w-full max-w-full space-y-2">
+          <section className="grid min-h-0 w-full max-w-full gap-2 overflow-x-hidden md:grid-cols-[13rem_minmax(0,1fr)] md:items-stretch md:gap-2 lg:grid-cols-[14.5rem_minmax(0,1fr)]">
+            <div className="min-w-0 w-full max-w-full space-y-1.5 md:flex md:h-full md:flex-col">
               <FleetSidebar
                 availableShips={game.availableShips}
                 playerFleet={game.playerFleet}
@@ -189,7 +189,7 @@ export default function GameShell() {
                 selectedShipName={selectedShipName}
               />
             </div>
-            <div className="grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:justify-items-stretch md:gap-3 xl:grid-cols-2">
+            <div className="grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:h-full md:grid-cols-2 md:justify-items-stretch md:gap-2">
               <GameBoard
                 title="Your Fleet"
                 boardId="Player Grid"
@@ -200,7 +200,7 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
                 onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-                className="setup-board w-full max-w-[13.5rem] sm:max-w-[15rem] md:max-w-none"
+                className="setup-board h-full w-full max-w-[13.5rem] sm:max-w-[15rem] md:max-w-none"
               />
               <GameBoard
                 title="Opponent Grid"
@@ -212,13 +212,13 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
                 onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
-                className="setup-board hidden w-full max-w-[13.5rem] sm:max-w-[15rem] md:max-w-none xl:flex"
+                className="setup-board hidden h-full w-full max-w-[13.5rem] sm:max-w-[15rem] md:flex md:max-w-none"
               />
             </div>
           </section>
         ) : (
-          <div className="flex min-h-0 flex-1 flex-col gap-2 sm:gap-3">
-            <section className="viewport-main grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-3">
+          <div className="flex min-h-0 flex-1 flex-col gap-2">
+            <section className="viewport-main grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-2">
               <GameBoard
                 title="Your Fleet"
                 boardId="Player Grid"

@@ -46,13 +46,13 @@ select {
 
 @media (min-width: 640px) {
   :root {
-    --viewport-padding: 15px;
+    --viewport-padding: 17px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --viewport-padding: 15px;
+    --viewport-padding: 18px;
   }
 }
 
@@ -245,10 +245,25 @@ select {
   min-width: 0;
 }
 
+.setup-board {
+  height: 100%;
+}
+
+.game-board-frame {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
 .game-board {
   display: grid;
   width: 100%;
-  max-width: min(100%, 15rem);
+  max-width: 100%;
+  margin: 0 auto;
   grid-template-columns: repeat(10, minmax(0, 1fr));
   grid-template-rows: repeat(10, minmax(0, 1fr));
   gap: 2px;
@@ -256,7 +271,7 @@ select {
 }
 
 .battle-board .game-board {
-  max-width: min(100%, 17rem);
+  max-width: 100%;
 }
 
 .board-cell {
@@ -335,11 +350,15 @@ select {
   }
 
   .game-board {
-    max-width: min(100%, 20rem);
+    max-width: 100%;
+  }
+
+  .setup-board .game-board {
+    max-width: 100%;
   }
 
   .battle-board .game-board {
-    max-width: min(100%, 22rem);
+    max-width: 100%;
   }
 }
 
@@ -355,11 +374,15 @@ select {
   }
 
   .game-board {
-    max-width: min(100%, 19.5rem);
+    max-width: 100%;
+  }
+
+  .setup-board .game-board {
+    max-width: 100%;
   }
 
   .battle-board .game-board {
-    max-width: min(100%, 24rem);
+    max-width: 100%;
   }
 }
 
@@ -373,16 +396,16 @@ select {
   }
 
   .game-board {
-    max-width: min(100%, clamp(11.5rem, 56vw, 14rem));
+    max-width: 100%;
     gap: 2px;
   }
 
   .setup-board .game-board {
-    max-width: min(100%, clamp(10.5rem, 50vw, 12.75rem));
+    max-width: 100%;
   }
 
   .battle-board .game-board {
-    max-width: min(100%, clamp(11rem, 62vw, 14.25rem));
+    max-width: 100%;
   }
 
   .setup-board {
