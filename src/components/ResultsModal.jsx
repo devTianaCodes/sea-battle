@@ -35,6 +35,8 @@ export default function ResultsModal({
   revealedBoard,
   onReplay,
   onReplayStep,
+  onChangeDifficulty,
+  onMainMenu,
 }) {
   if (!open) {
     return null;
@@ -85,11 +87,17 @@ export default function ResultsModal({
           <IconButton onClick={onReplay} tone="success">
             Play Again
           </IconButton>
+          <IconButton onClick={onChangeDifficulty} tone="accent">
+            Change Difficulty
+          </IconButton>
           <IconButton onClick={() => onReplayStep(-1)} disabled={difficulty === "easy"}>
             Ease Down
           </IconButton>
           <IconButton onClick={() => onReplayStep(1)} disabled={difficulty === "hard"}>
             Push Harder
+          </IconButton>
+          <IconButton onClick={onMainMenu}>
+            Main Menu
           </IconButton>
         </div>
       </div>

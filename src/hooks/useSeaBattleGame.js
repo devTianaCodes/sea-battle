@@ -46,6 +46,7 @@ import { buildShotMetrics } from "../utils/stats";
 const DEFAULT_DIFFICULTY = DIFFICULTY_LEVELS[1].id;
 const MAX_EVENT_LOG = 6;
 const ONBOARDING_KEY = "sea-battle-onboarding-dismissed-v1";
+const BACKGROUND_EFFECTS_KEY = "sea-battle-background-effects-v1";
 
 function createFocusState() {
   return {
@@ -63,6 +64,7 @@ function createSystemEvent(message, tone = "system") {
 }
 
 export default function useSeaBattleGame() {
+  const [screen, setScreen] = useState("menu");
   const [difficulty, setDifficultyState] = useState(DEFAULT_DIFFICULTY);
   const [phase, setPhase] = useState(GAME_PHASES.SETUP);
   const [turn, setTurn] = useState(TURN_STATES.PLAYER);
@@ -82,6 +84,12 @@ export default function useSeaBattleGame() {
   const [history, setHistory] = useState(() => loadHistory());
   const [showOnboarding, setShowOnboarding] = useState(
     () => !loadBooleanPreference(ONBOARDING_KEY, false)
+  );
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [settingsTab, setSettingsTab] = useState("settings");
+  const [backgroundEffectsEnabled, setBackgroundEffectsEnabled] = useState(
+    () => loadBooleanPreference(BACKGROUND_EFFECTS_KEY, true)
   );
   const [eventLog, setEventLog] = useState(() => [
     createSystemEvent("Awaiting deployment orders."),
@@ -239,6 +247,7 @@ export default function useSeaBattleGame() {
 
   function startNewGame(nextDifficulty = difficulty) {
     resetState(nextDifficulty);
+    setScreen("game");
   }
 
   function setDifficulty(nextDifficulty) {
@@ -252,6 +261,47 @@ export default function useSeaBattleGame() {
       Math.max(0, currentIndex + step)
     );
     resetState(DIFFICULTY_LEVELS[nextIndex].id);
+    setScreen("game");
+  }
+
+  function openDifficultyScreen() {
+    setScreen("difficulty");
+  }
+
+  function openMenu() {
+    clearAiTimeout();
+    setScreen("menu");
+    setShowInstructions(false);
+  }
+
+  function beginGameWithDifficulty(nextDifficulty) {
+    resetState(nextDifficulty);
+    setScreen("game");
+  }
+
+  function openInstructions() {
+    setShowInstructions(true);
+  }
+
+  function closeInstructions() {
+    setShowInstructions(false);
+  }
+
+  function openSettings(tab = "settings") {
+    setSettingsTab(tab);
+    setShowSettings(true);
+  }
+
+  function closeSettings() {
+    setShowSettings(false);
+  }
+
+  function toggleBackgroundEffects() {
+    setBackgroundEffectsEnabled((current) => {
+      const next = !current;
+      saveBooleanPreference(BACKGROUND_EFFECTS_KEY, next);
+      return next;
+    });
   }
 
   function selectShip(shipId) {
@@ -490,6 +540,7 @@ export default function useSeaBattleGame() {
 
   function restartMatch() {
     resetState(difficulty);
+    setScreen("game");
   }
 
   function dismissOnboarding() {
@@ -529,6 +580,7 @@ export default function useSeaBattleGame() {
   const turnLabel = getTurnLabel(turn, isAiThinking);
 
   return {
+    screen,
     difficulty,
     phase,
     phaseLabel,
@@ -553,6 +605,10 @@ export default function useSeaBattleGame() {
     history,
     historySummary,
     showOnboarding,
+    showInstructions,
+    showSettings,
+    settingsTab,
+    backgroundEffectsEnabled,
     eventLog,
     soundEnabled: soundEffects.soundEnabled,
     isAiThinking,
@@ -566,6 +622,14 @@ export default function useSeaBattleGame() {
     startNewGame,
     setDifficulty,
     changeDifficultyByStep,
+    openDifficultyScreen,
+    openMenu,
+    beginGameWithDifficulty,
+    openInstructions,
+    closeInstructions,
+    openSettings,
+    closeSettings,
+    toggleBackgroundEffects,
     selectShip,
     toggleOrientation,
     placeSelectedShip,

@@ -6,9 +6,12 @@ import BattleIntelPanel from "./BattleIntelPanel";
 import BoardStageTabs from "./BoardStageTabs";
 import GameBoard from "./GameBoard";
 import HistoryPanel from "./HistoryPanel";
+import InstructionsModal from "./InstructionsModal";
+import MainMenu from "./MainMenu";
 import OnboardingModal from "./OnboardingModal";
 import PhaseCoach from "./PhaseCoach";
 import ResultsModal from "./ResultsModal";
+import SettingsModal from "./SettingsModal";
 import ShipPlacer from "./ShipPlacer";
 import StatusBar from "./StatusBar";
 import TurnBanner from "./TurnBanner";
@@ -64,9 +67,96 @@ export default function GameShell() {
   const enemyShipsAfloat = game.enemyFleetStatus.filter((ship) => !ship.isSunk).length;
   const turnCount = Math.max(game.playerShots.length, game.aiShots.length) + 1;
 
+  if (game.screen === "menu") {
+    return (
+      <div className="min-h-screen overflow-hidden bg-[#050b18] text-slate-100">
+        {game.backgroundEffectsEnabled ? <div className="ocean-background" /> : null}
+        <MainMenu
+          historySummary={game.historySummary}
+          onPlayClick={game.openDifficultyScreen}
+          onInstructionsClick={game.openInstructions}
+          onStatsClick={() => game.openSettings("statistics")}
+        />
+        <InstructionsModal open={game.showInstructions} onClose={game.closeInstructions} />
+        <SettingsModal
+          open={game.showSettings}
+          defaultTab={game.settingsTab}
+          onClose={game.closeSettings}
+          soundEnabled={game.soundEnabled}
+          onToggleSound={game.toggleSound}
+          backgroundEffectsEnabled={game.backgroundEffectsEnabled}
+          onToggleBackgroundEffects={game.toggleBackgroundEffects}
+          difficulty={game.difficulty}
+          onDifficultyChange={game.setDifficulty}
+          historySummary={game.historySummary}
+          onClearStats={game.clearHistory}
+          onResetToMenu={game.openMenu}
+        />
+      </div>
+    );
+  }
+
+  if (game.screen === "difficulty") {
+    return (
+      <div className="min-h-screen overflow-hidden bg-[#050b18] text-slate-100">
+        {game.backgroundEffectsEnabled ? <div className="ocean-background" /> : null}
+        <main className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-center gap-6 px-4 py-10 sm:px-6 lg:px-8">
+          <div className="glass-panel rounded-[2rem] p-6 sm:p-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Difficulty</p>
+                <h1 className="mt-3 font-display text-4xl text-foam">Choose your opponent</h1>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
+                  Pick the AI behavior for this run. Each card shows how that difficulty tends to
+                  perform in your archive.
+                </p>
+              </div>
+              <IconButton onClick={game.openMenu}>Back</IconButton>
+            </div>
+            <div className="mt-6">
+              <StatusBar
+                difficulty={game.difficulty}
+                onDifficultyChange={game.beginGameWithDifficulty}
+                historySummary={game.historySummary}
+                phaseLabel="Difficulty Select"
+                turnLabel="Menu"
+                announcement="Confirm a difficulty to enter ship placement."
+                timerLabel="00:00"
+                turnCount={0}
+                playerStats={{ accuracy: 0, hits: 0, misses: 0 }}
+                shipsRemaining={{ player: 5, opponent: 5 }}
+                onRestart={game.openMenu}
+                onOpenGuide={game.openInstructions}
+                onOpenSettings={() => game.openSettings("settings")}
+                soundEnabled={game.soundEnabled}
+                onToggleSound={game.toggleSound}
+                difficultyLocked={false}
+              />
+            </div>
+          </div>
+        </main>
+        <InstructionsModal open={game.showInstructions} onClose={game.closeInstructions} />
+        <SettingsModal
+          open={game.showSettings}
+          defaultTab={game.settingsTab}
+          onClose={game.closeSettings}
+          soundEnabled={game.soundEnabled}
+          onToggleSound={game.toggleSound}
+          backgroundEffectsEnabled={game.backgroundEffectsEnabled}
+          onToggleBackgroundEffects={game.toggleBackgroundEffects}
+          difficulty={game.difficulty}
+          onDifficultyChange={game.setDifficulty}
+          historySummary={game.historySummary}
+          onClearStats={game.clearHistory}
+          onResetToMenu={game.openMenu}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-slate-100">
-      <div className="ocean-background" />
+      {game.backgroundEffectsEnabled ? <div className="ocean-background" /> : null}
       <TurnBanner visible={game.isAiThinking} label="Opponent Turn" />
       <main className="relative mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
         <StatusBar
@@ -81,7 +171,8 @@ export default function GameShell() {
           playerStats={game.playerMetrics}
           shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
           onRestart={game.restartMatch}
-          onOpenGuide={game.reopenOnboarding}
+          onOpenGuide={game.openInstructions}
+          onOpenSettings={() => game.openSettings("settings")}
           soundEnabled={game.soundEnabled}
           onToggleSound={game.toggleSound}
           difficultyLocked={game.phase === GAME_PHASES.BATTLE}
@@ -172,8 +263,25 @@ export default function GameShell() {
         revealedBoard={game.revealedEnemyBoard}
         onReplay={game.restartMatch}
         onReplayStep={game.changeDifficultyByStep}
+        onChangeDifficulty={game.openDifficultyScreen}
+        onMainMenu={game.openMenu}
       />
       <OnboardingModal open={game.showOnboarding} onClose={game.dismissOnboarding} />
+      <InstructionsModal open={game.showInstructions} onClose={game.closeInstructions} />
+      <SettingsModal
+        open={game.showSettings}
+        defaultTab={game.settingsTab}
+        onClose={game.closeSettings}
+        soundEnabled={game.soundEnabled}
+        onToggleSound={game.toggleSound}
+        backgroundEffectsEnabled={game.backgroundEffectsEnabled}
+        onToggleBackgroundEffects={game.toggleBackgroundEffects}
+        difficulty={game.difficulty}
+        onDifficultyChange={game.setDifficulty}
+        historySummary={game.historySummary}
+        onClearStats={game.clearHistory}
+        onResetToMenu={game.openMenu}
+      />
     </div>
   );
 }
