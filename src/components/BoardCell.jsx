@@ -1,3 +1,6 @@
+import clsx from "clsx";
+import { motion } from "framer-motion";
+
 function getCellClasses(cell, isInteractive) {
   const recentShotClass = cell.isRecentShot
     ? "after:absolute after:inset-1 after:rounded-[0.7rem] after:border after:border-cyan/55 after:shadow-[0_0_18px_rgba(0,212,255,0.35)] after:content-['']"
@@ -48,7 +51,7 @@ function getCellContents(cell) {
   return null;
 }
 
-export default function BoardCell({
+function BoardCell({
   cell,
   active,
   isInteractive,
@@ -56,24 +59,38 @@ export default function BoardCell({
   onActivate,
   tabIndex,
   ariaLabel,
+  coordinateLabel,
+  index,
 }) {
   return (
-    <button
+    <motion.button
       type="button"
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.18, delay: Math.min(index * 0.003, 0.18) }}
+      whileHover={isInteractive ? { scale: 1.04 } : undefined}
+      whileTap={isInteractive ? { scale: 0.97 } : undefined}
       onMouseEnter={onFocus}
       onFocus={onFocus}
       onClick={onActivate}
       disabled={!isInteractive}
       tabIndex={tabIndex}
       aria-label={ariaLabel}
-      className={`relative aspect-square rounded-[0.9rem] border transition duration-200 focus:outline-none focus:ring-2 focus:ring-cyan/70 ${
-        getCellClasses(cell, isInteractive)
-      } ${active ? "ring-2 ring-cyan/80 ring-offset-2 ring-offset-[#071120]" : ""} ${
-        !isInteractive && !cell.isHit && !cell.isMiss ? "cursor-default" : ""
-      }`}
+      title={coordinateLabel}
+      className={clsx(
+        "group relative aspect-square rounded-[0.9rem] border transition duration-200 focus:outline-none focus:ring-2 focus:ring-cyan/70",
+        getCellClasses(cell, isInteractive),
+        active && "ring-2 ring-cyan/80 ring-offset-2 ring-offset-[#071120]",
+        !isInteractive && !cell.isHit && !cell.isMiss && "cursor-default"
+      )}
     >
+      <span className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 rounded-full border border-white/10 bg-[#071120]/90 px-2 py-1 text-[0.6rem] uppercase tracking-[0.2em] text-slate-300 shadow-lg group-hover:block">
+        {coordinateLabel}
+      </span>
       {cell.isMiss ? <span className="absolute inset-0 ripple-dot rounded-[inherit]" /> : null}
       {getCellContents(cell)}
-    </button>
+    </motion.button>
   );
 }
+
+export default BoardCell;

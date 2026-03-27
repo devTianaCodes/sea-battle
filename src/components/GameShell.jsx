@@ -4,13 +4,12 @@ import { useGameContext } from "../context/GameContext";
 import { formatDuration } from "../utils/stats";
 import BattleIntelPanel from "./BattleIntelPanel";
 import BoardStageTabs from "./BoardStageTabs";
-import FleetSidebar from "./FleetSidebar";
 import GameBoard from "./GameBoard";
 import HistoryPanel from "./HistoryPanel";
 import OnboardingModal from "./OnboardingModal";
 import PhaseCoach from "./PhaseCoach";
 import ResultsModal from "./ResultsModal";
-import ShipPlacementPanel from "./ShipPlacementPanel";
+import ShipPlacer from "./ShipPlacer";
 import StatusBar from "./StatusBar";
 import TurnBanner from "./TurnBanner";
 
@@ -63,6 +62,7 @@ export default function GameShell() {
     game.availableShips.find((ship) => ship.id === game.selectedShipId)?.name ?? null;
   const playerShipsAfloat = game.playerFleetStatus.filter((ship) => !ship.isSunk).length;
   const enemyShipsAfloat = game.enemyFleetStatus.filter((ship) => !ship.isSunk).length;
+  const turnCount = Math.max(game.playerShots.length, game.aiShots.length) + 1;
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-slate-100">
@@ -76,6 +76,9 @@ export default function GameShell() {
           turnLabel={game.turnLabel}
           announcement={game.announcement}
           timerLabel={timerLabel}
+          turnCount={turnCount}
+          playerStats={game.playerMetrics}
+          shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
           onRestart={game.restartMatch}
           onOpenGuide={game.reopenOnboarding}
           soundEnabled={game.soundEnabled}
@@ -95,15 +98,13 @@ export default function GameShell() {
 
         <section className="animate-panel-in grid gap-6 xl:grid-cols-[22rem,minmax(0,1fr)]">
           <div className="space-y-6">
-            <FleetSidebar
+            <ShipPlacer
+              phase={game.phase}
               availableShips={game.availableShips}
               playerFleet={game.playerFleet}
               selectedShipId={game.selectedShipId}
               orientation={game.orientation}
               onSelectShip={game.selectShip}
-            />
-            <ShipPlacementPanel
-              phase={game.phase}
               canConfirm={canConfirm}
               onConfirm={game.confirmPlayerFleet}
               onRandomize={game.randomizePlayerFleet}

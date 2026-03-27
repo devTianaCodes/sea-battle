@@ -8,6 +8,9 @@ export default function StatusBar({
   turnLabel,
   announcement,
   timerLabel,
+  turnCount,
+  playerStats,
+  shipsRemaining,
   onRestart,
   onOpenGuide,
   soundEnabled,
@@ -30,10 +33,30 @@ export default function StatusBar({
             <span className="rounded-full border border-white/10 bg-white/6 px-3 py-1 text-sm text-slate-200">
               {timerLabel}
             </span>
+            <span className="rounded-full border border-cyan/20 bg-cyan/10 px-3 py-1 text-sm text-cyan-50">
+              Turn {turnCount}
+            </span>
           </div>
           <p className="max-w-3xl text-sm leading-6 text-slate-300" aria-live="polite">
             {announcement}
           </p>
+          <div className="grid gap-2 pt-1 sm:grid-cols-3">
+            <HudPill
+              label="Accuracy"
+              value={`${playerStats.accuracy}%`}
+              accent="text-cyan-50"
+            />
+            <HudPill
+              label="Hits / Misses"
+              value={`${playerStats.hits} / ${playerStats.misses}`}
+              accent="text-foam"
+            />
+            <HudPill
+              label="Ships Afloat"
+              value={`${shipsRemaining.player} / ${shipsRemaining.opponent}`}
+              accent="text-mint"
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-3 lg:items-end">
           <DifficultySelector
@@ -54,6 +77,15 @@ export default function StatusBar({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function HudPill({ label, value, accent }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.05] px-3 py-3">
+      <div className="text-[0.6rem] uppercase tracking-[0.28em] text-slate-400">{label}</div>
+      <div className={`mt-1 text-sm font-medium ${accent}`}>{value}</div>
     </div>
   );
 }

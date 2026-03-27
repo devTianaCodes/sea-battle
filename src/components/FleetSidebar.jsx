@@ -1,3 +1,5 @@
+import clsx from "clsx";
+import { motion } from "framer-motion";
 import { ORIENTATIONS, SHIP_DEFINITIONS } from "../data/constants";
 
 export default function FleetSidebar({
@@ -27,17 +29,20 @@ export default function FleetSidebar({
           const isSelected = selectedShipId === ship.id;
 
           return (
-            <button
+            <motion.button
               key={ship.id}
               type="button"
               onClick={() => onSelectShip(ship.id)}
-              className={`flex w-full items-center justify-between rounded-3xl border px-4 py-3 text-left transition duration-200 ${
+              whileHover={{ scale: 1.015 }}
+              whileTap={{ scale: 0.99 }}
+              className={clsx(
+                "flex w-full items-center justify-between rounded-3xl border px-4 py-3 text-left transition duration-200",
                 isSelected
-                  ? "border-cyan/50 bg-cyan/12"
+                  ? "border-cyan/50 bg-cyan/12 shadow-[0_0_0_1px_rgba(0,212,255,0.2)]"
                   : isPlaced
                     ? "border-white/15 bg-white/[0.07] hover:border-cyan/25 hover:bg-white/[0.09]"
-                  : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
-              }`}
+                    : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
+              )}
             >
               <div>
                 <div className="font-medium text-foam">{ship.name}</div>
@@ -55,7 +60,7 @@ export default function FleetSidebar({
                   />
                 ))}
               </div>
-            </button>
+            </motion.button>
           );
         })}
       </div>

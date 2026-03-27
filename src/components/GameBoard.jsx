@@ -31,6 +31,10 @@ function describeCell(cell, x, y, title) {
   return `${title} ${coordinate}, open water`;
 }
 
+function formatCoordinate(x, y) {
+  return `${LETTERS[x]}${y + 1}`;
+}
+
 export default function GameBoard({
   title,
   subtitle,
@@ -114,6 +118,8 @@ export default function GameBoard({
                   onActivate={() => onActivateCell(cell.x, cell.y)}
                   tabIndex={active ? 0 : -1}
                   ariaLabel={describeCell(cell, cell.x, cell.y, title)}
+                  coordinateLabel={formatCoordinate(cell.x, cell.y)}
+                  index={cell.y * 10 + cell.x}
                 />
               );
             })}

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { getEasyShot, getHardShot, getMediumShot } from "../utils/ai";
+import { getAIMove } from "../utils/aiLogic";
 
 export default function useAIPlayer(difficulty) {
   const recentResultRef = useRef(null);
@@ -9,15 +9,22 @@ export default function useAIPlayer(difficulty) {
   }, [difficulty]);
 
   function getNextShot(aiKnowledge, remainingShips) {
-    if (difficulty === "easy") {
-      return getEasyShot(aiKnowledge);
-    }
+    const nextMove = getAIMove(
+      difficulty,
+      [],
+      aiKnowledge.map((shot) => ({
+        row: shot.y,
+        col: shot.x,
+        result: shot.result,
+        shipId: shot.shipId,
+      })),
+      remainingShips
+    );
 
-    if (difficulty === "hard") {
-      return getHardShot(aiKnowledge, remainingShips);
-    }
-
-    return getMediumShot(aiKnowledge);
+    return {
+      x: nextMove.col,
+      y: nextMove.row,
+    };
   }
 
   function notifyShotResult(result) {
