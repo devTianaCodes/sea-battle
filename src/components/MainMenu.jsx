@@ -67,7 +67,10 @@ export default function MainMenu({
   }, [onInstructionsClick, onPlayClick, onSettingsClick, onStatsClick]);
 
   return (
-    <section className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-2 py-3 text-center sm:px-6 sm:py-10">
+    <section
+      aria-labelledby="main-menu-title"
+      className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-2 py-3 text-center sm:px-6 sm:py-10"
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -83,6 +86,7 @@ export default function MainMenu({
           Tactical Launch
         </motion.p>
         <motion.h1
+          id="main-menu-title"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.05 }}
@@ -90,6 +94,9 @@ export default function MainMenu({
         >
           SEA BATTLE
         </motion.h1>
+        <p className="sr-only">
+          Press Play to start, or use the instructions, settings, and statistics buttons to review the game before launching.
+        </p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

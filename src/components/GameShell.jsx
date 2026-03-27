@@ -75,7 +75,10 @@ export default function GameShell() {
 
   if (game.screen === "menu") {
     return (
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden text-slate-100">
+      <main
+        id="game-main"
+        className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden text-slate-100"
+      >
         {game.backgroundEffectsEnabled ? <BackgroundEffects energetic={false} /> : null}
         <div className="relative z-10 flex min-h-0 flex-1 flex-col">
           <MainMenu
@@ -101,13 +104,16 @@ export default function GameShell() {
           onClearStats={game.clearHistory}
           onResetToMenu={game.openMenu}
         />
-      </div>
+      </main>
     );
   }
 
   if (game.screen === "difficulty") {
     return (
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden text-slate-100">
+      <main
+        id="game-main"
+        className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden text-slate-100"
+      >
         {game.backgroundEffectsEnabled ? <BackgroundEffects energetic={false} /> : null}
         <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-start overflow-hidden sm:justify-center">
           <DifficultySelector
@@ -132,12 +138,15 @@ export default function GameShell() {
           onClearStats={game.clearHistory}
           onResetToMenu={game.openMenu}
         />
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden text-slate-100">
+    <main
+      id="game-main"
+      className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden text-slate-100"
+    >
       {game.backgroundEffectsEnabled ? (
         <BackgroundEffects energetic={game.phase === GAME_PHASES.BATTLE} />
       ) : null}
@@ -288,6 +297,6 @@ export default function GameShell() {
         onClearStats={game.clearHistory}
         onResetToMenu={game.openMenu}
       />
-    </div>
+    </main>
   );
 }

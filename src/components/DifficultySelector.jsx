@@ -97,13 +97,19 @@ export default function DifficultySelector({
   }
 
   return (
-    <div className="mx-auto flex h-auto w-full min-w-0 max-w-6xl flex-col justify-start overflow-hidden pt-0 pb-0.5 sm:h-full sm:justify-center sm:py-2">
+    <section
+      aria-labelledby="difficulty-screen-title"
+      className="mx-auto flex h-auto w-full min-w-0 max-w-6xl flex-col justify-start overflow-hidden pt-0 pb-0.5 sm:h-full sm:justify-center sm:py-2"
+    >
       <div className="mb-1.5 flex min-w-0 flex-wrap items-center justify-between gap-2 px-0.5 sm:mb-8 sm:gap-3 sm:px-0">
         <div>
           <p className="text-[0.65rem] uppercase tracking-[0.22em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">
             Difficulty
           </p>
-          <h1 className="mt-1 font-display text-[1.35rem] leading-tight text-foam sm:mt-3 sm:text-4xl">
+          <h1
+            id="difficulty-screen-title"
+            className="mt-1 font-display text-[1.35rem] leading-tight text-foam sm:mt-3 sm:text-4xl"
+          >
             Choose Difficulty
           </h1>
         </div>
@@ -111,6 +117,9 @@ export default function DifficultySelector({
           Back
         </IconButton>
       </div>
+      <p className="sr-only">
+        Use arrow keys to move between difficulty options and press Enter or Space to confirm the selected difficulty.
+      </p>
 
       <div className="grid min-w-0 w-full grid-cols-3 gap-1.5 sm:gap-4 md:grid-cols-3 lg:gap-5">
         {DIFFICULTY_LEVELS.map((level, index) => {
@@ -150,6 +159,7 @@ export default function DifficultySelector({
                 disabled && "cursor-not-allowed opacity-40"
               )}
               aria-pressed={active || pending}
+              aria-label={`${level.name} difficulty. ${level.description}`}
               onMouseEnter={() => setFocusedIndex(index)}
               onFocus={() => setFocusedIndex(index)}
             >
@@ -202,6 +212,6 @@ export default function DifficultySelector({
           Back
         </IconButton>
       </div>
-    </div>
+    </section>
   );
 }

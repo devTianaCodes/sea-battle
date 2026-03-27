@@ -33,7 +33,7 @@ export default function StatusBar({
   }, [showStats]);
 
   return (
-    <header className="glass-panel rounded-[1.1rem] border-b border-cyan/20 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-4 sm:py-2.5">
+    <header aria-label="Match status" className="glass-panel rounded-[1.1rem] border-b border-cyan/20 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-4 sm:py-2.5">
       <div className="flex flex-col gap-1.5 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
@@ -60,7 +60,7 @@ export default function StatusBar({
             Hits {playerStats.hits} | Misses {playerStats.misses} | Accuracy {playerStats.accuracy}% | Turn {turnCount}
           </div>
         ) : (
-          <p className="mt-1 max-w-3xl break-words text-[0.72rem] leading-[1.1rem] text-slate-400 sm:mt-1.5 sm:text-xs sm:leading-5" aria-live="polite">
+          <p className="mt-1 max-w-3xl break-words text-[0.72rem] leading-[1.1rem] text-slate-400 sm:mt-1.5 sm:text-xs sm:leading-5" role="status" aria-live="polite">
             {announcement}
           </p>
         )}
