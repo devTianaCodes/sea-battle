@@ -1,4 +1,6 @@
-export default function IconButton({
+import { forwardRef } from "react";
+
+const IconButton = forwardRef(function IconButton({
   children,
   onClick,
   tone = "default",
@@ -9,7 +11,7 @@ export default function IconButton({
   className = "",
   shape = "pill",
   size = "md",
-}) {
+}, ref) {
   const tones = {
     default:
       "border-white/12 bg-white/[0.03] text-foam hover:border-cyan/45 hover:bg-cyan/[0.08]",
@@ -32,6 +34,7 @@ export default function IconButton({
 
   return (
     <button
+      ref={ref}
       type={type}
       onClick={onClick}
       disabled={disabled}
@@ -44,4 +47,6 @@ export default function IconButton({
       {children}
     </button>
   );
-}
+});
+
+export default IconButton;

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { formatDuration } from "../utils/stats";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
+import useDialogA11y from "../hooks/useDialogA11y";
 import IconButton from "./IconButton";
 
 function MiniBoard({ board }) {
@@ -42,6 +43,9 @@ export default function ResultsModal({
 }) {
   useBodyScrollLock(open);
   const animatedStats = useAnimatedStats(open, stats, historySummary);
+  const titleId = useId();
+  const descriptionId = useId();
+  const { dialogRef, initialFocusRef } = useDialogA11y(open, onReplay);
 
   if (!open) {
     return null;
@@ -49,7 +53,15 @@ export default function ResultsModal({
 
   return (
     <div className="animate-fade-in fixed inset-[15px] z-50 flex items-center justify-center rounded-[20px] bg-[#020817]/70 p-2 backdrop-blur-md sm:p-3">
-      <div className="glass-frosted animate-modal flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[1.7rem] sm:p-4">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+        tabIndex={-1}
+        className="glass-frosted animate-modal flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[1.7rem] sm:p-4"
+      >
         <div className="grid gap-3 lg:grid-cols-[16rem,minmax(0,1fr)] lg:gap-4">
           <div className="flex flex-col justify-between gap-3">
             <div className="text-center lg:text-left">
@@ -58,11 +70,12 @@ export default function ResultsModal({
                 Results
               </p>
               <h2
+                id={titleId}
                 className={`mt-1.5 font-display text-2xl sm:mt-2 sm:text-3xl ${winner === "player" ? "text-mint" : "text-coral"}`}
               >
                 {winner === "player" ? "Victory" : "Defeat"}
               </h2>
-              <p className="mt-1.5 text-[0.8rem] leading-5 text-slate-300 sm:mt-2 sm:text-sm sm:leading-6">
+              <p id={descriptionId} className="mt-1.5 text-[0.8rem] leading-5 text-slate-300 sm:mt-2 sm:text-sm sm:leading-6">
                 {winner === "player"
                   ? "Your targeting held under pressure and the opposing fleet went under."
                   : "The enemy found enough openings to sink your fleet. Reset and try a different deployment."}
@@ -81,6 +94,7 @@ export default function ResultsModal({
 
             <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
               <IconButton
+                ref={initialFocusRef}
                 onClick={onReplay}
                 tone="success"
                 className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"

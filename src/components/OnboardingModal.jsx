@@ -1,5 +1,7 @@
+import { useId } from "react";
 import IconButton from "./IconButton";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
+import useDialogA11y from "../hooks/useDialogA11y";
 
 function TipCard({ title, body }) {
   return (
@@ -12,6 +14,9 @@ function TipCard({ title, body }) {
 
 export default function OnboardingModal({ open, onClose }) {
   useBodyScrollLock(open);
+  const titleId = useId();
+  const descriptionId = useId();
+  const { dialogRef, initialFocusRef } = useDialogA11y(open, onClose);
 
   if (!open) {
     return null;
@@ -19,12 +24,20 @@ export default function OnboardingModal({ open, onClose }) {
 
   return (
     <div className="fixed inset-[15px] z-[60] flex items-center justify-center rounded-[20px] bg-[#020817]/80 p-2 backdrop-blur-md animate-fade-in sm:p-3">
-      <div className="glass-frosted animate-modal-in flex max-h-full w-full max-w-3xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[2rem] sm:p-8">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+        tabIndex={-1}
+        className="glass-frosted animate-modal-in flex max-h-full w-full max-w-3xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[2rem] sm:p-8"
+      >
         <p className="text-[0.62rem] uppercase tracking-[0.18em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">Welcome Aboard</p>
-        <h2 className="mt-2 font-display text-[1.45rem] text-foam sm:mt-3 sm:text-4xl">
+        <h2 id={titleId} className="mt-2 font-display text-[1.45rem] text-foam sm:mt-3 sm:text-4xl">
           Command the fleet in three phases
         </h2>
-        <p className="mt-2 max-w-2xl text-[0.82rem] leading-6 text-slate-300 sm:mt-3 sm:text-sm sm:leading-7">
+        <p id={descriptionId} className="mt-2 max-w-2xl text-[0.82rem] leading-6 text-slate-300 sm:mt-3 sm:text-sm sm:leading-7">
           Sea Battle plays fast once the loop clicks: deploy a hard-to-read fleet, probe for
           structure, then collapse on confirmed hits. The boards, intel feed, and top controls
           cover the full loop.
@@ -57,7 +70,7 @@ export default function OnboardingModal({ open, onClose }) {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3 sm:mt-8">
-          <IconButton onClick={onClose} tone="success" className="px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm">
+          <IconButton ref={initialFocusRef} onClick={onClose} tone="success" className="px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm">
             Start Battle
           </IconButton>
         </div>

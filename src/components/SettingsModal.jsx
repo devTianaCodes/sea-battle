@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { DIFFICULTY_LEVELS } from "../data/constants";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
+import useDialogA11y from "../hooks/useDialogA11y";
 import IconButton from "./IconButton";
 
 function TabButton({ active, onClick, children }) {
@@ -8,6 +9,7 @@ function TabButton({ active, onClick, children }) {
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={`rounded-full px-3 py-1.5 text-[0.78rem] transition sm:px-4 sm:py-2 sm:text-sm ${
         active
           ? "bg-cyan/15 text-foam shadow-[0_0_0_1px_rgba(0,212,255,0.3)]"
@@ -56,6 +58,15 @@ export default function SettingsModal({
 }) {
   const [tab, setTab] = useState(defaultTab);
   useBodyScrollLock(open);
+  const titleId = useId();
+  const descriptionId = useId();
+  const { dialogRef, initialFocusRef } = useDialogA11y(open, onClose);
+
+  useEffect(() => {
+    if (open) {
+      setTab(defaultTab);
+    }
+  }, [defaultTab, open]);
 
   if (!open) {
     return null;
@@ -63,16 +74,24 @@ export default function SettingsModal({
 
   return (
     <div className="fixed inset-[15px] z-[58] flex items-center justify-center rounded-[20px] bg-[#020817]/80 p-2 backdrop-blur-md animate-fade-in sm:p-3">
-      <div className="glass-frosted flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[2rem] sm:p-8">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+        tabIndex={-1}
+        className="glass-frosted flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[2rem] sm:p-8"
+      >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-[0.62rem] uppercase tracking-[0.18em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">Control Room</p>
-            <h2 className="mt-2 font-display text-[1.45rem] text-foam sm:mt-3 sm:text-3xl">Settings & Statistics</h2>
+            <h2 id={titleId} className="mt-2 font-display text-[1.45rem] text-foam sm:mt-3 sm:text-3xl">Settings & Statistics</h2>
           </div>
-          <IconButton onClick={onClose} className="px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm">Close</IconButton>
+          <IconButton ref={initialFocusRef} onClick={onClose} className="px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm">Close</IconButton>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2 sm:mt-6">
+        <div id={descriptionId} className="mt-4 flex flex-wrap gap-2 sm:mt-6">
           <TabButton active={tab === "settings"} onClick={() => setTab("settings")}>
             Settings
           </TabButton>
