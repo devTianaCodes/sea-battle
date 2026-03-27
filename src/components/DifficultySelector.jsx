@@ -97,18 +97,22 @@ export default function DifficultySelector({
   }
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center py-2">
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+    <div className="mx-auto flex h-full w-full min-w-0 max-w-6xl flex-col justify-between overflow-hidden py-0.5 sm:justify-center sm:py-2">
+      <div className="mb-2 flex min-w-0 flex-wrap items-center justify-between gap-2 px-0.5 sm:mb-8 sm:gap-3 sm:px-0">
         <div>
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Difficulty</p>
-          <h1 className="mt-3 font-display text-3xl text-foam sm:text-4xl">Choose Difficulty</h1>
+          <p className="text-[0.65rem] uppercase tracking-[0.22em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">
+            Difficulty
+          </p>
+          <h1 className="mt-1 font-display text-[1.35rem] leading-tight text-foam sm:mt-3 sm:text-4xl">
+            Choose Difficulty
+          </h1>
         </div>
         <IconButton onClick={onBack} className="hidden sm:inline-flex">
           Back
         </IconButton>
       </div>
 
-      <div className="grid gap-4 lg:gap-5 md:grid-cols-3">
+      <div className="grid min-w-0 w-full grid-cols-3 gap-1.5 sm:gap-4 md:grid-cols-3 lg:gap-5">
         {DIFFICULTY_LEVELS.map((level, index) => {
           const active = level.id === difficulty;
           const pending = level.id === selecting;
@@ -133,7 +137,7 @@ export default function DifficultySelector({
               whileTap={disabled ? undefined : { scale: 0.985 }}
               onClick={() => selectDifficulty(level.id)}
               className={clsx(
-                "glass-light min-h-[240px] rounded-[1.4rem] border px-5 py-6 text-left transition duration-200 md:min-h-[300px]",
+                "glass-light min-h-[8.75rem] w-full min-w-0 max-w-full rounded-[0.9rem] border px-2 py-2.5 text-left transition duration-200 sm:min-h-[240px] sm:rounded-[1.4rem] sm:px-5 sm:py-6 md:min-h-[300px]",
                 toneClass,
                 active || pending
                   ? level.accent === "mint"
@@ -150,20 +154,22 @@ export default function DifficultySelector({
               onFocus={() => setFocusedIndex(index)}
             >
               <div className="flex h-full flex-col items-center justify-between text-center">
-                <div>
-                  <div className="text-5xl">{level.emoji}</div>
-                  <div className="mt-4 text-xl font-semibold uppercase tracking-[0.12em] text-foam">
+                <div className="w-full">
+                  <div className="text-2xl sm:text-5xl">{level.emoji}</div>
+                  <div className="mt-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-foam sm:mt-4 sm:text-xl sm:tracking-[0.12em]">
                     {level.name}
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{level.description}</p>
-                  <p className="mt-3 text-[0.72rem] uppercase tracking-[0.12em] text-slate-500">
+                  <p className="mt-1.5 h-[2rem] overflow-hidden text-[0.6rem] leading-4 text-slate-300 sm:mt-3 sm:h-auto sm:text-sm sm:leading-6">
+                    {level.description}
+                  </p>
+                  <p className="mt-1 text-[0.52rem] uppercase tracking-[0.04em] text-slate-500 sm:mt-3 sm:text-[0.72rem] sm:tracking-[0.12em]">
                     {stats.matches
                       ? `${stats.winRate}% win rate across ${stats.matches} runs`
                       : "No archive data yet"}
                   </p>
                 </div>
-                <div className="mt-8 w-full">
-                  <div className="flex justify-center gap-2">
+                <div className="mt-2.5 w-full sm:mt-8">
+                  <div className="flex justify-center gap-1 sm:gap-2">
                     {Array.from({ length: 4 }).map((_, barIndex) => {
                       const filled =
                         level.id === "easy"
@@ -175,14 +181,14 @@ export default function DifficultySelector({
                       return (
                         <span
                           key={`${level.id}-${barIndex}`}
-                          className={`h-1.5 w-10 rounded-full ${
+                          className={`h-1 w-4 rounded-full sm:h-1.5 sm:w-10 ${
                             filled ? "bg-cyan/70" : "bg-white/[0.08]"
                           }`}
                         />
                       );
                     })}
                   </div>
-                  <div className="mt-4 text-[0.68rem] uppercase tracking-[0.18em] text-slate-400">
+                  <div className="mt-2 text-[0.5rem] uppercase tracking-[0.08em] text-slate-400 sm:mt-4 sm:text-[0.68rem] sm:tracking-[0.18em]">
                     {pending ? `Starting ${level.name}...` : active ? "Current default" : "Select"}
                   </div>
                 </div>
@@ -191,8 +197,10 @@ export default function DifficultySelector({
           );
         })}
       </div>
-      <div className="mt-5 sm:hidden">
-        <IconButton onClick={onBack}>Back</IconButton>
+      <div className="mt-2 w-full sm:hidden">
+        <IconButton onClick={onBack} className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em]">
+          Back
+        </IconButton>
       </div>
     </div>
   );

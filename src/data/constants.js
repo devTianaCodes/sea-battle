@@ -26,7 +26,7 @@ export const DIFFICULTY_LEVELS = [
     name: "Easy",
     emoji: "😊",
     accent: "mint",
-    description: "AI plays randomly and leaves space to recover.",
+    description: "Opponent plays randomly and leaves space to recover.",
     detail: "Longer games, forgiving search pattern, best for first runs.",
   },
   {
@@ -34,7 +34,7 @@ export const DIFFICULTY_LEVELS = [
     name: "Medium",
     emoji: "😎",
     accent: "cyan",
-    description: "AI uses parity search and follows up on hits.",
+    description: "Opponent follows patterns and presses after hits.",
     detail: "Balanced pressure with fair tactical punishment.",
   },
   {
@@ -42,7 +42,7 @@ export const DIFFICULTY_LEVELS = [
     name: "Hard",
     emoji: "🔥",
     accent: "coral",
-    description: "AI uses probability hunting and closes efficiently.",
+    description: "Opponent hunts efficiently and closes quickly.",
     detail: "Shorter games, tighter punish windows, highest pressure.",
   },
 ];

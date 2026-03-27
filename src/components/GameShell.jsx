@@ -108,7 +108,7 @@ export default function GameShell() {
     return (
       <div className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden text-slate-100">
         {game.backgroundEffectsEnabled ? <BackgroundEffects energetic={false} /> : null}
-        <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-center">
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-start overflow-hidden sm:justify-center">
           <DifficultySelector
             difficulty={game.difficulty}
             onChange={game.beginGameWithDifficulty}

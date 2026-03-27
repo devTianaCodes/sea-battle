@@ -5,7 +5,7 @@
 :root {
   color-scheme: dark;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  --viewport-padding: 10px;
+  --viewport-padding: 15px;
   --cell-size: clamp(1.8rem, 5vw, 2.8rem);
   --transition-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -45,13 +45,13 @@ select {
 
 @media (min-width: 640px) {
   :root {
-    --viewport-padding: 16px;
+    --viewport-padding: 15px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --viewport-padding: 20px;
+    --viewport-padding: 15px;
   }
 }
 
@@ -151,7 +151,7 @@ select {
   height: 100%;
   min-height: 0;
   max-height: 100%;
-  width: min(100%, 1400px);
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   flex-direction: column;
@@ -312,7 +312,7 @@ select {
 
 @media (min-width: 768px) {
   .viewport-container {
-    width: min(100%, 900px);
+    width: 100%;
   }
 
   .game-board {
@@ -322,7 +322,7 @@ select {
 
 @media (min-width: 1024px) {
   .viewport-container {
-    width: min(90vw, 1400px);
+    width: 100%;
     max-height: calc(100vh - 32px);
   }
 

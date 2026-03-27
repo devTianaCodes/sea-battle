@@ -61,7 +61,7 @@ export default function ResultsModal({
               <p className="mt-2 text-sm leading-6 text-slate-300">
                 {winner === "player"
                   ? "Your targeting held under pressure and the opposing fleet went under."
-                  : "The AI found enough openings to sink your fleet. Reset and try a different deployment."}
+                  : "The enemy found enough openings to sink your fleet. Reset and try a different deployment."}
               </p>
               <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
                 <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[0.68rem] uppercase tracking-[0.18em] text-slate-300">

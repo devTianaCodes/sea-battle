@@ -42,7 +42,7 @@ export default function InstructionsModal({ open, onClose }) {
               <Section title="Rules">
                 <p>Place your five ships on the player grid without overlap.</p>
                 <p>Click the opponent grid to fire one shot per turn.</p>
-                <p>Sink the entire enemy fleet before the AI sinks yours.</p>
+                <p>Sink the entire enemy fleet before the enemy sinks yours.</p>
               </Section>
 
               <Section title="Controls">

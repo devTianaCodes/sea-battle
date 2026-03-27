@@ -35,7 +35,7 @@ export default function PhaseCoach({
             },
             {
               label: "Tactical Advice",
-              detail: "Avoid long obvious lines. Spread ship lengths to make AI follow-up shots less efficient.",
+              detail: "Avoid long obvious lines. Spread ship lengths to make follow-up shots less efficient.",
             },
           ],
         }
