@@ -33,40 +33,40 @@ export default function StatusBar({
   }, [showStats]);
 
   return (
-    <header className="glass-panel rounded-[1.35rem] border-b border-cyan/20 px-4 py-3 sm:px-5">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+    <header className="glass-panel rounded-[1.1rem] border-b border-cyan/20 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-4 sm:py-2.5">
+      <div className="flex flex-col gap-1.5 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-            <div className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
+            <div className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-cyan-200 sm:text-xs sm:tracking-[0.28em]">
             Sea Battle
             </div>
             <div className="hidden h-3 w-px bg-white/10 sm:block" />
             <div className={`status-text ${isPlayerTurn ? "pulse text-cyan-100" : "text-slate-300"}`}>
               {isPaused ? "Paused" : turnLabel}
             </div>
-            <div className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-slate-400">
+            <div className="rounded-full border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[0.52rem] uppercase tracking-[0.1em] text-slate-400 sm:px-2 sm:py-1 sm:text-[0.56rem] sm:tracking-[0.12em]">
               {difficulty}
             </div>
-            <div className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-slate-400">
+            <div className="rounded-full border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[0.52rem] uppercase tracking-[0.1em] text-slate-400 sm:px-2 sm:py-1 sm:text-[0.56rem] sm:tracking-[0.12em]">
               {timerLabel}
             </div>
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-2.5 sm:gap-3">
+          <div className="mt-1 flex flex-wrap items-center gap-1.5 sm:mt-1.5 sm:gap-2.5">
             <ShipTrack label="Your Fleet" active={shipsRemaining.player} />
             <ShipTrack label="Enemy Fleet" active={shipsRemaining.opponent} dimmed />
           </div>
           {showStats ? (
-          <div className="animate-fade-in-fast mt-2 text-[0.68rem] uppercase tracking-[0.18em] text-slate-400">
+          <div className="animate-fade-in-fast mt-1 text-[0.58rem] uppercase tracking-[0.1em] text-slate-400 sm:mt-1.5 sm:text-[0.62rem] sm:tracking-[0.12em]">
             Hits {playerStats.hits} | Misses {playerStats.misses} | Accuracy {playerStats.accuracy}% | Turn {turnCount}
           </div>
         ) : (
-          <p className="mt-2 max-w-3xl break-words text-sm leading-5 text-slate-400" aria-live="polite">
+          <p className="mt-1 max-w-3xl break-words text-[0.72rem] leading-[1.1rem] text-slate-400 sm:mt-1.5 sm:text-xs sm:leading-5" aria-live="polite">
             {announcement}
           </p>
         )}
       </div>
 
-      <div className="flex shrink-0 flex-wrap items-center gap-2 lg:ml-4 lg:justify-end">
+      <div className="flex shrink-0 flex-wrap items-center gap-1 lg:ml-3 lg:justify-end">
         <IconButton
           onClick={() => setShowStats((current) => !current)}
           ariaLabel="Toggle match stats"
@@ -112,7 +112,7 @@ export default function StatusBar({
           shape="circle"
           size="sm"
         >
-          =
+          ⚙
         </IconButton>
         <IconButton
           onClick={onRestart}

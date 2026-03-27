@@ -74,7 +74,6 @@ function BoardCell({
       disabled={!isInteractive}
       tabIndex={tabIndex}
       aria-label={ariaLabel}
-      title={coordinateLabel}
       data-state={cellState}
       data-interactive={isInteractive ? "true" : "false"}
       style={{ animationDelay: `${Math.min(index * 12, 180)}ms` }}
@@ -90,9 +89,6 @@ function BoardCell({
         !isInteractive && !cell.isHit && !cell.isMiss && "cursor-default"
       )}
     >
-      <span className="pointer-events-none absolute -top-7 left-1/2 z-10 hidden -translate-x-1/2 rounded-full border border-white/10 bg-[#071120]/92 px-2 py-1 text-[0.55rem] uppercase tracking-[0.2em] text-slate-300 shadow-lg group-hover:block group-focus-visible:block">
-        {coordinateLabel}
-      </span>
       {cell.isMiss ? <span className="absolute inset-0 ripple-dot rounded-[inherit]" /> : null}
       <BattleEffects cell={cell} />
       {getCellContents(cell)}

@@ -131,7 +131,7 @@ export default function MainMenu({
               activeAction === "settings" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]"
             )}
           >
-            =
+            ⚙
           </IconButton>
           <IconButton
             onClick={onStatsClick}

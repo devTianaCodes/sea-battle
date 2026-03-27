@@ -45,7 +45,7 @@ function GameViewport({ children, className }) {
   }, []);
 
   return (
-    <div className="min-h-screen px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-6">
+    <div className="h-[100svh] overflow-hidden px-1.5 py-1.5 sm:px-4 sm:py-4 lg:px-6 lg:py-6">
       <div ref={viewportRef} className={clsx("viewport-container", className)}>
         {children}
       </div>

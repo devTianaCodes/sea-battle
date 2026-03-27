@@ -17,23 +17,25 @@ export default function ShipPlacementPanel({
         : "Fleet ready";
 
   return (
-    <div className="glass-light rounded-[1.35rem] p-3 sm:p-4">
-      <div className="mb-3 flex items-center justify-between gap-3">
+    <div className="glass-light min-w-0 w-full max-w-full rounded-[1rem] p-2 sm:rounded-[1.2rem] sm:p-3">
+      <div className="mb-1.5 flex items-center justify-between gap-2 sm:mb-2">
         <div>
-          <p className="text-[0.65rem] uppercase tracking-[0.24em] text-cyan/70">Controls</p>
-          <p className="mt-1 text-sm text-slate-300">{statusText}</p>
+          <p className="text-[0.52rem] uppercase tracking-[0.16em] text-cyan/70 sm:text-[0.58rem] sm:tracking-[0.18em]">
+            Controls
+          </p>
+          <p className="mt-0.5 text-[0.72rem] text-slate-300 sm:text-xs">{statusText}</p>
         </div>
-        <div className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[0.58rem] uppercase tracking-[0.16em] text-slate-400">
+        <div className="rounded-full border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[0.48rem] uppercase tracking-[0.1em] text-slate-400 sm:px-2 sm:py-1 sm:text-[0.52rem] sm:tracking-[0.12em]">
           {phase === "setup" ? "Setup" : "Battle"}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-1 sm:gap-1.5">
         <IconButton
           onClick={onRotate}
           tone="accent"
           disabled={phase !== "setup"}
-          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          className="min-h-0 justify-center px-2 py-1.5 text-[0.62rem] tracking-[0.02em] sm:px-2.5 sm:text-[0.68rem] sm:tracking-[0.04em]"
           size="sm"
         >
           Rotate
@@ -41,7 +43,7 @@ export default function ShipPlacementPanel({
         <IconButton
           onClick={onRandomize}
           disabled={phase !== "setup"}
-          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          className="min-h-0 justify-center px-2 py-1.5 text-[0.62rem] tracking-[0.02em] sm:px-2.5 sm:text-[0.68rem] sm:tracking-[0.04em]"
           size="sm"
         >
           Random
@@ -49,7 +51,7 @@ export default function ShipPlacementPanel({
         <IconButton
           onClick={onClear}
           disabled={phase !== "setup"}
-          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          className="min-h-0 justify-center px-2 py-1.5 text-[0.62rem] tracking-[0.02em] sm:px-2.5 sm:text-[0.68rem] sm:tracking-[0.04em]"
           size="sm"
         >
           Clear
@@ -58,7 +60,7 @@ export default function ShipPlacementPanel({
           onClick={onConfirm}
           tone="success"
           disabled={phase !== "setup" || !canConfirm}
-          className="justify-center px-3 py-2 text-xs tracking-[0.08em]"
+          className="min-h-0 justify-center px-2 py-1.5 text-[0.62rem] tracking-[0.02em] sm:px-2.5 sm:text-[0.68rem] sm:tracking-[0.04em]"
           size="sm"
         >
           Confirm

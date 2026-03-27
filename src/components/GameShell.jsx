@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { GAME_PHASES } from "../data/constants";
 import { useGameContext } from "../context/GameContext";
+import { isRotateKey } from "../utils/keyboard";
 import { formatDuration } from "../utils/stats";
 import BattleIntelPanel from "./BattleIntelPanel";
 import BackgroundEffects from "./BackgroundEffects";
@@ -49,7 +50,7 @@ export default function GameShell() {
         return;
       }
 
-      if (event.key.toLowerCase() === "r" && game.phase === GAME_PHASES.SETUP) {
+      if (isRotateKey(event.key) && game.phase === GAME_PHASES.SETUP) {
         event.preventDefault();
         game.toggleOrientation();
       }
@@ -140,7 +141,7 @@ export default function GameShell() {
         <BackgroundEffects energetic={game.phase === GAME_PHASES.BATTLE} />
       ) : null}
       <TurnBanner visible={game.isAiThinking} label="Opponent Turn" />
-      <div className="relative z-10 flex flex-1 flex-col gap-4">
+      <div className="relative z-10 flex flex-1 flex-col gap-3 overflow-hidden">
         <StatusBar
           difficulty={game.difficulty}
           turnLabel={game.turnLabel}
@@ -159,8 +160,8 @@ export default function GameShell() {
         />
 
         {game.phase === GAME_PHASES.SETUP ? (
-          <section className="grid gap-4 md:grid-cols-[15rem_minmax(0,1fr)] md:items-start lg:grid-cols-[18rem_minmax(0,1fr)]">
-            <div className="space-y-3">
+          <section className="grid min-h-0 w-full max-w-full gap-2 overflow-x-hidden md:grid-cols-[13.5rem_minmax(0,1fr)] md:items-start md:gap-3 lg:grid-cols-[15rem_minmax(0,1fr)]">
+            <div className="min-w-0 w-full max-w-full space-y-2">
               <FleetSidebar
                 availableShips={game.availableShips}
                 playerFleet={game.playerFleet}
@@ -178,20 +179,35 @@ export default function GameShell() {
                 selectedShipName={selectedShipName}
               />
             </div>
-            <GameBoard
-              title="Your Fleet"
-              boardId="Player Grid"
-              board={game.playerBoard}
-              focusCell={game.focus.player}
-              interactive
-              cursorMode="placement"
-              onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
-              onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
-              onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-            />
+            <div className="grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:justify-items-stretch md:gap-3 xl:grid-cols-2">
+              <GameBoard
+                title="Your Fleet"
+                boardId="Player Grid"
+                board={game.playerBoard}
+                focusCell={game.focus.player}
+                interactive
+                cursorMode="placement"
+                onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
+                onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
+                onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
+                className="setup-board w-full max-w-[13.5rem] sm:max-w-[15rem] md:max-w-none"
+              />
+              <GameBoard
+                title="Opponent Grid"
+                boardId="Target Grid"
+                board={game.enemyBoard}
+                focusCell={game.focus.enemy}
+                interactive={false}
+                cursorMode="battle"
+                onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
+                onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
+                onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
+                className="setup-board hidden w-full max-w-[13.5rem] sm:max-w-[15rem] md:max-w-none xl:flex"
+              />
+            </div>
           </section>
         ) : (
-          <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_18rem] xl:items-start">
+          <section className="grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:justify-items-stretch md:gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_16rem] xl:items-start">
             <GameBoard
               title="Your Fleet"
               boardId="Player Grid"
@@ -202,6 +218,7 @@ export default function GameShell() {
               onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
               onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
               onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
+              className="w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
             />
             <GameBoard
               title="Opponent Grid"
@@ -218,9 +235,10 @@ export default function GameShell() {
               onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
               onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
               onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
+              className="w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
             />
             <BattleIntelPanel
-              className="h-full"
+              className="hidden h-full md:block"
               playerMetrics={game.playerMetrics}
               enemyMetrics={game.enemyMetrics}
               playerFleetStatus={game.playerFleetStatus}
