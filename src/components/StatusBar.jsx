@@ -1,11 +1,8 @@
-import DifficultySelector from "./DifficultySelector";
+import { useEffect, useState } from "react";
 import IconButton from "./IconButton";
 
 export default function StatusBar({
   difficulty,
-  onDifficultyChange,
-  historySummary,
-  phaseLabel,
   turnLabel,
   announcement,
   timerLabel,
@@ -18,85 +15,137 @@ export default function StatusBar({
   onOpenSettings,
   soundEnabled,
   onToggleSound,
-  difficultyLocked,
   isPaused,
 }) {
+  const [showStats, setShowStats] = useState(false);
+  const isPlayerTurn = !isPaused && turnLabel.toLowerCase().includes("your");
+
+  useEffect(() => {
+    if (!showStats) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowStats(false);
+    }, 5000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [showStats]);
+
   return (
-    <div className="glass-panel rounded-[2rem] p-4 sm:p-5">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Mission Feed</p>
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="font-display text-3xl text-foam sm:text-4xl">Sea Battle</h1>
-            <span className="rounded-full border border-white/10 bg-white/6 px-3 py-1 text-sm text-slate-200">
-              {phaseLabel}
-            </span>
-            <span className="rounded-full border border-cyan/20 bg-cyan/10 px-3 py-1 text-sm text-cyan-100">
+    <header className="glass-panel rounded-[1.35rem] border-b border-cyan/20 px-4 py-3 sm:px-5">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+            <div className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+            Sea Battle
+            </div>
+            <div className="hidden h-3 w-px bg-white/10 sm:block" />
+            <div className={`status-text ${isPlayerTurn ? "pulse text-cyan-100" : "text-slate-300"}`}>
               {isPaused ? "Paused" : turnLabel}
-            </span>
-            <span className="rounded-full border border-white/10 bg-white/6 px-3 py-1 text-sm text-slate-200">
+            </div>
+            <div className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-slate-400">
+              {difficulty}
+            </div>
+            <div className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-slate-400">
               {timerLabel}
-            </span>
-            <span className="rounded-full border border-cyan/20 bg-cyan/10 px-3 py-1 text-sm text-cyan-50">
-              Turn {turnCount}
-            </span>
+            </div>
           </div>
-          <p className="max-w-3xl text-sm leading-6 text-slate-300" aria-live="polite">
+          <div className="mt-2 flex flex-wrap items-center gap-2.5 sm:gap-3">
+            <ShipTrack label="Your Fleet" active={shipsRemaining.player} />
+            <ShipTrack label="Enemy Fleet" active={shipsRemaining.opponent} dimmed />
+          </div>
+          {showStats ? (
+          <div className="animate-fade-in-fast mt-2 text-[0.68rem] uppercase tracking-[0.18em] text-slate-400">
+            Hits {playerStats.hits} | Misses {playerStats.misses} | Accuracy {playerStats.accuracy}% | Turn {turnCount}
+          </div>
+        ) : (
+          <p className="mt-2 max-w-3xl break-words text-sm leading-5 text-slate-400" aria-live="polite">
             {announcement}
           </p>
-          <div className="grid gap-2 pt-1 sm:grid-cols-3">
-            <HudPill
-              label="Accuracy"
-              value={`${playerStats.accuracy}%`}
-              accent="text-cyan-50"
-            />
-            <HudPill
-              label="Hits / Misses"
-              value={`${playerStats.hits} / ${playerStats.misses}`}
-              accent="text-foam"
-            />
-            <HudPill
-              label="Ships Afloat"
-              value={`${shipsRemaining.player} / ${shipsRemaining.opponent}`}
-              accent="text-mint"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-3 lg:items-end">
-          <DifficultySelector
-            difficulty={difficulty}
-            onChange={onDifficultyChange}
-            historySummary={historySummary}
-            disabled={difficultyLocked}
-          />
-          <div className="flex flex-wrap gap-3 lg:justify-end">
-            <IconButton onClick={onOpenGuide}>
-              Guide
-            </IconButton>
-            <IconButton onClick={onOpenSettings}>
-              Settings
-            </IconButton>
-            <IconButton onClick={onPause} tone={isPaused ? "warm" : "default"}>
-              {isPaused ? "Resume" : "Pause"}
-            </IconButton>
-            <IconButton onClick={onToggleSound} tone={soundEnabled ? "accent" : "default"}>
-              {soundEnabled ? "Sound On" : "Sound Off"}
-            </IconButton>
-            <IconButton onClick={onRestart} tone="warm">
-              Restart Match
-            </IconButton>
-          </div>
-        </div>
+        )}
       </div>
-    </div>
+
+      <div className="flex shrink-0 flex-wrap items-center gap-2 lg:ml-4 lg:justify-end">
+        <IconButton
+          onClick={() => setShowStats((current) => !current)}
+          ariaLabel="Toggle match stats"
+          title="Toggle match stats"
+          shape="circle"
+          size="sm"
+        >
+          i
+        </IconButton>
+        <IconButton
+          onClick={onToggleSound}
+          tone={soundEnabled ? "accent" : "default"}
+          ariaLabel={soundEnabled ? "Mute sound" : "Enable sound"}
+          title={soundEnabled ? "Mute sound" : "Enable sound"}
+          shape="circle"
+          size="sm"
+        >
+          S
+        </IconButton>
+        <IconButton
+          onClick={onPause}
+          tone={isPaused ? "warm" : "default"}
+          ariaLabel={isPaused ? "Resume game" : "Pause game"}
+          title={isPaused ? "Resume game" : "Pause game"}
+          shape="circle"
+          size="sm"
+        >
+          P
+        </IconButton>
+        <IconButton
+          onClick={onOpenGuide}
+          ariaLabel="Open instructions"
+          title="Open instructions"
+          shape="circle"
+          size="sm"
+        >
+          ?
+        </IconButton>
+        <IconButton
+          onClick={onOpenSettings}
+          ariaLabel="Open settings"
+          title="Open settings"
+          shape="circle"
+          size="sm"
+        >
+          =
+        </IconButton>
+        <IconButton
+          onClick={onRestart}
+          tone="warm"
+          ariaLabel="Restart match"
+          title="Restart match"
+          shape="circle"
+          size="sm"
+          className="hidden sm:inline-flex"
+        >
+          R
+        </IconButton>
+      </div>
+      </div>
+    </header>
   );
 }
 
-function HudPill({ label, value, accent }) {
+function ShipTrack({ label, active, dimmed = false }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.05] px-3 py-3">
-      <div className="text-[0.6rem] uppercase tracking-[0.28em] text-slate-400">{label}</div>
-      <div className={`mt-1 text-sm font-medium ${accent}`}>{value}</div>
+    <div className="flex items-center gap-1.5" title={`${label}: ${active} ships afloat`}>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <span
+          key={`${label}-${index}`}
+          className={`h-1.5 w-4 rounded-full border ${
+            index < active
+              ? dimmed
+                ? "border-white/25 bg-white/[0.18]"
+                : "border-mint/50 bg-mint/[0.55]"
+              : "border-white/10 bg-white/[0.04]"
+          }`}
+        />
+      ))}
     </div>
   );
 }

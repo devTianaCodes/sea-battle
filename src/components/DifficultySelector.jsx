@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import clsx from "clsx";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { DIFFICULTY_LEVELS } from "../data/constants";
 import IconButton from "./IconButton";
 
@@ -8,14 +8,10 @@ export default function DifficultySelector({
   difficulty,
   onChange,
   historySummary,
+  onBack,
   disabled = false,
 }) {
-  const [pendingDifficulty, setPendingDifficulty] = useState(null);
-
-  const selectedLevel = useMemo(
-    () => DIFFICULTY_LEVELS.find((level) => level.id === (pendingDifficulty ?? difficulty)),
-    [difficulty, pendingDifficulty]
-  );
+  const [selecting, setSelecting] = useState(null);
 
   function getDifficultyStats(levelId) {
     const data = historySummary?.difficultyBreakdown?.[levelId];
@@ -33,23 +29,41 @@ export default function DifficultySelector({
     };
   }
 
-  function confirmSelection() {
-    if (!pendingDifficulty || pendingDifficulty === difficulty) {
-      setPendingDifficulty(null);
+  function selectDifficulty(levelId) {
+    if (disabled || selecting) {
       return;
     }
 
-    onChange(pendingDifficulty);
-    setPendingDifficulty(null);
+    setSelecting(levelId);
+    window.setTimeout(() => {
+      onChange(levelId);
+      setSelecting(null);
+    }, 200);
   }
 
   return (
-    <div className="glass-panel rounded-[2rem] p-3">
-      <div className="grid gap-2 md:grid-cols-3">
+    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center py-2">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Difficulty</p>
+          <h1 className="mt-3 font-display text-3xl text-foam sm:text-4xl">Choose Difficulty</h1>
+        </div>
+        <IconButton onClick={onBack} className="hidden sm:inline-flex">
+          Back
+        </IconButton>
+      </div>
+
+      <div className="grid gap-4 lg:gap-5 md:grid-cols-3">
         {DIFFICULTY_LEVELS.map((level, index) => {
           const active = level.id === difficulty;
-          const pending = level.id === pendingDifficulty;
+          const pending = level.id === selecting;
           const stats = getDifficultyStats(level.id);
+          const toneClass =
+            level.accent === "mint"
+              ? "border-mint/30 hover:border-mint/70 hover:shadow-[0_0_24px_rgba(74,222,128,0.2)]"
+              : level.accent === "coral"
+                ? "border-coral/30 hover:border-coral/70 hover:shadow-[0_0_24px_rgba(255,107,107,0.2)]"
+                : "border-cyan/30 hover:border-cyan/70 hover:shadow-[0_0_24px_rgba(0,212,255,0.2)]";
 
           return (
             <motion.button
@@ -58,79 +72,69 @@ export default function DifficultySelector({
               disabled={disabled}
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.22, delay: index * 0.05 }}
+              transition={{ duration: 0.28, delay: index * 0.08 }}
               whileHover={disabled ? undefined : { scale: 1.03 }}
               whileTap={disabled ? undefined : { scale: 0.985 }}
-              onClick={() => setPendingDifficulty(level.id)}
+              onClick={() => selectDifficulty(level.id)}
               className={clsx(
-                "rounded-[1.4rem] border px-4 py-4 text-left transition duration-200",
+                "glass-light min-h-[240px] rounded-[1.4rem] border px-5 py-6 text-left transition duration-200 md:min-h-[300px]",
+                toneClass,
                 active || pending
                   ? level.accent === "mint"
-                    ? "border-mint/50 bg-mint/10 shadow-[0_0_22px_rgba(74,222,128,0.12)]"
+                    ? "border-mint/80 bg-mint/[0.09] shadow-[0_0_28px_rgba(74,222,128,0.22)]"
                     : level.accent === "coral"
-                      ? "border-coral/50 bg-coral/10 shadow-[0_0_22px_rgba(255,107,107,0.14)]"
-                      : "border-cyan/50 bg-cyan/10 shadow-[0_0_22px_rgba(0,212,255,0.14)]"
-                  : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.07]",
-                disabled && "cursor-not-allowed opacity-45"
+                      ? "border-coral/80 bg-coral/[0.09] shadow-[0_0_28px_rgba(255,107,107,0.24)]"
+                      : "border-cyan/80 bg-cyan/[0.09] shadow-[0_0_28px_rgba(0,212,255,0.22)]"
+                  : "bg-white/[0.03]",
+                disabled && "cursor-not-allowed opacity-40"
               )}
               aria-pressed={active || pending}
             >
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex h-full flex-col items-center justify-between text-center">
                 <div>
-                  <div className="text-2xl">{level.emoji}</div>
-                  <div className="mt-2 text-lg font-semibold text-foam">{level.name}</div>
+                  <div className="text-5xl">{level.emoji}</div>
+                  <div className="mt-4 text-xl font-semibold uppercase tracking-[0.12em] text-foam">
+                    {level.name}
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-slate-300">{level.description}</p>
+                  <p className="mt-3 text-[0.72rem] uppercase tracking-[0.12em] text-slate-500">
+                    {stats.matches
+                      ? `${stats.winRate}% win rate across ${stats.matches} runs`
+                      : "No archive data yet"}
+                  </p>
                 </div>
-                <span className="rounded-full border border-white/10 bg-white/[0.05] px-2 py-1 text-[0.65rem] uppercase tracking-[0.25em] text-slate-300">
-                  {active ? "Active" : pending ? "Selected" : "Ready"}
-                </span>
-              </div>
-              <p className="mt-3 text-sm leading-6 text-slate-200">{level.description}</p>
-              <p className="mt-2 text-xs leading-5 text-slate-400">{level.detail}</p>
-              <div className="mt-4 flex items-center justify-between text-xs text-slate-400">
-                <span>{stats.matches} archived runs</span>
-                <span>{stats.winRate}% win rate</span>
+                <div className="mt-8 w-full">
+                  <div className="flex justify-center gap-2">
+                    {Array.from({ length: 4 }).map((_, barIndex) => {
+                      const filled =
+                        level.id === "easy"
+                          ? barIndex < 1
+                          : level.id === "medium"
+                            ? barIndex < 3
+                            : true;
+
+                      return (
+                        <span
+                          key={`${level.id}-${barIndex}`}
+                          className={`h-1.5 w-10 rounded-full ${
+                            filled ? "bg-cyan/70" : "bg-white/[0.08]"
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className="mt-4 text-[0.68rem] uppercase tracking-[0.18em] text-slate-400">
+                    {pending ? `Starting ${level.name}...` : active ? "Current default" : "Select"}
+                  </div>
+                </div>
               </div>
             </motion.button>
           );
         })}
       </div>
-
-      <AnimatePresence>
-        {pendingDifficulty && selectedLevel ? (
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 14 }}
-            transition={{ duration: 0.2 }}
-            className="mt-3 rounded-[1.5rem] border border-white/10 bg-white/[0.05] p-4"
-          >
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">
-                  Confirm Difficulty
-                </div>
-                <div className="mt-2 text-lg font-semibold text-foam">
-                  Start game with {selectedLevel.name} {selectedLevel.emoji}?
-                </div>
-                <div className="mt-1 text-sm text-slate-300">
-                  {selectedLevel.detail}
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <IconButton onClick={() => setPendingDifficulty(null)}>
-                  Cancel
-                </IconButton>
-                <IconButton
-                  onClick={confirmSelection}
-                  tone={selectedLevel.accent === "coral" ? "warm" : "success"}
-                >
-                  {selectedLevel.id === difficulty ? "Keep Current" : "Start Game"}
-                </IconButton>
-              </div>
-            </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      <div className="mt-5 sm:hidden">
+        <IconButton onClick={onBack}>Back</IconButton>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import IconButton from "./IconButton";
 
 function SummaryCard({ label, value }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/6 px-4 py-4">
+    <div className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-4">
       <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">{label}</div>
       <div className="mt-2 text-xl font-semibold text-foam">{value}</div>
     </div>

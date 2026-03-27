@@ -29,7 +29,7 @@ export default function PauseModal({ open, onResume, onOpenInstructions, onMainM
   return (
     <div className="fixed inset-0 z-[57] flex items-center justify-center bg-[#020817]/80 px-4 backdrop-blur-md animate-fade-in">
       <div className="glass-frosted w-full max-w-2xl rounded-[2rem] p-6 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Paused</p>
+        <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Paused</p>
         <h2 className="mt-3 font-display text-4xl text-foam">Battle on hold</h2>
         <p className="mt-3 max-w-xl text-sm leading-7 text-slate-300">
           Resume when you are ready, open the instructions for a quick refresher, or return to the

@@ -28,17 +28,17 @@ export default function InstructionsModal({ open, onClose }) {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 18, scale: 0.98 }}
             transition={{ duration: 0.25 }}
-            className="glass-frosted max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] p-6 sm:p-8"
+            className="glass-frosted max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] p-6 sm:p-8"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Instructions</p>
+                <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Instructions</p>
                 <h2 className="mt-3 font-display text-3xl text-foam">How to command the fleet</h2>
               </div>
               <IconButton onClick={onClose}>Close</IconButton>
             </div>
 
-            <div className="mt-6 grid gap-4">
+            <div className="mt-6 grid gap-5">
               <Section title="Rules">
                 <p>Place your five ships on the player grid without overlap.</p>
                 <p>Click the opponent grid to fire one shot per turn.</p>

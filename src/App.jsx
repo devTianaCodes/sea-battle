@@ -1,10 +1,13 @@
 import GameShell from "./components/GameShell";
+import GameViewport from "./components/GameViewport";
 import { GameProvider } from "./context/GameContext";
 
 export default function App() {
   return (
     <GameProvider>
-      <GameShell />
+      <GameViewport>
+        <GameShell />
+      </GameViewport>
     </GameProvider>
   );
 }

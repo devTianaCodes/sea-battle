@@ -19,8 +19,8 @@ export default function OnboardingModal({ open, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#020817]/80 px-4 backdrop-blur-md animate-fade-in">
-      <div className="glass-frosted animate-modal-in w-full max-w-3xl rounded-[2rem] p-6 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Welcome Aboard</p>
+      <div className="glass-frosted animate-modal-in max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] p-6 sm:p-8">
+        <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Welcome Aboard</p>
         <h2 className="mt-3 font-display text-3xl text-foam sm:text-4xl">
           Command the fleet in three phases
         </h2>
@@ -52,7 +52,7 @@ export default function OnboardingModal({ open, onClose }) {
           />
           <TipCard
             title="Mobile"
-            body="Use the board tabs to switch between your board, the enemy board, and the intel panel without the layout becoming cramped."
+            body="The layout keeps the active boards readable first and lets the rest of the interface breathe instead of crowding the play area."
           />
         </div>
 

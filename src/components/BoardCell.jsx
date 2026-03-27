@@ -1,39 +1,34 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import { memo } from "react";
 import BattleEffects from "./BattleEffects";
 
-function getCellClasses(cell, isInteractive) {
-  const recentShotClass = cell.isRecentShot
-    ? "after:absolute after:inset-1 after:rounded-[0.7rem] after:border after:border-cyan/55 after:shadow-[0_0_18px_rgba(0,212,255,0.35)] after:content-['']"
-    : "";
-
+function getCellState(cell) {
   if (cell.isHit && cell.isSunkReveal) {
-    return `border-coral/70 bg-gradient-to-br from-coral/80 to-orange-400/70 shadow-[0_0_25px_rgba(255,107,107,0.35)] ${recentShotClass}`;
+    return "sunk";
   }
 
   if (cell.isHit) {
-    return `border-coral/70 bg-gradient-to-br from-coral/80 to-pink-400/70 shadow-[0_0_24px_rgba(255,107,107,0.25)] ${recentShotClass}`;
+    return "hit";
   }
 
   if (cell.isMiss) {
-    return `border-cyan/25 bg-[radial-gradient(circle_at_center,rgba(0,212,255,0.22),rgba(0,212,255,0.02)_48%,transparent_64%)] ${recentShotClass}`;
+    return "miss";
   }
 
   if (cell.preview === "valid") {
-    return `border-cyan/60 bg-cyan/20 ${recentShotClass}`;
+    return "ship";
   }
 
   if (cell.preview === "invalid") {
-    return `border-coral/50 bg-coral/15 ${recentShotClass}`;
+    return "invalid";
   }
 
   if (cell.shipId) {
-    return `border-white/20 bg-gradient-to-br from-white/14 to-white/8 ${recentShotClass}`;
+    return "ship";
   }
 
-  return isInteractive
-    ? `border-white/10 bg-white/5 hover:border-cyan/40 hover:bg-cyan/10 ${recentShotClass}`
-    : `border-white/8 bg-white/[0.03] ${recentShotClass}`;
+  return "empty";
 }
 
 function getCellContents(cell) {
@@ -63,6 +58,8 @@ function BoardCell({
   coordinateLabel,
   index,
 }) {
+  const cellState = getCellState(cell);
+
   return (
     <motion.button
       type="button"
@@ -78,14 +75,19 @@ function BoardCell({
       tabIndex={tabIndex}
       aria-label={ariaLabel}
       title={coordinateLabel}
+      data-state={cellState}
+      data-interactive={isInteractive ? "true" : "false"}
       className={clsx(
-        "group relative aspect-square rounded-[0.9rem] border transition duration-200 focus:outline-none focus:ring-2 focus:ring-cyan/70",
-        getCellClasses(cell, isInteractive),
-        active && "ring-2 ring-cyan/80 ring-offset-2 ring-offset-[#071120]",
+        "board-cell group focus:outline-none focus:ring-2 focus:ring-cyan/70 focus:ring-inset",
+        cell.preview === "invalid" && "border-coral/50 bg-coral/20",
+        cell.preview === "valid" && "border-cyan/[0.55] bg-cyan/[0.18]",
+        cell.isRecentShot &&
+          "after:absolute after:inset-1 after:rounded-[inherit] after:border after:border-cyan/40 after:content-['']",
+        active && "ring-2 ring-cyan/80 ring-offset-1 ring-offset-[#071120]",
         !isInteractive && !cell.isHit && !cell.isMiss && "cursor-default"
       )}
     >
-      <span className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 rounded-full border border-white/10 bg-[#071120]/90 px-2 py-1 text-[0.6rem] uppercase tracking-[0.2em] text-slate-300 shadow-lg group-hover:block">
+      <span className="pointer-events-none absolute -top-7 left-1/2 z-10 hidden -translate-x-1/2 rounded-full border border-white/10 bg-[#071120]/92 px-2 py-1 text-[0.55rem] uppercase tracking-[0.2em] text-slate-300 shadow-lg group-hover:block group-focus-visible:block">
         {coordinateLabel}
       </span>
       {cell.isMiss ? <span className="absolute inset-0 ripple-dot rounded-[inherit]" /> : null}
@@ -95,4 +97,4 @@ function BoardCell({
   );
 }
 
-export default BoardCell;
+export default memo(BoardCell);

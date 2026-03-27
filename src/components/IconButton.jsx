@@ -4,26 +4,42 @@ export default function IconButton({
   tone = "default",
   disabled = false,
   type = "button",
+  ariaLabel,
+  title,
+  className = "",
+  shape = "pill",
+  size = "md",
 }) {
   const tones = {
     default:
-      "border-white/15 bg-white/8 text-foam hover:border-cyan/60 hover:bg-cyan/12",
+      "border-white/12 bg-white/[0.03] text-foam hover:border-cyan/45 hover:bg-cyan/[0.08]",
     accent:
-      "border-cyan/30 bg-cyan/15 text-foam hover:border-cyan/70 hover:bg-cyan/20",
+      "border-cyan/28 bg-cyan/[0.08] text-cyan-50 hover:border-cyan/70 hover:bg-cyan/[0.14]",
     warm:
-      "border-coral/30 bg-coral/12 text-foam hover:border-coral/70 hover:bg-coral/18",
+      "border-coral/28 bg-coral/[0.08] text-foam hover:border-coral/70 hover:bg-coral/[0.14]",
     success:
-      "border-mint/30 bg-mint/12 text-foam hover:border-mint/70 hover:bg-mint/18",
+      "border-mint/28 bg-mint/[0.08] text-foam hover:border-mint/70 hover:bg-mint/[0.14]",
   };
+  const sizeClasses = {
+    sm: shape === "circle" ? "h-9 w-9 text-xs" : "px-3 py-1.5 text-xs",
+    md: shape === "circle" ? "h-10 w-10 text-sm" : "px-4 py-2 text-sm",
+    lg: shape === "circle" ? "h-11 w-11 text-sm" : "px-5 py-3 text-sm",
+  };
+  const shapeClasses =
+    shape === "circle"
+      ? "glass-button inline-flex items-center justify-center rounded-full"
+      : "glass-button inline-flex items-center justify-center rounded-full";
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`rounded-full border px-4 py-2 text-sm font-medium tracking-wide transition duration-200 ${
+      aria-label={ariaLabel}
+      title={title}
+      className={`${shapeClasses} ${sizeClasses[size]} border font-medium tracking-[0.14em] transition duration-200 ${
         tones[tone]
-      } ${disabled ? "cursor-not-allowed opacity-40" : ""}`}
+      } ${disabled ? "cursor-not-allowed opacity-40" : "hover:scale-[1.03]"} ${className}`}
     >
       {children}
     </button>

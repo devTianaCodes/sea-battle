@@ -63,10 +63,10 @@ export default function SettingsModal({
 
   return (
     <div className="fixed inset-0 z-[58] flex items-center justify-center bg-[#020817]/80 px-4 py-6 backdrop-blur-md animate-fade-in">
-      <div className="glass-frosted max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] p-6 sm:p-8">
-        <div className="flex items-start justify-between gap-4">
+      <div className="glass-frosted max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] p-6 sm:p-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-cyan/70">Control Room</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-cyan/70">Control Room</p>
             <h2 className="mt-3 font-display text-3xl text-foam">Settings & Statistics</h2>
           </div>
           <IconButton onClick={onClose}>Close</IconButton>

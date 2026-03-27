@@ -391,6 +391,19 @@ export default function useSeaBattleGame() {
     soundEffects.play("randomize");
   }
 
+  function clearPlayerFleet() {
+    if (phase !== GAME_PHASES.SETUP || isPaused) {
+      return;
+    }
+
+    setPlayerFleet([]);
+    setSelectedShipId(SHIP_DEFINITIONS[0].id);
+    setOrientation(ORIENTATIONS.HORIZONTAL);
+    setAnnouncement("Fleet cleared. Select a ship and deploy again.");
+    pushEvent("Player fleet cleared for a fresh deployment.", "system");
+    soundEffects.play("recall");
+  }
+
   function confirmPlayerFleet() {
     if (isPaused) {
       return false;
@@ -663,6 +676,7 @@ export default function useSeaBattleGame() {
     placeSelectedShip,
     handlePlayerBoardAction,
     randomizePlayerFleet,
+    clearPlayerFleet,
     confirmPlayerFleet,
     fireAtEnemy,
     restartMatch,
