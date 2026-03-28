@@ -1,4 +1,5 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { formatDuration } from "../utils/stats";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import useDialogA11y from "../hooks/useDialogA11y";
@@ -34,6 +35,7 @@ export default function ResultsModal({
   winner,
   stats,
   difficulty,
+  history,
   historySummary,
   revealedBoard,
   onReplay,
@@ -46,6 +48,20 @@ export default function ResultsModal({
   const titleId = useId();
   const descriptionId = useId();
   const { dialogRef, initialFocusRef } = useDialogA11y(open, onReplay);
+  const isNewBestAccuracy = useMemo(() => {
+    if (!stats || !history?.length) {
+      return false;
+    }
+
+    const latestEntry = history[0];
+
+    if (!latestEntry || latestEntry.endTime !== stats.endTime) {
+      return false;
+    }
+
+    const previousBest = history.slice(1).reduce((best, match) => Math.max(best, match.accuracy ?? 0), 0);
+    return stats.accuracy > previousBest;
+  }, [history, stats]);
 
   if (!open) {
     return null;
@@ -60,8 +76,9 @@ export default function ResultsModal({
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
         tabIndex={-1}
-        className="glass-frosted animate-modal flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[1.7rem] sm:p-4"
+        className="glass-frosted animate-modal relative flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-[1.35rem] p-3 sm:rounded-[1.7rem] sm:p-4"
       >
+        {winner === "player" ? <VictoryParticles /> : null}
         <div className="grid gap-3 lg:grid-cols-[16rem,minmax(0,1fr)] lg:gap-4">
           <div className="flex flex-col justify-between gap-3">
             <div className="text-center lg:text-left">
@@ -90,6 +107,16 @@ export default function ResultsModal({
                   </span>
                 ) : null}
               </div>
+              {isNewBestAccuracy ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.94, y: 8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: 0.28, duration: 0.22 }}
+                  className="mt-3 inline-flex rounded-full border border-mint/30 bg-mint/[0.12] px-3 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.12em] text-mint"
+                >
+                  New accuracy record
+                </motion.div>
+              ) : null}
             </div>
 
             <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
@@ -156,6 +183,56 @@ export default function ResultsModal({
           ) : null}
         </div>
       </div>
+    </div>
+  );
+}
+
+function VictoryParticles() {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 20 }, (_, index) => ({
+        id: index,
+        left: 6 + ((index * 11) % 88),
+        delay: (index % 5) * 0.12,
+        duration: 2.6 + (index % 4) * 0.22,
+        size: 4 + (index % 3) * 2,
+      })),
+    []
+  );
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-32 overflow-hidden">
+      {particles.map((particle) => (
+        <motion.span
+          key={particle.id}
+          initial={{ opacity: 0, y: -8, x: 0 }}
+          animate={{
+            opacity: [0, 0.9, 0.85, 0],
+            y: [0, 36, 88, 132],
+            x: [0, particle.id % 2 === 0 ? -10 : 10, particle.id % 2 === 0 ? -18 : 18],
+          }}
+          transition={{
+            duration: particle.duration,
+            delay: particle.delay,
+            repeat: Infinity,
+            repeatDelay: 0.8,
+            ease: "easeOut",
+          }}
+          className="absolute rounded-full"
+          style={{
+            left: `${particle.left}%`,
+            width: `${particle.size}px`,
+            height: `${particle.size * 1.8}px`,
+            background:
+              particle.id % 3 === 0
+                ? "linear-gradient(180deg, rgba(74,222,128,0.95), rgba(217,249,157,0.55))"
+                : particle.id % 3 === 1
+                  ? "linear-gradient(180deg, rgba(0,212,255,0.95), rgba(125,211,252,0.5))"
+                  : "linear-gradient(180deg, rgba(255,255,255,0.95), rgba(226,243,255,0.35))",
+            boxShadow: "0 0 14px rgba(0,212,255,0.18)",
+          }}
+        />
+      ))}
     </div>
   );
 }

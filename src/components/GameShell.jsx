@@ -267,6 +267,7 @@ export default function GameShell() {
         winner={game.winner}
         stats={game.resultsStats}
         difficulty={game.difficulty}
+        history={game.history}
         historySummary={game.historySummary}
         revealedBoard={game.revealedEnemyBoard}
         onReplay={game.restartMatch}
