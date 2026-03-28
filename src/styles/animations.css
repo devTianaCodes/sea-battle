@@ -16,8 +16,8 @@
     opacity: 1;
   }
 
-  50% {
-    transform: scale(1.05);
+  45% {
+    transform: scale(1.045);
   }
 
   100% {
@@ -45,7 +45,7 @@
   }
 
   50% {
-    box-shadow: 0 0 18px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 16px rgba(0, 212, 255, 0.24);
   }
 }
 
@@ -58,7 +58,7 @@
 
   50% {
     opacity: 1;
-    box-shadow: 0 0 12px 2px rgba(0, 212, 255, 0.18);
+    box-shadow: 0 0 12px 3px rgba(0, 212, 255, 0.16);
   }
 }
 
@@ -131,7 +131,7 @@
 @keyframes slideInBottom {
   from {
     opacity: 0;
-    transform: translateY(1.25rem);
+    transform: translateY(1rem);
   }
 
   to {
@@ -143,7 +143,7 @@
 @keyframes revealCell {
   0% {
     opacity: 0;
-    transform: scale(0.88);
+    transform: scale(0.86);
   }
 
   100% {
@@ -174,8 +174,8 @@
 
   50% {
     box-shadow:
-      0 0 22px 0 rgba(0, 212, 255, 0.12),
-      inset 0 0 0 1px rgba(0, 212, 255, 0.3);
+      0 0 18px 0 rgba(0, 212, 255, 0.1),
+      inset 0 0 0 1px rgba(0, 212, 255, 0.28);
   }
 }
 
@@ -187,8 +187,8 @@
   }
 
   50% {
-    opacity: 0.94;
-    transform: scale(1.015);
+    opacity: 0.92;
+    transform: scale(1.01);
   }
 }
 
@@ -279,15 +279,18 @@
 }
 
 .animate-modal-in {
-  animation: slideIn 0.3s ease-out both;
+  animation: slideIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
+  will-change: transform, opacity;
 }
 
 .animate-modal {
-  animation: slideInBottom 0.3s ease-out both;
+  animation: slideInBottom 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
+  will-change: transform, opacity;
 }
 
 .animate-panel-in {
-  animation: slideIn 0.45s ease-out both;
+  animation: slideIn 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
+  will-change: transform, opacity;
 }
 
 .animate-banner-in {
@@ -381,8 +384,9 @@
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 999px;
-  background: rgba(223, 247, 255, 0.95);
-  animation: thinkingPulse 1.1s ease-in-out infinite;
+  background: rgba(223, 247, 255, 0.92);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.14);
+  animation: thinkingPulse 1.15s ease-in-out infinite;
 }
 
 .thinking-dot:nth-child(2) {
@@ -395,18 +399,22 @@
 
 .animate-hit {
   animation: hitFlash 0.3s cubic-bezier(0.34, 0.1, 0.68, 0.55);
+  will-change: transform, opacity;
 }
 
 .animate-miss {
-  animation: missRipple 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: missRipple 0.48s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, opacity;
 }
 
 .animate-count {
   animation: countUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  will-change: transform, opacity;
 }
 
 .animate-reveal-cell {
-  animation: revealCell 0.26s ease-out both;
+  animation: revealCell 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -425,5 +433,9 @@
   .thinking-dot,
   .status-text.pulse {
     animation: none !important;
+  }
+
+  .banner-sheen::after {
+    display: none !important;
   }
 }
