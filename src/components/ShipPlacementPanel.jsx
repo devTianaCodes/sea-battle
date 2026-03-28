@@ -20,12 +20,12 @@ export default function ShipPlacementPanel({
     <div className="glass-light min-w-0 w-full max-w-full rounded-[1.1rem] p-3 sm:rounded-[1.3rem] sm:p-4">
       <div className="mb-2 flex items-center justify-between gap-2 sm:mb-2.5">
         <div>
-          <p className="text-[0.58rem] uppercase tracking-[0.16em] text-cyan/70 sm:text-[0.64rem] sm:tracking-[0.18em]">
+          <p className="text-[0.62rem] uppercase tracking-[0.14em] text-cyan-100 sm:text-[0.68rem] sm:tracking-[0.16em]">
             Controls
           </p>
-          <p className="mt-0.5 text-[0.84rem] text-slate-300 sm:text-[0.95rem]">{statusText}</p>
+          <p className="mt-0.5 text-[0.88rem] text-slate-200 sm:text-[0.98rem]">{statusText}</p>
         </div>
-        <div className="rounded-full border border-white/10 bg-white/[0.03] px-2 py-1 text-[0.54rem] uppercase tracking-[0.1em] text-slate-400 sm:px-2.5 sm:text-[0.58rem] sm:tracking-[0.12em]">
+        <div className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[0.58rem] uppercase tracking-[0.08em] text-slate-200 sm:px-2.5 sm:text-[0.62rem] sm:tracking-[0.1em]">
           {phase === "setup" ? "Setup" : "Battle"}
         </div>
       </div>

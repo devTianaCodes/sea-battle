@@ -37,17 +37,17 @@ export default function StatusBar({
       <div className="flex flex-col gap-1.5 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
-            <div className="text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-cyan-200 sm:text-[0.78rem] sm:tracking-[0.24em]">
-            Sea Battle
+            <div className="text-[0.74rem] font-semibold uppercase tracking-[0.18em] text-cyan-100 sm:text-[0.82rem] sm:tracking-[0.22em]">
+              Sea Battle
             </div>
             <div className="hidden h-3 w-px bg-white/10 sm:block" />
             <div className={`status-text ${isPlayerTurn ? "pulse text-cyan-100" : "text-slate-300"}`}>
               {isPaused ? "Paused" : turnLabel}
             </div>
-            <div className="rounded-full border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[0.52rem] uppercase tracking-[0.1em] text-slate-400 sm:px-2 sm:py-1 sm:text-[0.58rem] sm:tracking-[0.12em]">
+            <div className="rounded-full border border-white/10 bg-white/[0.05] px-1.5 py-0.5 text-[0.58rem] uppercase tracking-[0.08em] text-slate-200 sm:px-2 sm:py-1 sm:text-[0.62rem] sm:tracking-[0.1em]">
               {difficulty}
             </div>
-            <div className="rounded-full border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[0.52rem] uppercase tracking-[0.1em] text-slate-400 sm:px-2 sm:py-1 sm:text-[0.58rem] sm:tracking-[0.12em]">
+            <div className="rounded-full border border-white/10 bg-white/[0.05] px-1.5 py-0.5 text-[0.58rem] uppercase tracking-[0.08em] text-slate-200 sm:px-2 sm:py-1 sm:text-[0.62rem] sm:tracking-[0.1em]">
               {timerLabel}
             </div>
           </div>
@@ -56,11 +56,11 @@ export default function StatusBar({
             <ShipTrack label="Enemy Fleet" active={shipsRemaining.opponent} dimmed />
           </div>
           {showStats ? (
-          <div className="animate-fade-in-fast mt-1 text-[0.62rem] uppercase tracking-[0.08em] text-slate-400 sm:mt-1.5 sm:text-[0.68rem] sm:tracking-[0.12em]">
+          <div className="animate-fade-in-fast mt-1 text-[0.68rem] uppercase tracking-[0.08em] text-slate-300 sm:mt-1.5 sm:text-[0.72rem] sm:tracking-[0.1em]">
             Hits {playerStats.hits} | Misses {playerStats.misses} | Accuracy {playerStats.accuracy}% | Turn {turnCount}
           </div>
         ) : (
-          <p className="mt-1 max-w-3xl break-words text-[0.76rem] leading-[1.15rem] text-slate-400 sm:mt-1.5 sm:text-[0.84rem] sm:leading-5" role="status" aria-live="polite">
+          <p className="mt-1 max-w-3xl break-words text-[0.8rem] leading-[1.2rem] text-slate-300 sm:mt-1.5 sm:text-[0.88rem] sm:leading-5" role="status" aria-live="polite">
             {announcement}
           </p>
         )}

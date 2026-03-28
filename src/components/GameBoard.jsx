@@ -74,8 +74,8 @@ export default function GameBoard({
       } ${interactive && isBattleTargetBoard ? "targetable-board" : ""} ${className}`}
     >
       <div className="mb-2 flex w-full items-center justify-between lg:mb-2.5">
-        <p className="text-[0.74rem] uppercase tracking-[0.28em] text-slate-400">{boardId}</p>
-        <p className="text-[0.74rem] uppercase tracking-[0.22em] text-cyan/70">{title}</p>
+        <p className="text-[0.76rem] uppercase tracking-[0.22em] text-slate-300">{boardId}</p>
+        <p className="text-[0.76rem] uppercase tracking-[0.18em] text-cyan-100">{title}</p>
       </div>
 
       <div className="game-board-frame">
@@ -108,7 +108,7 @@ export default function GameBoard({
           })}
           {isThinking ? (
             <div className="glass-light thinking-overlay absolute inset-0 flex items-center justify-center rounded-[1rem] border border-cyan/15">
-              <div className="animate-fade-in-fast banner-sheen flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.72rem] uppercase tracking-[0.18em] text-cyan-50">
+              <div className="animate-fade-in-fast banner-sheen flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.76rem] uppercase tracking-[0.14em] text-cyan-50">
                 <span className="thinking-dot" />
                 <span className="thinking-dot" />
                 <span className="thinking-dot" />

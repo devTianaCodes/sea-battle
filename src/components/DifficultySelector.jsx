@@ -112,7 +112,7 @@ export default function DifficultySelector({
     >
       <div className="mb-1.5 flex min-w-0 flex-wrap items-center justify-between gap-2 px-0.5 sm:mb-8 sm:gap-3 sm:px-0">
         <div>
-          <p className="text-[0.65rem] uppercase tracking-[0.22em] text-cyan/70 sm:text-xs sm:tracking-[0.28em]">
+          <p className="text-[0.68rem] uppercase tracking-[0.18em] text-cyan-100 sm:text-xs sm:tracking-[0.24em]">
             Difficulty
           </p>
           <h1
@@ -179,13 +179,13 @@ export default function DifficultySelector({
               <div className="flex h-full flex-col items-center justify-between text-center">
                 <div className="w-full">
                   <div className="text-2xl sm:text-5xl">{level.emoji}</div>
-                  <div className="mt-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-foam sm:mt-4 sm:text-xl sm:tracking-[0.12em]">
+                  <div className="mt-1.5 text-[0.74rem] font-semibold uppercase tracking-[0.08em] text-foam sm:mt-4 sm:text-xl sm:tracking-[0.12em]">
                     {level.name}
                   </div>
-                  <p className="mt-1.5 h-[2rem] overflow-hidden text-[0.6rem] leading-4 text-slate-300 sm:mt-3 sm:h-auto sm:text-sm sm:leading-6">
+                  <p className="mt-1.5 h-[2rem] overflow-hidden text-[0.64rem] leading-4 text-slate-200 sm:mt-3 sm:h-auto sm:text-sm sm:leading-6">
                     {level.description}
                   </p>
-                  <p className="mt-1 text-[0.52rem] uppercase tracking-[0.04em] text-slate-500 sm:mt-3 sm:text-[0.72rem] sm:tracking-[0.12em]">
+                  <p className="mt-1 text-[0.56rem] uppercase tracking-[0.04em] text-slate-300 sm:mt-3 sm:text-[0.72rem] sm:tracking-[0.1em]">
                     {stats.matches
                       ? `${stats.winRate}% win rate across ${stats.matches} runs`
                       : "No archive data yet"}
@@ -211,7 +211,7 @@ export default function DifficultySelector({
                       );
                     })}
                   </div>
-                  <div className="mt-2 text-[0.5rem] uppercase tracking-[0.08em] text-slate-400 sm:mt-4 sm:text-[0.68rem] sm:tracking-[0.18em]">
+                  <div className="mt-2 text-[0.56rem] uppercase tracking-[0.08em] text-slate-300 sm:mt-4 sm:text-[0.68rem] sm:tracking-[0.14em]">
                     {pending ? `Starting ${level.name}...` : active ? "Current default" : "Select"}
                   </div>
                 </div>

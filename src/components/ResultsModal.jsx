@@ -66,7 +66,7 @@ export default function ResultsModal({
           <div className="flex flex-col justify-between gap-3">
             <div className="text-center lg:text-left">
               <div className="text-3xl sm:text-4xl">{winner === "player" ? "O" : "X"}</div>
-              <p className="mt-1.5 text-[0.62rem] uppercase tracking-[0.18em] text-cyan/70 sm:mt-2 sm:text-xs sm:tracking-[0.24em]">
+              <p className="mt-1.5 text-[0.66rem] uppercase tracking-[0.16em] text-cyan-100 sm:mt-2 sm:text-xs sm:tracking-[0.2em]">
                 Results
               </p>
               <h2
@@ -81,11 +81,11 @@ export default function ResultsModal({
                   : "The enemy found enough openings to sink your fleet. Reset and try a different deployment."}
               </p>
               <div className="mt-2.5 flex flex-wrap justify-center gap-1.5 lg:justify-start sm:mt-3 sm:gap-2">
-                <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.12em] text-slate-300 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.18em]">
+                <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[0.64rem] uppercase tracking-[0.1em] text-slate-200 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.14em]">
                   {difficulty} difficulty
                 </span>
                 {stats?.performanceLabel ? (
-                  <span className="inline-flex rounded-full border border-cyan/20 bg-cyan/[0.08] px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.12em] text-cyan-100 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.18em]">
+                  <span className="inline-flex rounded-full border border-cyan/20 bg-cyan/[0.08] px-2.5 py-1 text-[0.64rem] uppercase tracking-[0.1em] text-cyan-50 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.14em]">
                     {stats.performanceLabel}
                   </span>
                 ) : null}
@@ -147,7 +147,7 @@ export default function ResultsModal({
                 />
               </div>
               <div>
-                <div className="mb-1.5 text-center text-[0.6rem] uppercase tracking-[0.14em] text-slate-400 sm:mb-2 sm:text-[0.68rem] sm:tracking-[0.18em]">
+                <div className="mb-1.5 text-center text-[0.64rem] uppercase tracking-[0.12em] text-slate-300 sm:mb-2 sm:text-[0.7rem] sm:tracking-[0.14em]">
                   Enemy Fleet Reveal
                 </div>
                 <MiniBoard board={revealedBoard} />
@@ -232,7 +232,7 @@ function useAnimatedStats(open, stats, historySummary) {
 function StatCard({ label, value }) {
   return (
     <div className="animate-count rounded-[0.9rem] border border-white/10 bg-white/[0.06] px-2 py-2 text-center sm:rounded-[1.1rem] sm:px-3 sm:py-3">
-      <div className="text-[0.54rem] uppercase tracking-[0.12em] text-slate-400 sm:text-[0.62rem] sm:tracking-[0.18em]">
+      <div className="text-[0.58rem] uppercase tracking-[0.1em] text-slate-300 sm:text-[0.66rem] sm:tracking-[0.14em]">
         {label}
       </div>
       <div className="mt-1 text-base font-semibold text-foam sm:mt-1.5 sm:text-xl">{value}</div>

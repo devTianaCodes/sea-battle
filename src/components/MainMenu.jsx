@@ -90,7 +90,7 @@ export default function MainMenu({
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="text-[0.68rem] uppercase tracking-[0.22em] text-cyan/70 sm:text-[0.82rem] sm:tracking-[0.3em]"
+          className="text-[0.72rem] uppercase tracking-[0.18em] text-cyan-100 sm:text-[0.84rem] sm:tracking-[0.24em]"
         >
           Tactical Launch
         </motion.p>
@@ -168,7 +168,7 @@ export default function MainMenu({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.34 }}
-          className="mt-7 px-3 text-[0.68rem] uppercase tracking-[0.08em] text-slate-400 sm:mt-10 sm:px-4 sm:text-[0.82rem] sm:tracking-[0.16em]"
+          className="mt-7 px-3 text-[0.72rem] uppercase tracking-[0.08em] text-slate-300 sm:mt-10 sm:px-4 sm:text-[0.86rem] sm:tracking-[0.14em]"
         >
           {historySummary.totalMatches} matches | {historySummary.wins} wins | best accuracy {historySummary.bestAccuracy}%
         </motion.div>
