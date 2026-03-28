@@ -15,9 +15,10 @@ export default function ShipPlacer({
   onClear,
   onRotate,
   selectedShipName,
+  selectedShipSize,
 }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex h-full flex-col gap-1.5 md:gap-2">
       <motion.div
         initial={{ opacity: 0, x: -16 }}
         animate={{ opacity: 1, x: 0 }}
@@ -27,7 +28,6 @@ export default function ShipPlacer({
           availableShips={availableShips}
           playerFleet={playerFleet}
           selectedShipId={selectedShipId}
-          orientation={orientation}
           onSelectShip={onSelectShip}
         />
       </motion.div>
@@ -45,6 +45,8 @@ export default function ShipPlacer({
           onClear={onClear}
           onRotate={onRotate}
           selectedShipName={selectedShipName}
+          selectedShipSize={selectedShipSize}
+          orientation={orientation}
         />
       </motion.div>
     </div>

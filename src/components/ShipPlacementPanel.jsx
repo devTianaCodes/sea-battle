@@ -8,13 +8,17 @@ export default function ShipPlacementPanel({
   onClear,
   onRotate,
   selectedShipName,
+  selectedShipSize,
+  orientation,
 }) {
   const statusText =
     phase !== "setup"
       ? "Battle live."
       : selectedShipName
-        ? `Place ${selectedShipName}`
-        : "Fleet ready";
+        ? `Place ${selectedShipName} · ${selectedShipSize} cells`
+        : canConfirm
+          ? "All ships placed"
+          : "Select a ship to begin";
 
   return (
     <div className="glass-light min-w-0 w-full max-w-full rounded-[1.1rem] p-3 sm:rounded-[1.3rem] sm:p-4">
@@ -25,25 +29,24 @@ export default function ShipPlacementPanel({
           </p>
           <p className="mt-0.5 text-[0.88rem] text-slate-200 sm:text-[0.98rem]">{statusText}</p>
         </div>
-        <div className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[0.58rem] uppercase tracking-[0.08em] text-slate-200 sm:px-2.5 sm:text-[0.62rem] sm:tracking-[0.1em]">
-          {phase === "setup" ? "Setup" : "Battle"}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
         <IconButton
           onClick={onRotate}
           tone="accent"
           disabled={phase !== "setup"}
-          className="min-h-0 justify-center px-2.5 py-2 text-[0.72rem] tracking-[0.03em] sm:px-3 sm:text-[0.78rem] sm:tracking-[0.04em]"
           size="sm"
+          className="min-h-0 gap-1 px-2.5 py-1.5 text-[0.62rem] tracking-[0.08em] sm:px-3 sm:text-[0.68rem]"
+          ariaLabel="Rotate selected ship"
+          title="Rotate selected ship"
         >
-          Rotate
+          {orientation === "horizontal" ? "H" : "V"}
         </IconButton>
+      </div>
+
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
         <IconButton
           onClick={onRandomize}
           disabled={phase !== "setup"}
-          className="min-h-0 justify-center px-2.5 py-2 text-[0.72rem] tracking-[0.03em] sm:px-3 sm:text-[0.78rem] sm:tracking-[0.04em]"
+          className="min-h-0 justify-center px-2 py-2 text-[0.68rem] tracking-[0.04em] sm:px-3 sm:text-[0.76rem]"
           size="sm"
         >
           Random
@@ -51,7 +54,7 @@ export default function ShipPlacementPanel({
         <IconButton
           onClick={onClear}
           disabled={phase !== "setup"}
-          className="min-h-0 justify-center px-2.5 py-2 text-[0.72rem] tracking-[0.03em] sm:px-3 sm:text-[0.78rem] sm:tracking-[0.04em]"
+          className="min-h-0 justify-center px-2 py-2 text-[0.68rem] tracking-[0.04em] sm:px-3 sm:text-[0.76rem]"
           size="sm"
         >
           Clear
@@ -60,7 +63,7 @@ export default function ShipPlacementPanel({
           onClick={onConfirm}
           tone="success"
           disabled={phase !== "setup" || !canConfirm}
-          className="min-h-0 justify-center px-2.5 py-2 text-[0.72rem] tracking-[0.03em] sm:px-3 sm:text-[0.78rem] sm:tracking-[0.04em]"
+          className="min-h-0 justify-center px-2 py-2 text-[0.68rem] tracking-[0.04em] sm:px-3 sm:text-[0.76rem]"
           size="sm"
         >
           Confirm

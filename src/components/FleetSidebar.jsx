@@ -1,30 +1,25 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { ORIENTATIONS, SHIP_DEFINITIONS } from "../data/constants";
+import { SHIP_DEFINITIONS } from "../data/constants";
 
 export default function FleetSidebar({
   availableShips,
   playerFleet,
   selectedShipId,
-  orientation,
   onSelectShip,
 }) {
   const availableIds = new Set(availableShips.map((ship) => ship.id));
 
   return (
     <div className="glass-light min-w-0 w-full max-w-full overflow-hidden rounded-[1.2rem] p-3 sm:rounded-[1.4rem] sm:p-4">
-      <div className="mb-2.5 flex items-center justify-between sm:mb-3">
-        <div>
-          <p className="text-[0.76rem] uppercase tracking-[0.16em] text-cyan-100 sm:text-[0.82rem] sm:tracking-[0.22em]">
-            Ships
-          </p>
-          <h2 className="text-[0.98rem] uppercase tracking-[0.12em] text-foam sm:text-[1.05rem] sm:tracking-[0.16em]">
-            Deployment
-          </h2>
-        </div>
-        <div className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.1em] text-slate-200 sm:px-3 sm:text-[0.66rem] sm:tracking-[0.12em]">
-          {orientation === ORIENTATIONS.HORIZONTAL ? "H" : "V"}
-        </div>
+      <div className="mb-2.5 sm:mb-3">
+        <p className="text-[0.76rem] uppercase tracking-[0.16em] text-cyan-100 sm:text-[0.82rem] sm:tracking-[0.22em]">
+          Ships
+        </p>
+        <h2 className="text-[0.98rem] uppercase tracking-[0.12em] text-foam sm:text-[1.05rem] sm:tracking-[0.16em]">
+          Deployment
+        </h2>
+        <div className="mt-2 h-px w-full bg-cyan/15" />
       </div>
       <div className="flex min-w-0 w-full max-w-full gap-1.5 overflow-x-auto pb-1 md:flex-col md:gap-2 md:overflow-visible">
         {SHIP_DEFINITIONS.map((ship) => {
@@ -45,16 +40,16 @@ export default function FleetSidebar({
                 isSelected
                   ? "border-cyan/60 bg-cyan/[0.12] shadow-[0_0_0_1px_rgba(0,212,255,0.2)]"
                   : isPlaced
-                    ? "border-white/15 bg-white/[0.07] hover:border-cyan/25 hover:bg-white/[0.09]"
+                    ? "border-mint/25 bg-mint/[0.08] hover:border-mint/35 hover:bg-mint/[0.11]"
                     : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/[0.08]"
               )}
-              >
+            >
               <div className="min-w-0">
                 <div className="truncate text-[0.82rem] font-medium text-foam sm:text-[0.92rem]">
                   {ship.name}
                 </div>
                 <div className="text-[0.6rem] uppercase tracking-[0.04em] text-slate-300 sm:text-[0.66rem] sm:tracking-[0.05em]">
-                  {ship.size} cells {isPlaced ? "placed" : isAvailable ? "ready" : ""}
+                  {ship.size} cells {isPlaced ? "placed" : isAvailable ? "ready" : "queued"}
                 </div>
               </div>
               <div className="ml-2 flex shrink-0 gap-0.5 sm:gap-1">

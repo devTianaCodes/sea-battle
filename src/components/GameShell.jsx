@@ -6,7 +6,6 @@ import { formatDuration } from "../utils/stats";
 import BattleActionBar from "./BattleActionBar";
 import BackgroundEffects from "./BackgroundEffects";
 import DifficultySelector from "./DifficultySelector";
-import FleetSidebar from "./FleetSidebar";
 import GameBoard from "./GameBoard";
 import InstructionsModal from "./InstructionsModal";
 import MainMenu from "./MainMenu";
@@ -14,7 +13,7 @@ import OnboardingModal from "./OnboardingModal";
 import PauseModal from "./PauseModal";
 import ResultsModal from "./ResultsModal";
 import SettingsModal from "./SettingsModal";
-import ShipPlacementPanel from "./ShipPlacementPanel";
+import ShipPlacer from "./ShipPlacer";
 import StatusBar from "./StatusBar";
 import TurnBanner from "./TurnBanner";
 
@@ -66,8 +65,9 @@ export default function GameShell() {
   }, [game.matchEndTime, game.matchStartTime, now]);
 
   const canConfirm = game.playerFleet.length === 5;
-  const selectedShipName =
-    game.availableShips.find((ship) => ship.id === game.selectedShipId)?.name ?? null;
+  const selectedShip = game.availableShips.find((ship) => ship.id === game.selectedShipId) ?? null;
+  const selectedShipName = selectedShip?.name ?? null;
+  const selectedShipSize = selectedShip?.size ?? null;
   const playerShipsAfloat = game.playerFleetStatus.filter((ship) => !ship.isSunk).length;
   const enemyShipsAfloat = game.enemyFleetStatus.filter((ship) => !ship.isSunk).length;
   const turnCount = Math.max(game.playerShots.length, game.aiShots.length) + 1;
@@ -172,21 +172,20 @@ export default function GameShell() {
         {game.phase === GAME_PHASES.SETUP ? (
           <section className="grid min-h-0 w-full max-w-full gap-2 overflow-x-hidden md:grid-cols-[13rem_minmax(0,1fr)] md:items-stretch md:gap-2 lg:grid-cols-[14.5rem_minmax(0,1fr)]">
             <div className="min-w-0 w-full max-w-full space-y-1.5 md:flex md:h-full md:flex-col">
-              <FleetSidebar
+              <ShipPlacer
+                phase={game.phase}
                 availableShips={game.availableShips}
                 playerFleet={game.playerFleet}
                 selectedShipId={game.selectedShipId}
                 orientation={game.orientation}
                 onSelectShip={game.selectShip}
-              />
-              <ShipPlacementPanel
-                phase={game.phase}
                 canConfirm={canConfirm}
                 onConfirm={game.confirmPlayerFleet}
                 onRandomize={game.randomizePlayerFleet}
                 onClear={game.clearPlayerFleet}
                 onRotate={game.toggleOrientation}
                 selectedShipName={selectedShipName}
+                selectedShipSize={selectedShipSize}
               />
             </div>
             <div className="grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:h-full md:grid-cols-2 md:justify-items-stretch md:gap-2">
