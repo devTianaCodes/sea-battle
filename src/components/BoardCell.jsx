@@ -47,6 +47,10 @@ function getCellContents(cell) {
   return null;
 }
 
+function shouldShowCoordinate(cell) {
+  return !cell.isHit && !cell.isMiss;
+}
+
 function BoardCell({
   cell,
   active,
@@ -89,6 +93,14 @@ function BoardCell({
         !isInteractive && !cell.isHit && !cell.isMiss && "cursor-default"
       )}
     >
+      {shouldShowCoordinate(cell) ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1 top-1 opacity-0 transition-opacity duration-150 group-hover:opacity-75 group-focus-visible:opacity-90"
+        >
+          <span className="board-cell-coordinate">{coordinateLabel}</span>
+        </span>
+      ) : null}
       {cell.isMiss ? <span className="absolute inset-0 ripple-dot rounded-[inherit]" /> : null}
       <BattleEffects cell={cell} />
       {getCellContents(cell)}

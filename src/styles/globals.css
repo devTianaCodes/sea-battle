@@ -309,10 +309,29 @@ select {
   border-color: rgba(0, 212, 255, 0.45);
 }
 
+.board-cell[data-state="ship"]::before {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(216, 245, 255, 0.2) 0 30%, transparent 31% 100%);
+  background-size: 8px 8px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .board-cell[data-state="sunk"] {
   background-color: rgba(255, 107, 107, 0.15);
   border-color: rgba(255, 107, 107, 0.28);
   opacity: 0.7;
+}
+
+.board-cell-coordinate {
+  font-size: 0.52rem;
+  letter-spacing: 0.04em;
+  color: rgba(226, 243, 255, 0.78);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.12);
 }
 
 .status-text {
@@ -414,5 +433,9 @@ select {
 
   .board-cell {
     border-radius: 0.4rem;
+  }
+
+  .board-cell-coordinate {
+    font-size: 0.48rem;
   }
 }
