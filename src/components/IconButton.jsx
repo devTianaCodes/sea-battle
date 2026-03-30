@@ -40,7 +40,7 @@ const IconButton = forwardRef(function IconButton({
       disabled={disabled}
       aria-label={ariaLabel}
       title={title}
-      className={`${shapeClasses} ${sizeClasses[size]} border font-medium tracking-[0.14em] transition duration-200 ${
+      className={`${shapeClasses} ${sizeClasses[size]} border font-medium tracking-[0.14em] transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#071120] ${
         tones[tone]
       } ${disabled ? "cursor-not-allowed opacity-40" : "hover:scale-[1.03]"} ${className}`}
     >

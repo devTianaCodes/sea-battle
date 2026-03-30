@@ -117,7 +117,7 @@ export default function MainMenu({
             onClick={onPlayClick}
             tone="accent"
             size="lg"
-            className="animate-pulse-subtle min-h-12 min-w-[168px] px-6 text-[0.95rem] font-semibold uppercase tracking-[0.16em] sm:min-h-16 sm:min-w-[260px] sm:px-9 sm:text-[1.05rem] sm:tracking-[0.26em]"
+            className="animate-pulse-subtle min-h-12 min-w-[168px] !border-cyan/45 shadow-[0_0_18px_rgba(0,212,255,0.14)] px-6 text-[0.95rem] font-semibold uppercase tracking-[0.16em] sm:min-h-16 sm:min-w-[260px] sm:px-9 sm:text-[1.05rem] sm:tracking-[0.26em]"
             ariaLabel="Play Sea Battle"
           >
             Play

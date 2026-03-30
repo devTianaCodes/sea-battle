@@ -12,6 +12,7 @@ export default function DifficultySelector({
   disabled = false,
 }) {
   const [selecting, setSelecting] = useState(null);
+  const [showKeyboardFocus, setShowKeyboardFocus] = useState(false);
   const optionRefs = useRef([]);
   const [focusedIndex, setFocusedIndex] = useState(() =>
     Math.max(
@@ -44,6 +45,16 @@ export default function DifficultySelector({
         return;
       }
 
+      if (
+        event.key === "Tab" ||
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowRight" ||
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown"
+      ) {
+        setShowKeyboardFocus(true);
+      }
+
       if (event.key === "Escape") {
         event.preventDefault();
         onBack();
@@ -64,13 +75,20 @@ export default function DifficultySelector({
 
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
+        setShowKeyboardFocus(true);
         selectDifficulty(DIFFICULTY_LEVELS[focusedIndex].id);
       }
     }
 
+    function handlePointerDown() {
+      setShowKeyboardFocus(false);
+    }
+
     window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("pointerdown", handlePointerDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pointerdown", handlePointerDown);
       if (selectionTimeoutRef.current) {
         window.clearTimeout(selectionTimeoutRef.current);
       }
@@ -108,7 +126,7 @@ export default function DifficultySelector({
   return (
     <section
       aria-labelledby="difficulty-screen-title"
-      className="mx-auto flex h-auto w-full min-w-0 max-w-6xl flex-col justify-start overflow-hidden pt-0 pb-0.5 sm:h-full sm:justify-center sm:py-2"
+      className="mx-auto flex h-auto w-full min-w-0 max-w-6xl flex-col justify-start overflow-visible pt-0 pb-0.5 sm:h-full sm:justify-center sm:py-2"
     >
       <div className="mb-1.5 flex min-w-0 flex-wrap items-center justify-between gap-2 px-0.5 sm:mb-8 sm:gap-3 sm:px-0">
         <div>
@@ -130,18 +148,12 @@ export default function DifficultySelector({
         Use arrow keys to move between difficulty options and press Enter or Space to confirm the selected difficulty.
       </p>
 
-      <div className="grid min-w-0 w-full grid-cols-3 gap-1.5 sm:gap-4 md:grid-cols-3 lg:gap-5">
+      <div className="grid min-w-0 w-full grid-cols-3 gap-1.5 px-2 py-2 sm:gap-4 sm:px-3 sm:py-3 md:grid-cols-3 lg:gap-5">
         {DIFFICULTY_LEVELS.map((level, index) => {
           const active = level.id === difficulty;
           const pending = level.id === selecting;
           const stats = getDifficultyStats(level.id);
-          const focused = index === focusedIndex;
-          const toneClass =
-            level.accent === "mint"
-              ? "border-mint/30 hover:border-mint/70 hover:shadow-[0_0_24px_rgba(74,222,128,0.2)]"
-              : level.accent === "coral"
-                ? "border-coral/30 hover:border-coral/70 hover:shadow-[0_0_24px_rgba(255,107,107,0.2)]"
-                : "border-cyan/30 hover:border-cyan/70 hover:shadow-[0_0_24px_rgba(0,212,255,0.2)]";
+          const focused = showKeyboardFocus && index === focusedIndex;
 
           return (
             <motion.button
@@ -154,26 +166,19 @@ export default function DifficultySelector({
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.28, delay: index * 0.08 }}
-              whileHover={disabled ? undefined : { scale: 1.03 }}
+              whileHover={disabled ? undefined : { scale: 1.015 }}
               whileTap={disabled ? undefined : { scale: 0.985 }}
               onClick={() => selectDifficulty(level.id)}
               className={clsx(
-                "glass-light min-h-[8.75rem] w-full min-w-0 max-w-full rounded-[0.9rem] border px-2 py-2.5 text-left transition duration-200 sm:min-h-[240px] sm:rounded-[1.4rem] sm:px-5 sm:py-6 md:min-h-[300px]",
-                toneClass,
-                active || pending
-                  ? level.accent === "mint"
-                    ? "border-mint/80 bg-mint/[0.09] shadow-[0_0_28px_rgba(74,222,128,0.22)]"
-                    : level.accent === "coral"
-                      ? "border-coral/80 bg-coral/[0.09] shadow-[0_0_28px_rgba(255,107,107,0.24)]"
-                      : "border-cyan/80 bg-cyan/[0.09] shadow-[0_0_28px_rgba(0,212,255,0.22)]"
-                  : "bg-white/[0.03]",
+                "glass-light min-h-[8.75rem] w-full min-w-0 max-w-full rounded-[0.9rem] border px-2 py-2.5 text-left transition duration-200 focus:outline-none sm:min-h-[240px] sm:rounded-[1.4rem] sm:px-4 sm:py-5 md:min-h-[290px]",
+                "!border-cyan/45 shadow-[0_0_18px_rgba(0,212,255,0.14)] hover:!border-cyan/90 hover:shadow-[0_0_30px_rgba(0,212,255,0.28)]",
+                "bg-white/[0.03]",
                 focused && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]",
                 disabled && "cursor-not-allowed opacity-40"
               )}
               aria-pressed={active || pending}
               aria-current={active ? "true" : undefined}
               aria-label={`${level.name} difficulty. ${level.description}`}
-              onMouseEnter={() => setFocusedIndex(index)}
               onFocus={() => setFocusedIndex(index)}
             >
               <div className="flex h-full flex-col items-center justify-between text-center">
