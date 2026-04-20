@@ -5,7 +5,7 @@
 :root {
   color-scheme: dark;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  --viewport-padding: 15px;
+  --viewport-padding: clamp(10px, 1.8vw, 15px);
   --cell-size: clamp(1.8rem, 5vw, 2.8rem);
   --transition-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -227,6 +227,8 @@ select {
   flex: 1;
   flex-direction: column;
   gap: 10px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .viewport-footer {
@@ -243,6 +245,13 @@ select {
   flex-direction: column;
   align-items: center;
   min-width: 0;
+  overflow: hidden;
+}
+
+.setup-board,
+.battle-board {
+  width: 100%;
+  max-width: 100%;
 }
 
 .setup-board {
@@ -251,17 +260,23 @@ select {
 
 .game-board-frame {
   display: flex;
-  flex: 1;
-  width: 100%;
+  flex: 0 1 auto;
+  width: min(100%, calc(var(--viewport-height, 100svh) - 255px));
+  max-width: 100%;
+  aspect-ratio: 1;
   min-height: 0;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 8px;
+  overflow: hidden;
+  margin-inline: auto;
 }
 
 .game-board {
   display: grid;
+  min-width: 0;
   width: 100%;
+  height: 100%;
   max-width: 100%;
   margin: 0 auto;
   grid-template-columns: repeat(10, minmax(0, 1fr));
@@ -368,8 +383,18 @@ select {
     width: 100%;
   }
 
+  .game-board-frame {
+    width: min(100%, calc(var(--viewport-height, 100vh) - 255px));
+  }
+
   .game-board {
     max-width: 100%;
+  }
+
+  .setup-board .game-board-frame,
+  .battle-board .game-board-frame {
+    width: min(100%, calc(var(--viewport-height, 100vh) - 245px));
+    margin-inline: auto;
   }
 
   .setup-board .game-board {
@@ -385,6 +410,15 @@ select {
   .viewport-container {
     width: 100%;
     max-height: calc(100vh - 32px);
+  }
+
+  .game-board-frame {
+    width: min(100%, calc(var(--viewport-height, 100vh) - 230px));
+  }
+
+  .setup-board .game-board-frame,
+  .battle-board .game-board-frame {
+    width: min(100%, calc(var(--viewport-height, 100vh) - 225px));
   }
 
   .viewport-main {
@@ -417,6 +451,11 @@ select {
   .game-board {
     max-width: 100%;
     gap: 2px;
+  }
+
+  .game-board-frame {
+    width: 100%;
+    padding: 6px;
   }
 
   .setup-board .game-board {

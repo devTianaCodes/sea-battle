@@ -199,7 +199,7 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
                 onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-                className="setup-board h-full w-full max-w-[13.5rem] sm:max-w-[15rem] md:max-w-none"
+                className="setup-board h-full w-full max-w-full"
               />
               <GameBoard
                 title="Opponent Grid"
@@ -211,7 +211,7 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
                 onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
-                className="setup-board hidden h-full w-full max-w-[13.5rem] sm:max-w-[15rem] md:flex md:max-w-none"
+                className="setup-board hidden h-full w-full max-w-full md:flex"
               />
             </div>
           </section>
@@ -228,7 +228,7 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
                 onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-                className="battle-board w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
+                className="battle-board w-full max-w-full"
               />
               <GameBoard
                 title="Opponent Grid"
@@ -245,7 +245,7 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
                 onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
-                className="battle-board w-full max-w-[15rem] sm:max-w-[16rem] md:max-w-none"
+                className="battle-board w-full max-w-full"
               />
             </section>
             <BattleActionBar
