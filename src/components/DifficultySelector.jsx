@@ -173,7 +173,7 @@ export default function DifficultySelector({
                 "glass-light min-h-[8.75rem] w-full min-w-0 max-w-full rounded-[0.9rem] border px-2 py-2.5 text-left transition duration-200 focus:outline-none sm:min-h-[240px] sm:rounded-[1.4rem] sm:px-4 sm:py-5 md:min-h-[290px]",
                 "!border-cyan/45 shadow-[0_0_18px_rgba(0,212,255,0.14)] hover:!border-cyan/90 hover:shadow-[0_0_30px_rgba(0,212,255,0.28)]",
                 "bg-white/[0.03]",
-                focused && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]",
+                focused && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]",
                 disabled && "cursor-not-allowed opacity-40"
               )}
               aria-pressed={active || pending}

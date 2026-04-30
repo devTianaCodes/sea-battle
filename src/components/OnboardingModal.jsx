@@ -23,7 +23,7 @@ export default function OnboardingModal({ open, onClose }) {
   }
 
   return (
-    <div className="fixed inset-[15px] z-[60] flex items-center justify-center rounded-[20px] bg-[#020817]/80 p-2 backdrop-blur-md animate-fade-in sm:p-3">
+    <div className="fixed inset-[15px] z-[60] flex items-center justify-center rounded-[20px] bg-[#03110e]/80 p-2 backdrop-blur-md animate-fade-in sm:p-3">
       <div
         ref={dialogRef}
         role="dialog"

@@ -135,7 +135,7 @@ export default function MainMenu({
             title="Instructions"
             shape="circle"
             className={clsx(
-              activeAction === "instructions" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]"
+              activeAction === "instructions" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
             )}
           >
             ?
@@ -146,7 +146,7 @@ export default function MainMenu({
             title="Settings"
             shape="circle"
             className={clsx(
-              activeAction === "settings" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]"
+              activeAction === "settings" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
             )}
           >
             ⚙
@@ -157,7 +157,7 @@ export default function MainMenu({
             title="Statistics"
             shape="circle"
             className={clsx(
-              activeAction === "stats" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#071120]"
+              activeAction === "stats" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
             )}
           >
             #

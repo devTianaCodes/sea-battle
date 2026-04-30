@@ -68,7 +68,7 @@ export default function ResultsModal({
   }
 
   return (
-    <div className="animate-fade-in fixed inset-[15px] z-50 flex items-center justify-center rounded-[20px] bg-[#020817]/70 p-2 backdrop-blur-md sm:p-3">
+    <div className="animate-fade-in fixed inset-[15px] z-50 flex items-center justify-center rounded-[20px] bg-[#03110e]/70 p-2 backdrop-blur-md sm:p-3">
       <div
         ref={dialogRef}
         role="dialog"

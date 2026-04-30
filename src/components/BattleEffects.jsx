@@ -58,7 +58,7 @@ export default function BattleEffects({ cell }) {
                 transition={{ duration: 0.3, delay: 0.08 }}
                 className="absolute inset-x-0 top-1 flex justify-center"
               >
-                <span className="rounded-full border border-mint/30 bg-[#071120]/85 px-2 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-mint">
+                <span className="rounded-full border border-mint/30 bg-[#061f19]/85 px-2 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.25em] text-mint">
                   Ship Sunk
                 </span>
               </motion.div>

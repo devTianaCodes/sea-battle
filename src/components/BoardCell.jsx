@@ -89,7 +89,7 @@ function BoardCell({
         cell.isRecentShot && cell.isMiss && "animate-miss",
         cell.isRecentShot &&
           "after:absolute after:inset-1 after:rounded-[inherit] after:border after:border-cyan/40 after:content-['']",
-        active && "ring-2 ring-cyan/80 ring-offset-1 ring-offset-[#071120]",
+        active && "ring-2 ring-cyan/80 ring-offset-1 ring-offset-[#061f19]",
         !isInteractive && !cell.isHit && !cell.isMiss && "cursor-default"
       )}
     >

@@ -30,7 +30,7 @@ export default function InstructionsModal({ open, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-[15px] z-[55] flex items-center justify-center rounded-[20px] bg-[#020817]/80 p-2 backdrop-blur-md sm:p-3"
+          className="fixed inset-[15px] z-[55] flex items-center justify-center rounded-[20px] bg-[#03110e]/80 p-2 backdrop-blur-md sm:p-3"
         >
           <motion.div
             initial={{ opacity: 0, x: 18, scale: 0.98 }}

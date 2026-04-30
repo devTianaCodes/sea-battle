@@ -108,7 +108,7 @@ export default function GameBoard({
           })}
           {isThinking ? (
             <div className="glass-light thinking-overlay absolute inset-0 flex items-center justify-center rounded-[1rem] border border-cyan/15">
-              <div className="animate-fade-in-fast banner-sheen flex items-center gap-2 rounded-full border border-cyan/20 bg-[#071120]/84 px-4 py-2 text-[0.76rem] uppercase tracking-[0.14em] text-cyan-50">
+              <div className="animate-fade-in-fast banner-sheen flex items-center gap-2 rounded-full border border-cyan/20 bg-[#061f19]/84 px-4 py-2 text-[0.76rem] uppercase tracking-[0.14em] text-cyan-50">
                 <span className="thinking-dot" />
                 <span className="thinking-dot" />
                 <span className="thinking-dot" />

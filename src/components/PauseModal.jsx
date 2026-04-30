@@ -10,7 +10,7 @@ function ShortcutRow({ keys, description }) {
         {keys.map((key) => (
           <kbd
             key={key}
-            className="rounded-lg border border-white/10 bg-[#071120] px-2 py-1 text-[0.68rem] font-semibold text-cyan-50 sm:text-xs"
+            className="rounded-lg border border-white/10 bg-[#061f19] px-2 py-1 text-[0.68rem] font-semibold text-cyan-50 sm:text-xs"
           >
             {key}
           </kbd>
@@ -32,7 +32,7 @@ export default function PauseModal({ open, onResume, onOpenInstructions, onMainM
   }
 
   return (
-    <div className="fixed inset-[15px] z-[57] flex items-center justify-center rounded-[20px] bg-[#020817]/80 p-2 backdrop-blur-md animate-fade-in sm:p-3">
+    <div className="fixed inset-[15px] z-[57] flex items-center justify-center rounded-[20px] bg-[#03110e]/80 p-2 backdrop-blur-md animate-fade-in sm:p-3">
       <div
         ref={dialogRef}
         role="dialog"
