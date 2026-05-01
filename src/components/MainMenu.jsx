@@ -127,41 +127,44 @@ export default function MainMenu({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.24 }}
-          className="mt-8 flex items-center justify-center gap-2.5 sm:mt-14 sm:gap-4"
+          className="menu-actions mt-8 flex items-center justify-center gap-2 sm:mt-14 sm:gap-3"
         >
-          <IconButton
+          <button
+            type="button"
             onClick={onInstructionsClick}
-            ariaLabel="Open instructions"
+            aria-label="Open instructions"
             title="Instructions"
-            shape="circle"
             className={clsx(
+              "menu-action",
               activeAction === "instructions" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
             )}
           >
-            ?
-          </IconButton>
-          <IconButton
+            Guide
+          </button>
+          <button
+            type="button"
             onClick={onSettingsClick}
-            ariaLabel="Open settings"
+            aria-label="Open settings"
             title="Settings"
-            shape="circle"
             className={clsx(
+              "menu-action",
               activeAction === "settings" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
             )}
           >
-            ⚙
-          </IconButton>
-          <IconButton
+            Settings
+          </button>
+          <button
+            type="button"
             onClick={onStatsClick}
-            ariaLabel="Open statistics"
+            aria-label="Open statistics"
             title="Statistics"
-            shape="circle"
             className={clsx(
+              "menu-action",
               activeAction === "stats" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
             )}
           >
-            #
-          </IconButton>
+            Stats
+          </button>
         </motion.div>
 
         <motion.div

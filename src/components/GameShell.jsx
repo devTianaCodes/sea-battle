@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { GAME_PHASES } from "../data/constants";
 import { useGameContext } from "../context/GameContext";
 import { isRotateKey } from "../utils/keyboard";
-import { formatDuration } from "../utils/stats";
 import BattleActionBar from "./BattleActionBar";
 import BackgroundEffects from "./BackgroundEffects";
+import BoardStageTabs from "./BoardStageTabs";
 import DifficultySelector from "./DifficultySelector";
 import GameBoard from "./GameBoard";
 import InstructionsModal from "./InstructionsModal";
@@ -19,15 +19,7 @@ import TurnBanner from "./TurnBanner";
 
 export default function GameShell() {
   const game = useGameContext();
-  const [now, setNow] = useState(Date.now());
-
-  useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
-
-    return () => window.clearInterval(intervalId);
-  }, []);
+  const [activeBoardView, setActiveBoardView] = useState("enemy");
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -59,10 +51,16 @@ export default function GameShell() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [game]);
 
-  const timerLabel = useMemo(() => {
-    const endTime = game.matchEndTime ?? now;
-    return formatDuration(endTime - game.matchStartTime);
-  }, [game.matchEndTime, game.matchStartTime, now]);
+  useEffect(() => {
+    if (game.phase === GAME_PHASES.SETUP) {
+      setActiveBoardView("player");
+      return;
+    }
+
+    if (game.phase === GAME_PHASES.BATTLE && game.turn === "player") {
+      setActiveBoardView("enemy");
+    }
+  }, [game.phase, game.turn]);
 
   const canConfirm = game.playerFleet.length === 5;
   const selectedShip = game.availableShips.find((ship) => ship.id === game.selectedShipId) ?? null;
@@ -70,7 +68,6 @@ export default function GameShell() {
   const selectedShipSize = selectedShip?.size ?? null;
   const playerShipsAfloat = game.playerFleetStatus.filter((ship) => !ship.isSunk).length;
   const enemyShipsAfloat = game.enemyFleetStatus.filter((ship) => !ship.isSunk).length;
-  const turnCount = Math.max(game.playerShots.length, game.aiShots.length) + 1;
   const latestEventMessage = game.eventLog[0]?.message ?? game.announcement;
 
   if (game.screen === "menu") {
@@ -156,22 +153,16 @@ export default function GameShell() {
           difficulty={game.difficulty}
           turnLabel={game.turnLabel}
           announcement={game.announcement}
-          timerLabel={timerLabel}
-          turnCount={turnCount}
-          playerStats={game.playerMetrics}
           shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
-          onRestart={game.restartMatch}
           onPause={game.togglePause}
           onOpenGuide={game.openInstructions}
           onOpenSettings={() => game.openSettings("settings")}
-          soundEnabled={game.soundEnabled}
-          onToggleSound={game.toggleSound}
           isPaused={game.isPaused}
         />
 
         {game.phase === GAME_PHASES.SETUP ? (
-          <section className="grid min-h-0 w-full max-w-full gap-2 overflow-x-hidden md:grid-cols-[13rem_minmax(0,1fr)] md:items-stretch md:gap-2 lg:grid-cols-[14.5rem_minmax(0,1fr)]">
-            <div className="min-w-0 w-full max-w-full space-y-1.5 md:flex md:h-full md:flex-col">
+          <section className="setup-layout grid min-h-0 w-full max-w-full gap-2 overflow-x-hidden md:grid-cols-[13rem_minmax(0,1fr)] md:items-stretch md:gap-2 lg:grid-cols-[14.5rem_minmax(0,1fr)]">
+            <div className="setup-controls min-w-0 w-full max-w-full space-y-1.5 md:flex md:h-full md:flex-col">
               <ShipPlacer
                 phase={game.phase}
                 availableShips={game.availableShips}
@@ -188,10 +179,10 @@ export default function GameShell() {
                 selectedShipSize={selectedShipSize}
               />
             </div>
-            <div className="grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:h-full md:grid-cols-2 md:justify-items-stretch md:gap-2">
+            <div className="board-stage grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:h-full md:grid-cols-2 md:justify-items-stretch md:gap-2">
               <GameBoard
                 title="Your Fleet"
-                boardId="Player Grid"
+                boardId="Your Fleet"
                 board={game.playerBoard}
                 focusCell={game.focus.player}
                 interactive
@@ -199,10 +190,10 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
                 onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-                className="setup-board h-full w-full max-w-full"
+                className="setup-board mobile-board-panel is-active h-full w-full max-w-full"
               />
               <GameBoard
-                title="Opponent Grid"
+                title="Target Grid"
                 boardId="Target Grid"
                 board={game.enemyBoard}
                 focusCell={game.focus.enemy}
@@ -211,13 +202,21 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
                 onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
-                className="setup-board hidden h-full w-full max-w-full md:flex"
+                className="setup-board mobile-board-panel is-active h-full w-full max-w-full"
               />
             </div>
           </section>
         ) : (
           <div className="flex min-h-0 flex-1 flex-col gap-2">
-            <section className="viewport-main grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-2">
+            <section className="viewport-main board-stage grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-2">
+              <BoardStageTabs
+                activeView={activeBoardView}
+                onChange={setActiveBoardView}
+                views={[
+                  { id: "enemy", label: "Target" },
+                  { id: "player", label: "Fleet" },
+                ]}
+              />
               <GameBoard
                 title="Your Fleet"
                 boardId="Player Grid"
@@ -228,7 +227,9 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
                 onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-                className="battle-board w-full max-w-full"
+                className={`battle-board mobile-board-panel w-full max-w-full ${
+                  activeBoardView === "player" ? "is-active" : ""
+                }`}
               />
               <GameBoard
                 title="Opponent Grid"
@@ -245,7 +246,9 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
                 onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
-                className="battle-board w-full max-w-full"
+                className={`battle-board mobile-board-panel w-full max-w-full ${
+                  activeBoardView === "enemy" ? "is-active" : ""
+                }`}
               />
             </section>
             <BattleActionBar
@@ -254,9 +257,6 @@ export default function GameShell() {
               opponentAccuracy={game.enemyMetrics.accuracy}
               shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
               currentTurnLabel={game.turnLabel}
-              onPause={game.togglePause}
-              onOpenGuide={game.openInstructions}
-              onRestart={game.restartMatch}
             />
           </div>
         )}
@@ -266,13 +266,10 @@ export default function GameShell() {
         open={game.phase === GAME_PHASES.GAME_OVER}
         winner={game.winner}
         stats={game.resultsStats}
-        difficulty={game.difficulty}
         history={game.history}
         historySummary={game.historySummary}
         revealedBoard={game.revealedEnemyBoard}
-        onReplay={game.restartMatch}
-        onReplayStep={game.changeDifficultyByStep}
-        onChangeDifficulty={game.openDifficultyScreen}
+        onReplay={game.openDifficultyScreen}
         onMainMenu={game.openMenu}
       />
       <PauseModal

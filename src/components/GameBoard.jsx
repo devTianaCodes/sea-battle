@@ -73,9 +73,11 @@ export default function GameBoard({
             : ""
       } ${interactive && isBattleTargetBoard ? "targetable-board" : ""} ${className}`}
     >
-      <div className="mb-2 flex w-full items-center justify-between lg:mb-2.5">
+      <div className="game-board-heading mb-2 flex w-full items-center justify-between lg:mb-2.5">
         <p className="text-[0.76rem] uppercase tracking-[0.22em] text-slate-300">{boardId}</p>
-        <p className="text-[0.76rem] uppercase tracking-[0.18em] text-cyan-100">{title}</p>
+        {title && title !== boardId ? (
+          <p className="text-[0.76rem] uppercase tracking-[0.18em] text-cyan-100">{title}</p>
+        ) : null}
       </div>
 
       <div className="game-board-frame">

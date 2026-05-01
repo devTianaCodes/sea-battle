@@ -23,9 +23,9 @@ const IconButton = forwardRef(function IconButton({
       "border-mint/28 bg-mint/[0.08] text-foam hover:border-mint/70 hover:bg-mint/[0.14]",
   };
   const sizeClasses = {
-    sm: shape === "circle" ? "h-9 w-9 text-xs" : "px-3 py-1.5 text-xs",
-    md: shape === "circle" ? "h-10 w-10 text-sm" : "px-4 py-2 text-sm",
-    lg: shape === "circle" ? "h-11 w-11 text-sm" : "px-5 py-3 text-sm",
+    sm: shape === "circle" ? "h-8 w-8 text-[0.68rem]" : "px-3 py-1.5 text-xs",
+    md: shape === "circle" ? "h-9 w-9 text-xs" : "px-4 py-2 text-sm",
+    lg: shape === "circle" ? "h-10 w-10 text-sm" : "px-5 py-3 text-sm",
   };
   const shapeClasses =
     shape === "circle"

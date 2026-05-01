@@ -11,7 +11,7 @@ export default function FleetSidebar({
   const availableIds = new Set(availableShips.map((ship) => ship.id));
 
   return (
-    <div className="glass-light min-w-0 w-full max-w-full overflow-hidden rounded-[1.2rem] p-3 sm:rounded-[1.4rem] sm:p-4">
+    <div className="fleet-sidebar glass-light min-w-0 w-full max-w-full overflow-hidden rounded-[1.2rem] p-3 sm:rounded-[1.4rem] sm:p-4">
       <div className="mb-2.5 sm:mb-3">
         <p className="text-[0.76rem] uppercase tracking-[0.16em] text-cyan-100 sm:text-[0.82rem] sm:tracking-[0.22em]">
           Ships

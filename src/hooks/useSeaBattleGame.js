@@ -386,7 +386,7 @@ export default function useSeaBattleGame() {
 
     setPlayerFleet(randomizeFleet(SHIP_DEFINITIONS));
     setSelectedShipId(null);
-    setAnnouncement("Fleet randomized. Confirm when ready.");
+    setAnnouncement("Fleet randomized. Play when ready.");
     pushEvent("Fleet randomized for a faster launch.", "system");
     soundEffects.play("randomize");
   }

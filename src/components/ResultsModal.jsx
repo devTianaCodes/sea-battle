@@ -34,13 +34,10 @@ export default function ResultsModal({
   open,
   winner,
   stats,
-  difficulty,
   history,
   historySummary,
   revealedBoard,
   onReplay,
-  onReplayStep,
-  onChangeDifficulty,
   onMainMenu,
 }) {
   useBodyScrollLock(open);
@@ -97,16 +94,6 @@ export default function ResultsModal({
                   ? "Your targeting held under pressure and the opposing fleet went under."
                   : "The enemy found enough openings to sink your fleet. Reset and try a different deployment."}
               </p>
-              <div className="mt-2.5 flex flex-wrap justify-center gap-1.5 lg:justify-start sm:mt-3 sm:gap-2">
-                <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[0.64rem] uppercase tracking-[0.1em] text-slate-200 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.14em]">
-                  {difficulty} difficulty
-                </span>
-                {stats?.performanceLabel ? (
-                  <span className="inline-flex rounded-full border border-cyan/20 bg-cyan/[0.08] px-2.5 py-1 text-[0.64rem] uppercase tracking-[0.1em] text-cyan-50 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.14em]">
-                    {stats.performanceLabel}
-                  </span>
-                ) : null}
-              </div>
               {isNewBestAccuracy ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.94, y: 8 }}
@@ -127,27 +114,6 @@ export default function ResultsModal({
                 className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
               >
                 Play Again
-              </IconButton>
-              <IconButton
-                onClick={onChangeDifficulty}
-                tone="accent"
-                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
-              >
-                Difficulty
-              </IconButton>
-              <IconButton
-                onClick={() => onReplayStep(-1)}
-                disabled={difficulty === "easy"}
-                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
-              >
-                Ease Down
-              </IconButton>
-              <IconButton
-                onClick={() => onReplayStep(1)}
-                disabled={difficulty === "hard"}
-                className="w-full justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-xs"
-              >
-                Push Harder
               </IconButton>
               <IconButton
                 onClick={onMainMenu}

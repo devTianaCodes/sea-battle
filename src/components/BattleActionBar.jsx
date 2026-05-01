@@ -1,5 +1,3 @@
-import IconButton from "./IconButton";
-
 function StatChip({ label, value, accent = "text-slate-200" }) {
   return (
     <div className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1">
@@ -15,14 +13,11 @@ export default function BattleActionBar({
   opponentAccuracy,
   shipsRemaining,
   currentTurnLabel,
-  onPause,
-  onOpenGuide,
-  onRestart,
 }) {
   return (
     <footer
       aria-label="Battle controls and latest action"
-      className="glass-light viewport-footer animate-footer-rise rounded-[1rem] border border-white/10 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-3 sm:py-2.5"
+      className="battle-action-bar glass-light viewport-footer animate-footer-rise rounded-[1rem] border border-white/10 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-3 sm:py-2.5"
     >
       <div className="flex w-full flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
@@ -46,37 +41,6 @@ export default function BattleActionBar({
           <StatChip label="Enemy Acc" value={`${opponentAccuracy}%`} accent="text-coral-100" />
           <StatChip label="Your Fleet" value={shipsRemaining.player} accent="text-mint" />
           <StatChip label="Enemy Fleet" value={shipsRemaining.opponent} accent="text-slate-100" />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-1.5">
-          <IconButton
-            onClick={onPause}
-            shape="circle"
-            size="sm"
-            ariaLabel="Pause battle"
-            title="Pause battle"
-          >
-            P
-          </IconButton>
-          <IconButton
-            onClick={onOpenGuide}
-            shape="circle"
-            size="sm"
-            ariaLabel="Open instructions"
-            title="Open instructions"
-          >
-            ?
-          </IconButton>
-          <IconButton
-            onClick={onRestart}
-            shape="circle"
-            size="sm"
-            tone="warm"
-            ariaLabel="Restart match"
-            title="Restart match"
-          >
-            R
-          </IconButton>
         </div>
       </div>
     </footer>
