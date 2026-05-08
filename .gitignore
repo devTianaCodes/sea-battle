@@ -2,3 +2,11 @@ node_modules
 dist
 .DS_Store
 .private/
+
+# Local agent/template control files; never commit.
+AGENTS.md
+ModuleRules.md
+tools.md
+ai-rules/
+ai-docs/
+ai-scripts/

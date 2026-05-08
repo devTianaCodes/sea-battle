@@ -1,4 +1,4 @@
-import { GRID_SIZE, LETTERS, ORIENTATIONS, SHIP_DEFINITIONS } from "../data/constants";
+import { GRID_SIZE, LETTERS, ORIENTATIONS, SHIP_DEFINITIONS } from "../data/constants.js";
 
 export function coordinateKey(x, y) {
   return `${x},${y}`;

@@ -1,4 +1,4 @@
-import { GRID_SIZE, ORIENTATIONS, SHIP_DEFINITIONS, SHOT_RESULTS } from "../data/constants";
+import { GRID_SIZE, ORIENTATIONS, SHIP_DEFINITIONS, SHOT_RESULTS } from "../data/constants.js";
 import {
   coordinateKey,
   createPlacedShip,
@@ -7,7 +7,7 @@ import {
   getShipCoverageMap,
   isInBounds,
   isShipSunk,
-} from "./ships";
+} from "./ships.js";
 
 export function createEmptyBoard() {
   return Array.from({ length: GRID_SIZE }, (_, y) =>

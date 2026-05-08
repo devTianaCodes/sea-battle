@@ -1,11 +1,11 @@
-import { GAME_PHASES, SHOT_RESULTS, TURN_STATES } from "../data/constants";
+import { GAME_PHASES, SHOT_RESULTS, TURN_STATES } from "../data/constants.js";
 import {
   buildShotMetrics,
   calculateAccuracy,
   finalizeMatchStats,
   formatDuration,
-} from "./stats";
-import { isShipSunk } from "./ships";
+} from "./stats.js";
+import { isShipSunk } from "./ships.js";
 
 export function getPhaseLabel(phase) {
   if (phase === GAME_PHASES.SETUP) {

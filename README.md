@@ -97,3 +97,11 @@ src/
 ## Deployment
 
 Deployment instructions live in [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+## Template Validation
+
+Local agent template files are validated with:
+
+```bash
+ai-scripts/validate-template
+```
