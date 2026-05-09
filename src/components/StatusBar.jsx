@@ -1,5 +1,4 @@
 export default function StatusBar({
-  difficulty,
   turnLabel,
   announcement,
   shipsRemaining,
@@ -18,13 +17,6 @@ export default function StatusBar({
             <div className="text-[0.74rem] font-semibold uppercase tracking-[0.18em] text-cyan-100 sm:text-[0.82rem] sm:tracking-[0.22em]">
               Sea Battle
             </div>
-            <div className="hidden h-3 w-px bg-white/10 sm:block" />
-            <div className={`status-text ${isPlayerTurn ? "pulse text-cyan-100" : "text-slate-300"}`}>
-              {isPaused ? "Paused" : turnLabel}
-            </div>
-            <div className="rounded-full border border-white/10 bg-white/[0.05] px-1.5 py-0.5 text-[0.58rem] uppercase tracking-[0.08em] text-slate-200 sm:px-2 sm:py-1 sm:text-[0.62rem] sm:tracking-[0.1em]">
-              {difficulty}
-            </div>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-1.5 sm:mt-1.5 sm:gap-2.5">
             <ShipTrack label="Your Fleet" active={shipsRemaining.player} />
@@ -36,15 +28,9 @@ export default function StatusBar({
       </div>
 
       <div className="status-actions flex shrink-0 flex-wrap items-center gap-1 lg:ml-3 lg:justify-end">
-        <button
-          type="button"
-          onClick={onPause}
-          aria-label={isPaused ? "Resume game" : "Pause game"}
-          title={isPaused ? "Resume game" : "Pause game"}
-          className={`status-action ${isPaused ? "is-warm" : ""}`}
-        >
-          {isPaused ? "Resume" : "Pause"}
-        </button>
+        <div className={`status-text status-turn ${isPlayerTurn ? "pulse text-cyan-100" : "text-slate-300"}`}>
+          {isPaused ? "Paused" : turnLabel}
+        </div>
         <button
           type="button"
           onClick={onOpenGuide}
@@ -62,6 +48,15 @@ export default function StatusBar({
           className="status-action"
         >
           Settings
+        </button>
+        <button
+          type="button"
+          onClick={onPause}
+          aria-label={isPaused ? "Resume game" : "Pause game"}
+          title={isPaused ? "Resume game" : "Pause game"}
+          className={`status-action ${isPaused ? "is-warm" : ""}`}
+        >
+          {isPaused ? "Resume" : "Pause"}
         </button>
       </div>
       </div>
@@ -82,7 +77,7 @@ function ShipTrack({ label, active, dimmed = false }) {
               ? dimmed
                 ? "border-white/25 bg-white/[0.18]"
                 : "border-mint/50 bg-mint/[0.55]"
-              : "border-white/10 bg-white/[0.04]"
+              : "border-cyan/20 bg-white/[0.04]"
           }`}
         />
       ))}

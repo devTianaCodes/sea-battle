@@ -3,7 +3,7 @@ import IconButton from "./IconButton";
 
 function SummaryCard({ label, value }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-4">
+    <div className="rounded-3xl border border-cyan/20 bg-white/[0.06] px-4 py-4 shadow-[0_0_14px_rgba(0,212,255,0.06)]">
       <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">{label}</div>
       <div className="mt-2 text-xl font-semibold text-foam">{value}</div>
     </div>
@@ -42,7 +42,7 @@ export default function HistoryPanel({ history, summary, onClearHistory }) {
             return (
               <div
                 key={level}
-                className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3"
+                className="rounded-2xl border border-cyan/20 bg-white/[0.04] px-4 py-3 shadow-[0_0_14px_rgba(0,212,255,0.06)]"
               >
                 <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">
                   {level}
@@ -62,7 +62,7 @@ export default function HistoryPanel({ history, summary, onClearHistory }) {
             {history.map((match) => (
               <div
                 key={match.id}
-                className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                className="flex items-center justify-between rounded-2xl border border-cyan/20 bg-white/5 px-4 py-3 shadow-[0_0_14px_rgba(0,212,255,0.06)]"
               >
                 <div>
                   <div className="text-sm text-foam">
@@ -83,7 +83,7 @@ export default function HistoryPanel({ history, summary, onClearHistory }) {
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] px-4 py-6 text-sm leading-6 text-slate-300">
+          <div className="rounded-3xl border border-dashed border-cyan/25 bg-white/[0.03] px-4 py-6 text-sm leading-6 text-slate-300">
             Complete a few battles and your recent missions will appear here.
           </div>
         )}

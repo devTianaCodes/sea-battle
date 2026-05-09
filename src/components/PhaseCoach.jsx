@@ -1,6 +1,6 @@
 function CoachHint({ label, detail }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.04] px-4 py-4">
+    <div className="rounded-3xl border border-cyan/20 bg-white/[0.04] px-4 py-4 shadow-[0_0_14px_rgba(0,212,255,0.06)]">
       <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">{label}</div>
       <div className="mt-2 text-sm leading-6 text-slate-200">{detail}</div>
     </div>

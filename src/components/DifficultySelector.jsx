@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { motion } from "framer-motion";
 import { DIFFICULTY_LEVELS } from "../data/constants";
 
 export default function DifficultySelector({
@@ -29,14 +28,6 @@ export default function DifficultySelector({
       )
     );
   }, [difficulty]);
-
-  useEffect(() => {
-    const frameId = window.requestAnimationFrame(() => {
-      optionRefs.current[focusedIndex]?.focus();
-    });
-
-    return () => window.cancelAnimationFrame(frameId);
-  }, [focusedIndex]);
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -135,18 +126,13 @@ export default function DifficultySelector({
           const focused = showKeyboardFocus && index === focusedIndex;
 
           return (
-            <motion.button
+            <button
               key={level.id}
               ref={(element) => {
                 optionRefs.current[index] = element;
               }}
               type="button"
               disabled={disabled}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.28, delay: index * 0.08 }}
-              whileHover={disabled ? undefined : { scale: 1.015 }}
-              whileTap={disabled ? undefined : { scale: 0.985 }}
               onClick={() => selectDifficulty(level.id)}
               className={clsx(
                 "glass-light w-full min-w-0 max-w-full rounded-full border px-5 py-4 text-center transition duration-200 focus:outline-none sm:min-h-[8.5rem] sm:rounded-[1.4rem] sm:px-4 sm:py-5",
@@ -163,10 +149,10 @@ export default function DifficultySelector({
               <div className="flex h-full items-center justify-center gap-3 text-center sm:flex-col sm:gap-2">
                 <div className="text-xl sm:text-4xl">{level.emoji}</div>
                 <div className="text-[0.9rem] font-semibold uppercase tracking-[0.12em] text-foam sm:text-xl">
-                  {level.name}
-                </div>
+                {level.name}
               </div>
-            </motion.button>
+            </div>
+            </button>
           );
         })}
       </div>

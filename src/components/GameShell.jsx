@@ -19,6 +19,50 @@ import ShipPlacer from "./ShipPlacer";
 import StatusBar from "./StatusBar";
 import TurnBanner from "./TurnBanner";
 
+function getPageSlug(game, activeBoardView, setupBoardView) {
+  if (game.showInstructions) {
+    return "guide";
+  }
+
+  if (game.showSettings) {
+    return game.settingsTab === "statistics" ? "statistics" : "settings";
+  }
+
+  if (game.screen === "menu") {
+    return "entry-page";
+  }
+
+  if (game.screen === "difficulty") {
+    return "difficulty";
+  }
+
+  if (game.phase === GAME_PHASES.GAME_OVER) {
+    return game.winner === "player" ? "results-victory" : "results-defeat";
+  }
+
+  if (game.isPaused) {
+    return "pause";
+  }
+
+  if (game.showSetupGuide) {
+    return "how-to-play";
+  }
+
+  if (game.showOnboarding) {
+    return "onboarding";
+  }
+
+  if (game.phase === GAME_PHASES.SETUP) {
+    return setupBoardView === "enemy" ? "setup-opponent-waters" : "setup-your-fleet";
+  }
+
+  if (game.phase === GAME_PHASES.BATTLE) {
+    return activeBoardView === "player" ? "battle-your-fleet" : "battle-opponent-waters";
+  }
+
+  return "game";
+}
+
 export default function GameShell() {
   const game = useGameContext();
   const [activeBoardView, setActiveBoardView] = useState("enemy");
@@ -65,6 +109,27 @@ export default function GameShell() {
       setActiveBoardView("enemy");
     }
   }, [game.phase, game.turn]);
+
+  useEffect(() => {
+    const pageSlug = getPageSlug(game, activeBoardView, setupBoardView);
+    const nextUrl = `/${pageSlug}${window.location.search}`;
+
+    if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
+      window.history.replaceState(null, "", nextUrl);
+    }
+  }, [
+    activeBoardView,
+    game.isPaused,
+    game.phase,
+    game.screen,
+    game.settingsTab,
+    game.showInstructions,
+    game.showOnboarding,
+    game.showSettings,
+    game.showSetupGuide,
+    game.winner,
+    setupBoardView,
+  ]);
 
   const canConfirm = game.playerFleet.length === SHIP_DEFINITIONS.length;
   const selectedShip = game.availableShips.find((ship) => ship.id === game.selectedShipId) ?? null;
@@ -154,7 +219,6 @@ export default function GameShell() {
       <TurnBanner visible={game.isAiThinking} label="Opponent Turn" />
       <div className="relative z-10 flex flex-1 flex-col gap-2 overflow-hidden">
         <StatusBar
-          difficulty={game.difficulty}
           turnLabel={game.turnLabel}
           announcement={game.announcement}
           shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
@@ -165,7 +229,7 @@ export default function GameShell() {
         />
 
         {game.phase === GAME_PHASES.SETUP ? (
-          <section className="setup-layout grid min-h-0 w-full max-w-full gap-2 overflow-x-hidden md:grid-cols-[13rem_minmax(0,1fr)] md:items-stretch md:gap-2 lg:grid-cols-[14.5rem_minmax(0,1fr)]">
+          <section className="setup-layout grid min-h-0 w-full max-w-full gap-3 overflow-x-hidden md:grid-cols-[13rem_minmax(0,1fr)] md:items-stretch md:gap-4 lg:grid-cols-[14.5rem_minmax(0,1fr)] lg:gap-5">
             <div className="setup-controls min-w-0 w-full max-w-full space-y-1.5 md:flex md:h-full md:flex-col">
               <ShipPlacer
                 phase={game.phase}
@@ -182,14 +246,12 @@ export default function GameShell() {
               />
             </div>
             <div
-              className={`board-stage setup-folder-stage grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:h-full md:justify-items-stretch md:gap-2 ${
-                setupBoardView === "enemy" ? "is-opponent-folder" : "is-fleet-folder"
-              }`}
+              className="board-stage setup-board-stage grid min-h-0 w-full max-w-full justify-items-center overflow-x-hidden md:h-full md:justify-items-stretch"
             >
               <BoardStageTabs
                 activeView={setupBoardView}
                 onChange={setSetupBoardView}
-                className="folder-board-switcher"
+                className="setup-board-switcher"
                 views={[
                   { id: "player", label: "Your Fleet" },
                   { id: "enemy", label: "Opponent Waters" },
@@ -209,11 +271,11 @@ export default function GameShell() {
                 showActiveCell={!canConfirm}
                 overlay={
                   canConfirm ? (
-                    <div className="setup-play-overlay absolute inset-0 z-20 flex items-center justify-center bg-[#03110e]/32 p-4 backdrop-blur-[1px]">
+                    <div className="setup-play-overlay absolute inset-0 z-20 flex items-center justify-center bg-[#03110e]/44 p-4 backdrop-blur-[1.5px]">
                       <IconButton
                         onClick={game.confirmPlayerFleet}
                         tone="success"
-                        className="setup-play-button justify-center border-mint/70 bg-mint/24 px-10 py-3.5 text-[0.82rem] tracking-[0.12em] text-white shadow-[0_0_34px_rgba(135,255,199,0.42)] hover:bg-mint/32 sm:text-[0.92rem]"
+                        className="setup-play-button setup-play-cta justify-center px-10 py-3.5 text-[0.82rem] tracking-[0.12em] text-white sm:text-[0.92rem]"
                         size="sm"
                       >
                         Play

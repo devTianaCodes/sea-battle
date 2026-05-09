@@ -20,7 +20,7 @@ function MiniShip({ size }) {
 
 function FleetRow({ count, size }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-[0.85rem] border border-white/10 bg-white/[0.045] px-3 py-2.5">
+    <div className="flex items-center justify-between gap-4 rounded-[0.85rem] border border-cyan/20 bg-white/[0.045] px-3 py-2.5 shadow-[0_0_14px_rgba(0,212,255,0.06)]">
       <div className="flex items-center gap-3 text-[0.82rem] font-semibold text-foam sm:text-sm">
         <span>{count} *</span>
         <MiniShip size={size} />
@@ -36,7 +36,7 @@ export default function FleetCompositionCard({ descriptionId }) {
   return (
     <section
       aria-labelledby={descriptionId}
-      className="rounded-[1rem] border border-white/10 bg-white/[0.045] p-3 sm:rounded-[1.25rem] sm:p-4"
+      className="rounded-[1rem] border border-cyan/25 bg-white/[0.045] p-3 shadow-[0_0_18px_rgba(0,212,255,0.08)] sm:rounded-[1.25rem] sm:p-4"
     >
       <h3 id={descriptionId} className="font-display text-[1.15rem] leading-tight text-foam sm:text-xl">
         Build 10 ships

@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import clsx from "clsx";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import IconButton from "./IconButton";
 
@@ -10,7 +9,6 @@ export default function MainMenu({
   onSettingsClick,
   onStatsClick,
 }) {
-  const [activeAction, setActiveAction] = useState("instructions");
   const playButtonRef = useRef(null);
 
   useEffect(() => {
@@ -22,8 +20,6 @@ export default function MainMenu({
   }, []);
 
   useEffect(() => {
-    const actionOrder = ["instructions", "settings", "stats"];
-
     function handleKeyDown(event) {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
@@ -35,39 +31,19 @@ export default function MainMenu({
 
       if (lowerKey === "i") {
         event.preventDefault();
-        setActiveAction("instructions");
         onInstructionsClick();
         return;
       }
 
       if (lowerKey === "s") {
         event.preventDefault();
-        setActiveAction("settings");
         onSettingsClick();
         return;
       }
 
       if (lowerKey === "t") {
         event.preventDefault();
-        setActiveAction("stats");
         onStatsClick();
-        return;
-      }
-
-      if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-        event.preventDefault();
-        setActiveAction((current) => {
-          const currentIndex = actionOrder.indexOf(current);
-          return actionOrder[(currentIndex - 1 + actionOrder.length) % actionOrder.length];
-        });
-      }
-
-      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-        event.preventDefault();
-        setActiveAction((current) => {
-          const currentIndex = actionOrder.indexOf(current);
-          return actionOrder[(currentIndex + 1) % actionOrder.length];
-        });
       }
     }
 
@@ -134,10 +110,7 @@ export default function MainMenu({
             onClick={onInstructionsClick}
             aria-label="Open instructions"
             title="Instructions"
-            className={clsx(
-              "menu-action",
-              activeAction === "instructions" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
-            )}
+            className="menu-action"
           >
             Guide
           </button>
@@ -146,10 +119,7 @@ export default function MainMenu({
             onClick={onSettingsClick}
             aria-label="Open settings"
             title="Settings"
-            className={clsx(
-              "menu-action",
-              activeAction === "settings" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
-            )}
+            className="menu-action"
           >
             Settings
           </button>
@@ -158,10 +128,7 @@ export default function MainMenu({
             onClick={onStatsClick}
             aria-label="Open statistics"
             title="Statistics"
-            className={clsx(
-              "menu-action",
-              activeAction === "stats" && "ring-2 ring-cyan/70 ring-offset-2 ring-offset-[#061f19]"
-            )}
+            className="menu-action"
           >
             Stats
           </button>

@@ -1,6 +1,6 @@
 function StatChip({ label, value, accent = "text-slate-200" }) {
   return (
-    <div className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1">
+    <div className="rounded-full border border-cyan/20 bg-white/[0.04] px-2.5 py-1">
       <span className="text-[0.58rem] uppercase tracking-[0.1em] text-slate-300">{label}</span>
       <span className={`ml-1.5 text-[0.78rem] font-medium ${accent}`}>{value}</span>
     </div>
@@ -17,7 +17,7 @@ export default function BattleActionBar({
   return (
     <footer
       aria-label="Battle controls and latest action"
-      className="battle-action-bar glass-light viewport-footer animate-footer-rise rounded-[1rem] border border-white/10 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-3 sm:py-2.5"
+      className="battle-action-bar glass-light viewport-footer animate-footer-rise rounded-[1rem] border border-cyan/25 px-2.5 py-2 sm:rounded-[1.2rem] sm:px-3 sm:py-2.5"
     >
       <div className="flex w-full flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">

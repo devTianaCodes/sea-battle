@@ -1,6 +1,6 @@
 function MetricCard({ label, value, accent = "text-foam" }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-4">
+    <div className="rounded-3xl border border-cyan/20 bg-white/[0.06] px-4 py-4 shadow-[0_0_14px_rgba(0,212,255,0.06)]">
       <div className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">{label}</div>
       <div className={`mt-2 text-2xl font-semibold ${accent}`}>{value}</div>
     </div>
@@ -9,7 +9,7 @@ function MetricCard({ label, value, accent = "text-foam" }) {
 
 function FleetRow({ label, ships, tone }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+    <div className="rounded-3xl border border-cyan/20 bg-white/5 p-4 shadow-[0_0_14px_rgba(0,212,255,0.06)]">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-medium text-foam">{label}</h3>
         <span className="text-xs uppercase tracking-[0.3em] text-slate-400">
@@ -20,7 +20,7 @@ function FleetRow({ label, ships, tone }) {
         {ships.map((ship) => (
           <div
             key={`${label}-${ship.id}`}
-            className="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2"
+            className="flex items-center justify-between rounded-2xl border border-cyan/15 bg-white/[0.03] px-3 py-2"
           >
             <div>
               <div className="text-sm text-foam">{ship.name}</div>
@@ -50,7 +50,7 @@ function ActionItem({ event }) {
   const toneClasses = {
     player: "border-cyan/20 bg-cyan/[0.08] text-cyan-50",
     enemy: "border-coral/20 bg-coral/10 text-coral-50",
-    system: "border-white/10 bg-white/[0.04] text-slate-200",
+    system: "border-cyan/20 bg-white/[0.04] text-slate-200",
   };
 
   return (

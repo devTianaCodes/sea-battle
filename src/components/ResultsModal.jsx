@@ -7,7 +7,7 @@ import IconButton from "./IconButton";
 
 function MiniBoard({ board }) {
   return (
-    <div className="mx-auto grid w-full max-w-[11rem] grid-cols-10 gap-0.5 rounded-[1rem] border border-white/10 bg-white/[0.04] p-1.5 sm:max-w-[12.5rem] sm:gap-1 sm:rounded-[1.35rem] sm:p-2.5">
+    <div className="mx-auto grid w-full max-w-[11rem] grid-cols-10 gap-0.5 rounded-[1rem] border border-cyan/25 bg-white/[0.04] p-1.5 shadow-[0_0_18px_rgba(0,212,255,0.08)] sm:max-w-[12.5rem] sm:gap-1 sm:rounded-[1.35rem] sm:p-2.5">
       {board.flat().map((cell) => {
         const classes = cell.isHit
           ? cell.isSunkReveal
@@ -274,7 +274,7 @@ function useAnimatedStats(open, stats, historySummary) {
 
 function StatCard({ label, value }) {
   return (
-    <div className="animate-count rounded-[0.9rem] border border-white/10 bg-white/[0.06] px-2 py-2 text-center sm:rounded-[1.1rem] sm:px-3 sm:py-3">
+    <div className="animate-count rounded-[0.9rem] border border-cyan/20 bg-white/[0.06] px-2 py-2 text-center shadow-[0_0_14px_rgba(0,212,255,0.06)] sm:rounded-[1.1rem] sm:px-3 sm:py-3">
       <div className="text-[0.58rem] uppercase tracking-[0.1em] text-slate-300 sm:text-[0.66rem] sm:tracking-[0.14em]">
         {label}
       </div>

@@ -40,8 +40,8 @@ export default function FleetSidebar({
                 isSelected
                   ? "border-cyan/60 bg-cyan/[0.12] shadow-[0_0_0_1px_rgba(0,212,255,0.2)]"
                   : isPlaced
-                    ? "border-mint/25 bg-mint/[0.08] hover:border-mint/35 hover:bg-mint/[0.11]"
-                    : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/[0.08]"
+                    ? "border-mint/25 bg-mint/[0.08] hover:border-cyan/80 hover:bg-cyan/[0.10] hover:shadow-[0_0_16px_rgba(0,212,255,0.18)]"
+                    : "border-cyan/20 bg-white/5 hover:border-cyan/80 hover:bg-cyan/[0.10] hover:shadow-[0_0_16px_rgba(0,212,255,0.18)]"
               )}
             >
               <div className="min-w-0">

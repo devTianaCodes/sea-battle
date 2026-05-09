@@ -26,7 +26,7 @@ export default function BoardStageTabs({
               className={`rounded-full px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.08em] transition sm:text-xs ${
                 active
                   ? "bg-cyan/16 text-foam shadow-[0_0_0_1px_rgba(0,212,255,0.35)]"
-                  : "bg-white/5 text-slate-300 hover:bg-white/10 hover:text-foam"
+                  : "bg-white/5 text-slate-300 hover:bg-cyan/[0.10] hover:text-foam hover:shadow-[0_0_0_1px_rgba(0,212,255,0.55),0_0_16px_rgba(0,212,255,0.16)]"
               }`}
               aria-pressed={active}
             >

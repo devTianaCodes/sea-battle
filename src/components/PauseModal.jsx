@@ -5,12 +5,12 @@ import useDialogA11y from "../hooks/useDialogA11y";
 
 function ShortcutRow({ keys, description }) {
   return (
-    <div className="flex flex-col items-start justify-between gap-2 rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-2xl sm:px-4">
+    <div className="flex flex-col items-start justify-between gap-2 rounded-[1rem] border border-cyan/20 bg-white/[0.04] px-3 py-3 shadow-[0_0_14px_rgba(0,212,255,0.06)] sm:flex-row sm:items-center sm:gap-4 sm:rounded-2xl sm:px-4">
       <div className="flex flex-wrap gap-2">
         {keys.map((key) => (
           <kbd
             key={key}
-            className="rounded-lg border border-white/10 bg-[#061f19] px-2 py-1 text-[0.68rem] font-semibold text-cyan-50 sm:text-xs"
+            className="rounded-lg border border-cyan/20 bg-[#061f19] px-2 py-1 text-[0.68rem] font-semibold text-cyan-50 sm:text-xs"
           >
             {key}
           </kbd>

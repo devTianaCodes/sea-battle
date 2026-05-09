@@ -5,7 +5,7 @@ import useDialogA11y from "../hooks/useDialogA11y";
 
 function TipCard({ title, body }) {
   return (
-    <div className="min-w-0 rounded-[1rem] border border-white/10 bg-white/[0.05] px-3 py-3 sm:rounded-3xl sm:px-4 sm:py-4">
+    <div className="min-w-0 rounded-[1rem] border border-cyan/20 bg-white/[0.05] px-3 py-3 shadow-[0_0_14px_rgba(0,212,255,0.06)] sm:rounded-3xl sm:px-4 sm:py-4">
       <div className="text-[0.82rem] font-medium text-foam sm:text-sm">{title}</div>
       <div className="mt-1 text-[0.76rem] leading-5 text-slate-300 sm:mt-1.5 sm:text-[0.82rem] sm:leading-6">{body}</div>
     </div>

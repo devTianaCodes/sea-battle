@@ -14,13 +14,13 @@ const IconButton = forwardRef(function IconButton({
 }, ref) {
   const tones = {
     default:
-      "border-white/12 bg-white/[0.03] text-foam hover:border-cyan/45 hover:bg-cyan/[0.08]",
+      "border-cyan/25 bg-white/[0.03] text-foam hover:border-cyan/80 hover:bg-cyan/[0.10]",
     accent:
-      "border-cyan/28 bg-cyan/[0.08] text-cyan-50 hover:border-cyan/70 hover:bg-cyan/[0.14]",
+      "border-cyan/35 bg-cyan/[0.08] text-cyan-50 hover:border-cyan/90 hover:bg-cyan/[0.14]",
     warm:
-      "border-coral/28 bg-coral/[0.08] text-foam hover:border-coral/70 hover:bg-coral/[0.14]",
+      "border-coral/28 bg-coral/[0.08] text-foam hover:border-cyan/80 hover:bg-cyan/[0.10]",
     success:
-      "border-mint/28 bg-mint/[0.08] text-foam hover:border-mint/70 hover:bg-mint/[0.14]",
+      "border-mint/28 bg-mint/[0.08] text-foam hover:border-cyan/80 hover:bg-cyan/[0.10]",
   };
   const sizeClasses = {
     sm: shape === "circle" ? "h-8 w-8 text-[0.68rem]" : "px-3 py-1.5 text-xs",
