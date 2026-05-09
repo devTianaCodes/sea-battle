@@ -257,6 +257,12 @@ export function buildBoardMatrix({
         cell.isPlacementAnchor = true;
       }
 
+      const directionHint = getPlacementDirectionHint(preview, cell.x, cell.y);
+
+      if (directionHint) {
+        cell.placementDirectionHint = directionHint;
+      }
+
       if (
         !cell.shipId &&
         !cell.preview &&
@@ -268,4 +274,27 @@ export function buildBoardMatrix({
   });
 
   return board;
+}
+
+function getPlacementDirectionHint(preview, x, y) {
+  if (!preview?.anchor || !preview.options?.length) {
+    return null;
+  }
+
+  const horizontal = preview.options.find(
+    (option) => option.valid && option.orientation === ORIENTATIONS.HORIZONTAL
+  );
+  const vertical = preview.options.find(
+    (option) => option.valid && option.orientation === ORIENTATIONS.VERTICAL
+  );
+
+  if (horizontal && x === preview.anchor.x + 1 && y === preview.anchor.y) {
+    return "right";
+  }
+
+  if (vertical && x === preview.anchor.x && y === preview.anchor.y + 1) {
+    return "down";
+  }
+
+  return null;
 }

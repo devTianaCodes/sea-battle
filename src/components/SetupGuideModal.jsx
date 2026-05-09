@@ -37,7 +37,7 @@ export default function SetupGuideModal({ open, onClose }) {
           ref={initialFocusRef}
           onClick={onClose}
           tone="success"
-          className="mt-4 justify-center px-3 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm"
+          className="mt-4 self-center justify-center px-5 py-2 text-[0.72rem] tracking-[0.08em] sm:text-sm"
         >
           Start
         </IconButton>

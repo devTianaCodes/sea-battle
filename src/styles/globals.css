@@ -588,6 +588,59 @@ select {
     0 0 16px rgba(0, 212, 255, 0.48) !important;
 }
 
+.placement-direction-hint {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.placement-direction-hint::before,
+.placement-direction-hint::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  border-radius: 999px;
+  background: #dff7ff;
+  box-shadow:
+    0 0 8px rgba(0, 212, 255, 0.92),
+    0 0 16px rgba(0, 212, 255, 0.56);
+}
+
+.placement-direction-hint-right::before {
+  width: 48%;
+  height: 3px;
+  transform: translate(-50%, -50%);
+}
+
+.placement-direction-hint-right::after {
+  width: 28%;
+  height: 28%;
+  background: transparent;
+  border-top: 3px solid #dff7ff;
+  border-right: 3px solid #dff7ff;
+  border-radius: 0.12rem;
+  transform: translate(-28%, -50%) rotate(45deg);
+}
+
+.placement-direction-hint-down::before {
+  width: 3px;
+  height: 48%;
+  transform: translate(-50%, -50%);
+}
+
+.placement-direction-hint-down::after {
+  width: 28%;
+  height: 28%;
+  background: transparent;
+  border-right: 3px solid #dff7ff;
+  border-bottom: 3px solid #dff7ff;
+  border-radius: 0.12rem;
+  transform: translate(-50%, -28%) rotate(45deg);
+}
+
 .board-cell[data-state="ship"]::before {
   content: "";
   position: absolute;
@@ -788,12 +841,20 @@ select {
 }
 
 .status-turn {
-  margin-right: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.85rem;
+  margin-left: auto;
+  padding-inline: 0.42rem;
   white-space: nowrap;
 }
 
-.status-text.pulse {
-  animation: pulse-glow 0.9s ease-in-out infinite;
+.status-turn.is-active-turn {
+  color: #dff7ff;
+  text-shadow:
+    0 0 8px rgba(0, 212, 255, 0.72),
+    0 0 18px rgba(0, 212, 255, 0.38);
+  animation: activeTurnPulse 0.72s ease-in-out infinite;
 }
 
 .animate-fade-in-fast {

@@ -36,6 +36,15 @@ function getCellState(cell) {
 }
 
 function getCellContents(cell) {
+  if (cell.placementDirectionHint) {
+    return (
+      <span
+        aria-hidden="true"
+        className={`placement-direction-hint placement-direction-hint-${cell.placementDirectionHint}`}
+      />
+    );
+  }
+
   if (cell.isHit && cell.isSunkReveal) {
     return <span className="text-sm font-semibold text-white">X</span>;
   }

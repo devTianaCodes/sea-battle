@@ -18,6 +18,14 @@ function describeCell(cell, x, y, title) {
   }
 
   if (cell.preview === "valid") {
+    if (cell.placementDirectionHint === "right") {
+      return `${title} ${coordinate}, choose horizontal placement`;
+    }
+
+    if (cell.placementDirectionHint === "down") {
+      return `${title} ${coordinate}, choose vertical placement`;
+    }
+
     return `${title} ${coordinate}, valid placement preview`;
   }
 
