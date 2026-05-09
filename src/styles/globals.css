@@ -256,37 +256,6 @@ select {
   color: #ffe3e3;
 }
 
-.orientation-control {
-  display: inline-flex;
-  min-height: 2rem;
-  align-items: center;
-  gap: 0.5rem;
-  color: #dff7ff;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.orientation-control span {
-  color: rgba(223, 247, 255, 0.72);
-}
-
-.orientation-control button {
-  border: 1px solid rgba(0, 212, 255, 0.18);
-  border-radius: 999px;
-  background: rgba(0, 212, 255, 0.055);
-  padding: 0.42rem 0.62rem;
-  color: #dff7ff;
-  font: inherit;
-}
-
-.orientation-control button:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
 .difficulty-screen {
   min-height: 0;
 }
@@ -416,6 +385,11 @@ select {
   background-color: rgba(0, 212, 255, 0.05);
 }
 
+.board-cell[data-state="blocked"]:hover {
+  border-color: rgba(245, 190, 64, 0.46);
+  background: rgba(245, 190, 64, 0.16);
+}
+
 .board-cell[data-state="hit"] {
   background-color: rgba(255, 107, 107, 0.25);
   border-color: rgba(255, 107, 107, 0.7);
@@ -448,6 +422,20 @@ select {
   border-color: rgba(0, 212, 255, 0.45);
 }
 
+.placed-ship-cell {
+  border-color: rgba(0, 212, 255, 0.92) !important;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.32), rgba(0, 212, 255, 0.12)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(223, 247, 255, 0.25),
+    0 0 12px rgba(0, 212, 255, 0.38);
+}
+
+.placement-anchor-cell {
+  box-shadow:
+    inset 0 0 0 2px rgba(223, 247, 255, 0.62),
+    0 0 16px rgba(0, 212, 255, 0.48) !important;
+}
+
 .board-cell[data-state="ship"]::before {
   content: "";
   position: absolute;
@@ -464,13 +452,6 @@ select {
   background-color: rgba(255, 107, 107, 0.15);
   border-color: rgba(255, 107, 107, 0.28);
   opacity: 0.7;
-}
-
-.board-cell-coordinate {
-  font-size: 0.52rem;
-  letter-spacing: 0.04em;
-  color: rgba(226, 243, 255, 0.78);
-  text-shadow: 0 0 8px rgba(0, 212, 255, 0.12);
 }
 
 @media (max-width: 767px) and (orientation: portrait) {
@@ -559,10 +540,6 @@ select {
     border-radius: 0.34rem;
   }
 
-  .board-cell-coordinate {
-    font-size: 0.46rem;
-  }
-
   .fleet-sidebar {
     display: none;
   }
@@ -624,10 +601,6 @@ select {
 
   .board-cell {
     border-radius: 0.28rem;
-  }
-
-  .board-cell-coordinate {
-    font-size: 0.38rem;
   }
 
   .status-text {
@@ -778,9 +751,6 @@ select {
     border-radius: 0.4rem;
   }
 
-  .board-cell-coordinate {
-    font-size: 0.48rem;
-  }
 }
 
 @media (max-width: 767px) and (orientation: portrait) {
@@ -811,24 +781,6 @@ select {
 
   .ship-placement-panel > div:first-child {
     margin-bottom: 8px;
-  }
-
-  .orientation-control {
-    min-height: 1.9rem;
-    font-size: 0.56rem;
-    letter-spacing: 0.06em;
-  }
-
-  .orientation-control span {
-    display: inline;
-    max-width: 4.8rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .orientation-control button {
-    padding-inline: 0.55rem;
   }
 
   .battle-action-bar {
@@ -1009,10 +961,6 @@ select {
     border-radius: 0.22rem;
   }
 
-  .board-cell-coordinate {
-    font-size: 0.34rem;
-  }
-
   .fleet-sidebar,
   .ship-placement-panel {
     padding: 6px;
@@ -1032,19 +980,6 @@ select {
 
   .ship-placement-panel > div:first-child {
     margin-bottom: 5px;
-  }
-
-  .orientation-control {
-    min-height: 1.55rem;
-    font-size: 0.5rem;
-  }
-
-  .orientation-control span {
-    display: none;
-  }
-
-  .orientation-control button {
-    padding: 0.32rem 0.48rem;
   }
 
   .battle-action-bar {

@@ -51,10 +51,6 @@ function getCellContents(cell) {
   return null;
 }
 
-function shouldShowCoordinate(cell) {
-  return !cell.isHit && !cell.isMiss;
-}
-
 function BoardCell({
   cell,
   active,
@@ -63,7 +59,6 @@ function BoardCell({
   onActivate,
   tabIndex,
   ariaLabel,
-  coordinateLabel,
   index,
 }) {
   const cellState = getCellState(cell);
@@ -83,12 +78,14 @@ function BoardCell({
       tabIndex={tabIndex}
       aria-label={ariaLabel}
       data-state={cellState}
-      data-interactive={isInteractive ? "true" : "false"}
+      data-interactive={isInteractive && !cell.isPlacementBlocked ? "true" : "false"}
       style={{ animationDelay: `${Math.min(index * 12, 180)}ms` }}
       className={clsx(
         "board-cell animate-reveal-cell group focus:outline-none focus:ring-2 focus:ring-cyan/70 focus:ring-inset",
         cell.preview === "invalid" && "border-coral/50 bg-coral/20",
         cell.preview === "valid" && "border-cyan/[0.55] bg-cyan/[0.18]",
+        cell.isPlacedShip && "placed-ship-cell",
+        cell.isPlacementAnchor && "placement-anchor-cell",
         cell.isPlacementBlocked && "placement-blocked-cell",
         cell.isRecentShot && cell.isHit && "animate-hit",
         cell.isRecentShot && cell.isMiss && "animate-miss",
@@ -98,14 +95,6 @@ function BoardCell({
         !isInteractive && !cell.isHit && !cell.isMiss && "cursor-default"
       )}
     >
-      {shouldShowCoordinate(cell) ? (
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1 top-1 opacity-0 transition-opacity duration-150 group-hover:opacity-75 group-focus-visible:opacity-90"
-        >
-          <span className="board-cell-coordinate">{coordinateLabel}</span>
-        </span>
-      ) : null}
       {cell.isMiss ? <span className="absolute inset-0 ripple-dot rounded-[inherit]" /> : null}
       <BattleEffects cell={cell} />
       {getCellContents(cell)}

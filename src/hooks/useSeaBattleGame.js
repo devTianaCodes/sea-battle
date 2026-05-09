@@ -71,6 +71,7 @@ export default function useSeaBattleGame() {
   const [turn, setTurn] = useState(TURN_STATES.PLAYER);
   const [orientation, setOrientation] = useState(ORIENTATIONS.HORIZONTAL);
   const [selectedShipId, setSelectedShipId] = useState(SHIP_DEFINITIONS[0].id);
+  const [placementAnchor, setPlacementAnchor] = useState(null);
   const [playerFleet, setPlayerFleet] = useState([]);
   const [enemyFleet, setEnemyFleet] = useState(() => randomizeFleet(SHIP_DEFINITIONS));
   const [playerShots, setPlayerShots] = useState([]);
@@ -134,13 +135,21 @@ export default function useSeaBattleGame() {
     }
 
     const ship = getShipDefinition(selectedShipId);
-    const focusCell = focus.player;
-    const cells = getShipCells(ship, focusCell.x, focusCell.y, orientation);
+    const startCell =
+      placementAnchor?.shipId === selectedShipId ? placementAnchor : focus.player;
+    const options =
+      placementAnchor?.shipId === selectedShipId
+        ? getPlacementOptions(ship, startCell.x, startCell.y)
+        : null;
+    const cells = getShipCells(ship, startCell.x, startCell.y, orientation);
+
     return {
       cells,
-      valid: canPlaceShip(playerFleet, ship, focusCell.x, focusCell.y, orientation),
+      valid: canPlaceShip(playerFleet, ship, startCell.x, startCell.y, orientation),
+      anchor: placementAnchor?.shipId === selectedShipId ? placementAnchor : null,
+      options,
     };
-  }, [focus.player, orientation, phase, playerFleet, selectedShipId]);
+  }, [focus.player, orientation, phase, placementAnchor, playerFleet, selectedShipId]);
 
   const playerPlacementBlockedCells = useMemo(() => {
     if (phase !== GAME_PHASES.SETUP) {
@@ -242,6 +251,7 @@ export default function useSeaBattleGame() {
     setTurn(TURN_STATES.PLAYER);
     setOrientation(ORIENTATIONS.HORIZONTAL);
     setSelectedShipId(SHIP_DEFINITIONS[0].id);
+    setPlacementAnchor(null);
     setPlayerFleet([]);
     setEnemyFleet(randomizeFleet(SHIP_DEFINITIONS));
     setPlayerShots([]);
@@ -326,6 +336,7 @@ export default function useSeaBattleGame() {
     if (placedShip) {
       setPlayerFleet((current) => current.filter((ship) => ship.id !== shipId));
       setSelectedShipId(shipId);
+      setPlacementAnchor(null);
       setOrientation(placedShip.orientation);
       setAnnouncement(`${placedShip.name} recalled for repositioning.`);
       pushEvent(`Recalled ${placedShip.name} for repositioning.`, "system");
@@ -334,6 +345,7 @@ export default function useSeaBattleGame() {
     }
 
     setSelectedShipId(shipId);
+    setPlacementAnchor(null);
   }
 
   function toggleOrientation() {
@@ -369,24 +381,129 @@ export default function useSeaBattleGame() {
     }
 
     const ship = getShipDefinition(selectedShipId);
+    const anchor =
+      placementAnchor?.shipId === selectedShipId ? placementAnchor : null;
 
-    if (!canPlaceShip(playerFleet, ship, x, y, orientation)) {
+    if (!anchor && ship.size > 1) {
+      const validOrientation = getValidOrientationForStart(ship, x, y);
+
+      if (!validOrientation) {
+        setAnnouncement(`The ${ship.name} needs one empty square around every ship.`);
+        return false;
+      }
+
+      setPlacementAnchor({ x, y, shipId: selectedShipId });
+      setFocus((current) => ({
+        ...current,
+        player: { x, y },
+      }));
+      setAnnouncement(`Start selected for ${ship.name}. Tap the horizontal or vertical path.`);
+      return true;
+    }
+
+    if (anchor && isAnchorCell(anchor, x, y)) {
+      setAnnouncement(`Tap a highlighted path to choose ${ship.name}'s direction.`);
+      return true;
+    }
+
+    if (anchor) {
+      const chosenOrientation = getOrientationForChoice(ship, anchor, x, y);
+
+      if (chosenOrientation) {
+        return placeAnchoredShip(ship, anchor, chosenOrientation);
+      }
+
+      if (isPlacementOptionCell(ship, anchor, x, y)) {
+        setAnnouncement(`That path is blocked. Choose another direction or move the start.`);
+        return false;
+      }
+    }
+
+    if (anchor && !isPlacementOptionCell(ship, anchor, x, y)) {
+      const validOrientation = getValidOrientationForStart(ship, x, y);
+
+      if (!validOrientation) {
+        setAnnouncement(`The ${ship.name} needs one empty square around every ship.`);
+        return false;
+      }
+
+      setOrientation(validOrientation);
+      setPlacementAnchor({ x, y, shipId: selectedShipId });
+      setFocus((current) => ({
+        ...current,
+        player: { x, y },
+      }));
+      setAnnouncement(`Start moved for ${ship.name}. Tap the horizontal or vertical path.`);
+      return true;
+    }
+
+    const startX = anchor?.x ?? x;
+    const startY = anchor?.y ?? y;
+    return placeAnchoredShip(ship, { x: startX, y: startY }, orientation);
+  }
+
+  function placeAnchoredShip(ship, anchor, nextOrientation) {
+    if (!canPlaceShip(playerFleet, ship, anchor.x, anchor.y, nextOrientation)) {
       setAnnouncement(`The ${ship.name} needs one empty square around every ship.`);
       return false;
     }
 
-    const nextFleet = placeShip(playerFleet, ship, x, y, orientation);
+    const nextFleet = placeShip(playerFleet, ship, anchor.x, anchor.y, nextOrientation);
     const deployedShip = nextFleet.find((candidate) => candidate.id === ship.id);
     const remaining = SHIP_DEFINITIONS.filter(
       (candidate) => !nextFleet.some((placedShip) => placedShip.id === candidate.id)
     );
 
+    setOrientation(nextOrientation);
     setPlayerFleet(nextFleet);
+    setPlacementAnchor(null);
     setSelectedShipId(remaining[0]?.id ?? null);
     setAnnouncement(`${ship.name} locked in.`);
     pushEvent(`Deployed ${ship.name} across ${formatShipSpan(deployedShip.cells)}.`, "player");
     soundEffects.play("place");
     return true;
+  }
+
+  function getPlacementOptions(ship, x, y) {
+    return [ORIENTATIONS.HORIZONTAL, ORIENTATIONS.VERTICAL].map((nextOrientation) => ({
+      orientation: nextOrientation,
+      cells: getShipCells(ship, x, y, nextOrientation),
+      valid: canPlaceShip(playerFleet, ship, x, y, nextOrientation),
+    }));
+  }
+
+  function getValidOrientationForStart(ship, x, y) {
+    if (canPlaceShip(playerFleet, ship, x, y, orientation)) {
+      return orientation;
+    }
+
+    const alternateOrientation =
+      orientation === ORIENTATIONS.HORIZONTAL ? ORIENTATIONS.VERTICAL : ORIENTATIONS.HORIZONTAL;
+
+    if (canPlaceShip(playerFleet, ship, x, y, alternateOrientation)) {
+      return alternateOrientation;
+    }
+
+    return null;
+  }
+
+  function getOrientationForChoice(ship, anchor, x, y) {
+    return getPlacementOptions(ship, anchor.x, anchor.y).find(
+      (option) =>
+        option.valid &&
+        option.cells.some((cell) => cell.x === x && cell.y === y) &&
+        !isAnchorCell(anchor, x, y)
+    )?.orientation ?? null;
+  }
+
+  function isPlacementOptionCell(ship, anchor, x, y) {
+    return getPlacementOptions(ship, anchor.x, anchor.y).some((option) =>
+      option.cells.some((cell) => cell.x === x && cell.y === y)
+    );
+  }
+
+  function isAnchorCell(anchor, x, y) {
+    return anchor.x === x && anchor.y === y;
   }
 
   function randomizePlayerFleet() {
@@ -395,6 +512,7 @@ export default function useSeaBattleGame() {
     }
 
     setPlayerFleet(randomizeFleet(SHIP_DEFINITIONS));
+    setPlacementAnchor(null);
     setSelectedShipId(null);
     setAnnouncement("Fleet randomized. Play when ready.");
     pushEvent("Fleet randomized for a faster launch.", "system");
@@ -407,6 +525,7 @@ export default function useSeaBattleGame() {
     }
 
     setPlayerFleet([]);
+    setPlacementAnchor(null);
     setSelectedShipId(SHIP_DEFINITIONS[0].id);
     setOrientation(ORIENTATIONS.HORIZONTAL);
     setAnnouncement("Fleet cleared. Select a ship and deploy again.");
@@ -638,6 +757,7 @@ export default function useSeaBattleGame() {
     turnLabel,
     orientation,
     selectedShipId,
+    placementAnchor,
     playerFleet,
     enemyFleet,
     playerShots,

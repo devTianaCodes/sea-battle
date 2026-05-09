@@ -7,13 +7,12 @@ export default function ShipPlacer({
   availableShips,
   playerFleet,
   selectedShipId,
-  orientation,
+  placementAnchor,
   onSelectShip,
   canConfirm,
   onConfirm,
   onRandomize,
   onClear,
-  onRotate,
   selectedShipName,
   selectedShipSize,
 }) {
@@ -43,10 +42,9 @@ export default function ShipPlacer({
           onConfirm={onConfirm}
           onRandomize={onRandomize}
           onClear={onClear}
-          onRotate={onRotate}
           selectedShipName={selectedShipName}
           selectedShipSize={selectedShipSize}
-          orientation={orientation}
+          hasPlacementAnchor={Boolean(placementAnchor)}
         />
       </motion.div>
     </div>

@@ -6,16 +6,17 @@ export default function ShipPlacementPanel({
   onConfirm,
   onRandomize,
   onClear,
-  onRotate,
   selectedShipName,
   selectedShipSize,
-  orientation,
+  hasPlacementAnchor,
 }) {
   const statusText =
     phase !== "setup"
       ? "Battle live."
       : selectedShipName
-        ? `Place ${selectedShipName} · ${selectedShipSize} cells`
+        ? hasPlacementAnchor
+          ? `Choose path on grid for ${selectedShipName}`
+          : `Place ${selectedShipName} · ${selectedShipSize} cells`
         : canConfirm
           ? "All ships placed"
           : "Select a ship to begin";
@@ -28,18 +29,6 @@ export default function ShipPlacementPanel({
             Controls
           </p>
           <p className="mt-0.5 text-[0.88rem] text-slate-200 sm:text-[0.98rem]">{statusText}</p>
-        </div>
-        <div className="orientation-control">
-          <span>{orientation === "horizontal" ? "Horizontal" : "Vertical"}</span>
-          <button
-            type="button"
-            onClick={onRotate}
-            disabled={phase !== "setup"}
-            aria-label="Change ship direction"
-            title="Change ship direction"
-          >
-            Rotate Ship
-          </button>
         </div>
       </div>
 

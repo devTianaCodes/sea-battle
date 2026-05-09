@@ -217,6 +217,7 @@ export function buildBoardMatrix({
       if (ship) {
         cell.shipId = ship.id;
         cell.isSunkReveal = isShipSunk(ship);
+        cell.isPlacedShip = revealShips && !shot;
       }
 
       if (shot) {
@@ -232,8 +233,28 @@ export function buildBoardMatrix({
         cell.shipId = null;
       }
 
-      if (preview?.cells?.some((previewCell) => previewCell.x === cell.x && previewCell.y === cell.y)) {
+      const previewOptions = preview?.options ?? [];
+      const validOption = previewOptions.some(
+        (option) =>
+          option.valid &&
+          option.cells.some((previewCell) => previewCell.x === cell.x && previewCell.y === cell.y)
+      );
+      const invalidOption = previewOptions.some(
+        (option) =>
+          !option.valid &&
+          option.cells.some((previewCell) => previewCell.x === cell.x && previewCell.y === cell.y)
+      );
+
+      if (validOption) {
+        cell.preview = "valid";
+      } else if (invalidOption) {
+        cell.preview = "invalid";
+      } else if (preview?.cells?.some((previewCell) => previewCell.x === cell.x && previewCell.y === cell.y)) {
         cell.preview = preview.valid ? "valid" : "invalid";
+      }
+
+      if (preview?.anchor?.x === cell.x && preview.anchor.y === cell.y) {
+        cell.isPlacementAnchor = true;
       }
 
       if (

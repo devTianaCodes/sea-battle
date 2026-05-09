@@ -168,13 +168,12 @@ export default function GameShell() {
                 availableShips={game.availableShips}
                 playerFleet={game.playerFleet}
                 selectedShipId={game.selectedShipId}
-                orientation={game.orientation}
+                placementAnchor={game.placementAnchor}
                 onSelectShip={game.selectShip}
                 canConfirm={canConfirm}
                 onConfirm={game.confirmPlayerFleet}
                 onRandomize={game.randomizePlayerFleet}
                 onClear={game.clearPlayerFleet}
-                onRotate={game.toggleOrientation}
                 selectedShipName={selectedShipName}
                 selectedShipSize={selectedShipSize}
               />
