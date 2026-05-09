@@ -87,6 +87,7 @@ export default function useSeaBattleGame() {
   const [showOnboarding, setShowOnboarding] = useState(
     () => !loadBooleanPreference(ONBOARDING_KEY, false)
   );
+  const [showSetupGuide, setShowSetupGuide] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [settingsTab, setSettingsTab] = useState("settings");
@@ -293,12 +294,19 @@ export default function useSeaBattleGame() {
   function openMenu() {
     clearAiTimeout();
     setScreen("menu");
+    setShowSetupGuide(false);
     setShowInstructions(false);
   }
 
   function beginGameWithDifficulty(nextDifficulty) {
     resetState(nextDifficulty);
+    setShowOnboarding(false);
+    setShowSetupGuide(true);
     setScreen("game");
+  }
+
+  function closeSetupGuide() {
+    setShowSetupGuide(false);
   }
 
   function openInstructions() {
@@ -775,6 +783,7 @@ export default function useSeaBattleGame() {
     history,
     historySummary,
     showOnboarding,
+    showSetupGuide,
     showInstructions,
     showSettings,
     settingsTab,
@@ -796,6 +805,7 @@ export default function useSeaBattleGame() {
     openDifficultyScreen,
     openMenu,
     beginGameWithDifficulty,
+    closeSetupGuide,
     openInstructions,
     closeInstructions,
     openSettings,

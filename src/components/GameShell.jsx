@@ -12,6 +12,7 @@ import MainMenu from "./MainMenu";
 import OnboardingModal from "./OnboardingModal";
 import PauseModal from "./PauseModal";
 import ResultsModal from "./ResultsModal";
+import SetupGuideModal from "./SetupGuideModal";
 import SettingsModal from "./SettingsModal";
 import ShipPlacer from "./ShipPlacer";
 import StatusBar from "./StatusBar";
@@ -212,8 +213,8 @@ export default function GameShell() {
                 activeView={activeBoardView}
                 onChange={setActiveBoardView}
                 views={[
-                  { id: "enemy", label: "Target" },
-                  { id: "player", label: "Fleet" },
+                  { id: "enemy", label: "Opponent Waters" },
+                  { id: "player", label: "Your Fleet" },
                 ]}
               />
               <GameBoard
@@ -231,7 +232,7 @@ export default function GameShell() {
                 }`}
               />
               <GameBoard
-                title="Opponent Grid"
+                title="Target Grid"
                 boardId="Target Grid"
                 board={game.enemyBoard}
                 focusCell={game.focus.enemy}
@@ -277,7 +278,11 @@ export default function GameShell() {
         onOpenInstructions={game.openInstructions}
         onMainMenu={game.openMenu}
       />
-      <OnboardingModal open={game.showOnboarding} onClose={game.dismissOnboarding} />
+      <SetupGuideModal open={game.showSetupGuide} onClose={game.closeSetupGuide} />
+      <OnboardingModal
+        open={game.showOnboarding && !game.showSetupGuide}
+        onClose={game.dismissOnboarding}
+      />
       <InstructionsModal open={game.showInstructions} onClose={game.closeInstructions} />
       <SettingsModal
         open={game.showSettings}
