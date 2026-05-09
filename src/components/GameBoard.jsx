@@ -44,6 +44,9 @@ export default function GameBoard({
   onSetFocus,
   onActivateCell,
   className = "",
+  overlay = null,
+  showHeading = true,
+  showActiveCell = true,
 }) {
   const isBattleTargetBoard = cursorMode === "battle";
 
@@ -61,7 +64,7 @@ export default function GameBoard({
 
   return (
     <section
-      className={`game-board-container glass-panel group min-w-0 w-full max-w-full rounded-[1.45rem] px-3 py-3 sm:rounded-[1.75rem] sm:px-5 sm:py-5 ${
+      className={`game-board-container glass-panel group relative min-w-0 w-full max-w-full rounded-[1.45rem] px-3 py-3 sm:rounded-[1.75rem] sm:px-5 sm:py-5 ${
         cursorMode === "battle"
           ? "cursor-battle"
           : cursorMode === "placement"
@@ -69,12 +72,14 @@ export default function GameBoard({
             : ""
       } ${interactive && isBattleTargetBoard ? "targetable-board" : ""} ${className}`}
     >
-      <div className="game-board-heading mb-2 flex w-full items-center justify-between lg:mb-2.5">
-        <p className="text-[0.76rem] uppercase tracking-[0.22em] text-slate-300">{boardId}</p>
-        {title && title !== boardId ? (
-          <p className="text-[0.76rem] uppercase tracking-[0.18em] text-cyan-100">{title}</p>
-        ) : null}
-      </div>
+      {showHeading ? (
+        <div className="game-board-heading mb-2 flex w-full items-center justify-between lg:mb-2.5">
+          <p className="text-[0.76rem] uppercase tracking-[0.22em] text-slate-300">{boardId}</p>
+          {title && title !== boardId ? (
+            <p className="text-[0.76rem] uppercase tracking-[0.18em] text-cyan-100">{title}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="game-board-frame">
         <div
@@ -86,7 +91,7 @@ export default function GameBoard({
           aria-label={title}
         >
           {board.flat().map((cell) => {
-            const active = focusCell.x === cell.x && focusCell.y === cell.y;
+            const active = showActiveCell && focusCell.x === cell.x && focusCell.y === cell.y;
             const isInteractive = interactive && !cell.isHit && !cell.isMiss;
 
             return (
@@ -115,6 +120,7 @@ export default function GameBoard({
           ) : null}
         </div>
       </div>
+      {overlay}
     </section>
   );
 }

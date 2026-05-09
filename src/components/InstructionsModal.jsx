@@ -2,20 +2,8 @@ import { useId } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import useDialogA11y from "../hooks/useDialogA11y";
+import FleetCompositionCard from "./FleetCompositionCard";
 import IconButton from "./IconButton";
-
-function Section({ title, children }) {
-  return (
-    <section className="rounded-[1rem] border border-white/10 bg-white/[0.04] p-3 sm:rounded-3xl sm:p-4">
-      <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-cyan-50 sm:text-sm sm:tracking-[0.28em]">
-        {title}
-      </h3>
-      <div className="mt-2 space-y-1.5 text-[0.8rem] leading-5 text-slate-300 sm:mt-3 sm:space-y-2 sm:text-sm sm:leading-6">
-        {children}
-      </div>
-    </section>
-  );
-}
 
 export default function InstructionsModal({ open, onClose }) {
   useBodyScrollLock(open);
@@ -63,31 +51,8 @@ export default function InstructionsModal({ open, onClose }) {
               </IconButton>
             </div>
 
-            <div id={descriptionId} className="mt-4 grid gap-3 sm:mt-6 sm:gap-5">
-              <Section title="Rules">
-                <p>Place your 10 ships on the player grid with at least one empty square around each ship.</p>
-                <p>Click the opponent grid to fire one shot per turn.</p>
-                <p>Sink the entire enemy fleet before the enemy sinks yours.</p>
-              </Section>
-
-              <Section title="Controls">
-                <p>`Click / Tap` to place ships or fire at a target cell.</p>
-                <p>`R` rotates the selected ship during setup.</p>
-                <p>`Arrow Keys` move board focus.</p>
-                <p>`Enter / Space` confirms the active board action.</p>
-              </Section>
-
-              <Section title="Difficulty">
-                <p><strong>Easy</strong>: random shots with light pressure.</p>
-                <p><strong>Medium</strong>: parity search with focused follow-up.</p>
-                <p><strong>Hard</strong>: probability hunting with efficient finish patterns.</p>
-              </Section>
-
-              <Section title="Tips">
-                <p>Spread ships out so one lucky hit does not expose a cluster.</p>
-                <p>Use misses to erase lanes before overcommitting around a hit.</p>
-                <p>The intel panel tracks streaks, sunk ships, and recent action. Use it.</p>
-              </Section>
+            <div className="mt-4 sm:mt-6">
+              <FleetCompositionCard descriptionId={descriptionId} />
             </div>
           </motion.div>
         </motion.div>

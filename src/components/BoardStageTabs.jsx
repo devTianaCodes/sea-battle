@@ -3,9 +3,14 @@ const DEFAULT_VIEWS = [
   { id: "enemy", label: "Target Board" },
 ];
 
-export default function BoardStageTabs({ activeView, onChange, views = DEFAULT_VIEWS }) {
+export default function BoardStageTabs({
+  activeView,
+  onChange,
+  views = DEFAULT_VIEWS,
+  className = "",
+}) {
   return (
-    <div className="mobile-board-switcher glass-light rounded-full p-1">
+    <div className={`mobile-board-switcher glass-light rounded-full p-1 ${className}`}>
       <div
         className="grid gap-1"
         style={{ gridTemplateColumns: `repeat(${views.length}, minmax(0, 1fr))` }}

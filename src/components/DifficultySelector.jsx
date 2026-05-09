@@ -163,7 +163,7 @@ export default function DifficultySelector({
               <div className="flex h-full items-center justify-center gap-3 text-center sm:flex-col sm:gap-2">
                 <div className="text-xl sm:text-4xl">{level.emoji}</div>
                 <div className="text-[0.9rem] font-semibold uppercase tracking-[0.12em] text-foam sm:text-xl">
-                  {pending ? `Starting ${level.name}` : level.name}
+                  {level.name}
                 </div>
               </div>
             </motion.button>

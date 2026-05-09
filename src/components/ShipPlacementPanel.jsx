@@ -3,7 +3,6 @@ import IconButton from "./IconButton";
 export default function ShipPlacementPanel({
   phase,
   canConfirm,
-  onConfirm,
   onRandomize,
   onClear,
   selectedShipName,
@@ -32,7 +31,7 @@ export default function ShipPlacementPanel({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+      <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
         <IconButton
           onClick={onRandomize}
           disabled={phase !== "setup"}
@@ -48,15 +47,6 @@ export default function ShipPlacementPanel({
           size="sm"
         >
           Clear
-        </IconButton>
-        <IconButton
-          onClick={onConfirm}
-          tone="success"
-          disabled={phase !== "setup" || !canConfirm}
-          className="min-h-0 justify-center px-2 py-2 text-[0.68rem] tracking-[0.04em] sm:px-3 sm:text-[0.76rem]"
-          size="sm"
-        >
-          Play
         </IconButton>
       </div>
     </div>

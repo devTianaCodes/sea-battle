@@ -88,6 +88,7 @@ export default function useSeaBattleGame() {
     () => !loadBooleanPreference(ONBOARDING_KEY, false)
   );
   const [showSetupGuide, setShowSetupGuide] = useState(false);
+  const [showShootPrompt, setShowShootPrompt] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [settingsTab, setSettingsTab] = useState("settings");
@@ -302,6 +303,7 @@ export default function useSeaBattleGame() {
     resetState(nextDifficulty);
     setShowOnboarding(false);
     setShowSetupGuide(true);
+    setShowShootPrompt(false);
     setScreen("game");
   }
 
@@ -554,7 +556,8 @@ export default function useSeaBattleGame() {
     setPhase(GAME_PHASES.BATTLE);
     setTurn(TURN_STATES.PLAYER);
     setMatchStartTime(Date.now());
-    setAnnouncement("Battle stations. Fire when ready.");
+    setShowShootPrompt(true);
+    setAnnouncement("Shoot the opponent waters.");
     pushEvent(`Battle started on ${difficulty.toUpperCase()} difficulty.`, "system");
     soundEffects.play("start");
     return true;
@@ -616,6 +619,7 @@ export default function useSeaBattleGame() {
 
     const nextPlayerShots = [...playerShots, outcome.shot];
 
+    setShowShootPrompt(false);
     setEnemyFleet(outcome.fleet);
     setPlayerShots(nextPlayerShots);
     setAnnouncement(
@@ -784,6 +788,7 @@ export default function useSeaBattleGame() {
     historySummary,
     showOnboarding,
     showSetupGuide,
+    showShootPrompt,
     showInstructions,
     showSettings,
     settingsTab,

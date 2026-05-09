@@ -10,7 +10,6 @@ export default function ShipPlacer({
   placementAnchor,
   onSelectShip,
   canConfirm,
-  onConfirm,
   onRandomize,
   onClear,
   selectedShipName,
@@ -39,7 +38,6 @@ export default function ShipPlacer({
         <ShipPlacementPanel
           phase={phase}
           canConfirm={canConfirm}
-          onConfirm={onConfirm}
           onRandomize={onRandomize}
           onClear={onClear}
           selectedShipName={selectedShipName}

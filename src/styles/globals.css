@@ -191,6 +191,109 @@ select {
   display: none;
 }
 
+.folder-board-switcher {
+  display: block;
+  align-self: stretch;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+.folder-board-switcher::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  left: 0;
+  height: 1px;
+  background: rgba(0, 212, 255, 0.42);
+  pointer-events: none;
+}
+
+.folder-board-switcher > div {
+  display: flex !important;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.folder-board-switcher button {
+  position: relative;
+  min-height: 2.3rem;
+  flex: 1 1 0;
+  border: 0;
+  border-radius: 0 !important;
+  background: rgba(6, 31, 25, 0.42);
+  color: rgba(226, 243, 255, 0.62);
+  transform: none;
+  box-shadow: none;
+}
+
+.folder-board-switcher button:focus {
+  outline: none;
+}
+
+.folder-board-switcher button:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(223, 247, 255, 0.28);
+}
+
+.folder-board-switcher button + button {
+  border-left: 1px solid rgba(0, 212, 255, 0.22);
+}
+
+.folder-board-switcher button[aria-pressed="true"] {
+  z-index: 2;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(0, 212, 255, 0.08), transparent 62%),
+    linear-gradient(180deg, rgba(8, 45, 37, 0.96), rgba(6, 31, 25, 0.96));
+  color: #f4fffd;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(6, 31, 25, 0.96);
+}
+
+.folder-board-switcher button[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: rgba(6, 31, 25, 0.96);
+}
+
+.setup-folder-stage .game-board-container {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.setup-play-button {
+  width: min(12rem, 72%);
+}
+
+.setup-play-overlay,
+.shoot-prompt-overlay {
+  pointer-events: none;
+}
+
+.setup-play-overlay > *,
+.shoot-prompt-overlay > * {
+  pointer-events: auto;
+}
+
+.opponent-waters-warning {
+  pointer-events: none;
+  box-shadow:
+    0 0 24px rgba(255, 107, 107, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 .settings-glyph {
   display: inline-flex;
   align-items: center;
@@ -994,4 +1097,27 @@ select {
     font-size: 0.68rem;
     line-height: 0.9rem;
   }
+}
+
+.setup-layout .setup-folder-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  grid-template-columns: none;
+  border: 1px solid rgba(0, 212, 255, 0.48);
+  border-radius: 1.05rem;
+  background: rgba(6, 31, 25, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 20px 48px rgba(0, 0, 0, 0.32),
+    0 0 30px rgba(0, 212, 255, 0.08);
+  overflow: hidden;
+}
+
+.setup-layout .setup-folder-stage .mobile-board-panel {
+  display: none;
+}
+
+.setup-layout .setup-folder-stage .mobile-board-panel.is-active {
+  display: flex;
 }
