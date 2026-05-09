@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GAME_PHASES } from "../data/constants";
+import { GAME_PHASES, SHIP_DEFINITIONS } from "../data/constants";
 import { useGameContext } from "../context/GameContext";
 import { isRotateKey } from "../utils/keyboard";
 import BattleActionBar from "./BattleActionBar";
@@ -62,7 +62,7 @@ export default function GameShell() {
     }
   }, [game.phase, game.turn]);
 
-  const canConfirm = game.playerFleet.length === 5;
+  const canConfirm = game.playerFleet.length === SHIP_DEFINITIONS.length;
   const selectedShip = game.availableShips.find((ship) => ship.id === game.selectedShipId) ?? null;
   const selectedShipName = selectedShip?.name ?? null;
   const selectedShipSize = selectedShip?.size ?? null;

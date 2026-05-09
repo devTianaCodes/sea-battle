@@ -7,6 +7,7 @@ import {
   getShipCoverageMap,
   isInBounds,
   isShipSunk,
+  parseCoordinateKey,
 } from "./ships.js";
 
 export function createEmptyBoard() {
@@ -34,13 +35,37 @@ export function canPlaceShip(fleet, ship, x, y, orientation) {
     return false;
   }
 
-  return !cells.some((cell) =>
-    fleet.some((placedShip) =>
-      placedShip.cells.some(
-        (occupiedCell) => occupiedCell.x === cell.x && occupiedCell.y === cell.y
-      )
-    )
+  return !cells.some((cell) => fleet.some((placedShip) => touchesShip(cell, placedShip)));
+}
+
+function touchesShip(cell, placedShip) {
+  return placedShip.cells.some(
+    (occupiedCell) =>
+      Math.abs(occupiedCell.x - cell.x) <= 1 && Math.abs(occupiedCell.y - cell.y) <= 1
   );
+}
+
+export function getFleetBufferCells(fleet) {
+  const occupied = new Set(
+    fleet.flatMap((ship) => ship.cells.map((cell) => coordinateKey(cell.x, cell.y)))
+  );
+  const buffer = new Set();
+
+  fleet.forEach((ship) => {
+    ship.cells.forEach((cell) => {
+      for (let y = cell.y - 1; y <= cell.y + 1; y += 1) {
+        for (let x = cell.x - 1; x <= cell.x + 1; x += 1) {
+          const key = coordinateKey(x, y);
+
+          if (isInBounds(x, y) && !occupied.has(key)) {
+            buffer.add(key);
+          }
+        }
+      }
+    });
+  });
+
+  return Array.from(buffer, parseCoordinateKey);
 }
 
 export function placeShip(fleet, ship, x, y, orientation) {
@@ -53,33 +78,64 @@ export function placeShip(fleet, ship, x, y, orientation) {
 }
 
 export function randomizeFleet(shipDefinitions = SHIP_DEFINITIONS) {
-  const nextFleet = [];
+  const sortedShips = [...shipDefinitions].sort((left, right) => right.size - left.size);
+  const fleet = placeFleetFromIndex(sortedShips, 0, []);
 
-  for (const ship of shipDefinitions) {
-    let placed = false;
-    let attempts = 0;
+  if (!fleet) {
+    throw new Error("Unable to randomize fleet with the current spacing rules.");
+  }
 
-    while (!placed && attempts < 500) {
-      attempts += 1;
-      const orientation =
-        Math.random() > 0.5 ? ORIENTATIONS.HORIZONTAL : ORIENTATIONS.VERTICAL;
-      const x = Math.floor(Math.random() * GRID_SIZE);
-      const y = Math.floor(Math.random() * GRID_SIZE);
+  return shipDefinitions
+    .map((ship) => fleet.find((placedShip) => placedShip.id === ship.id))
+    .filter(Boolean);
+}
 
-      if (!canPlaceShip(nextFleet, ship, x, y, orientation)) {
-        continue;
-      }
+function placeFleetFromIndex(shipDefinitions, index, fleet) {
+  if (index >= shipDefinitions.length) {
+    return fleet;
+  }
 
-      nextFleet.push(createPlacedShip(ship, x, y, orientation));
-      placed = true;
+  const ship = shipDefinitions[index];
+  const candidates = shufflePlacementsForShip(ship);
+
+  for (const candidate of candidates) {
+    if (!canPlaceShip(fleet, ship, candidate.x, candidate.y, candidate.orientation)) {
+      continue;
     }
 
-    if (!placed) {
-      return randomizeFleet(shipDefinitions);
+    const result = placeFleetFromIndex(
+      shipDefinitions,
+      index + 1,
+      [...fleet, createPlacedShip(ship, candidate.x, candidate.y, candidate.orientation)]
+    );
+
+    if (result) {
+      return result;
     }
   }
 
-  return nextFleet;
+  return null;
+}
+
+function shufflePlacementsForShip(ship) {
+  const placements = [];
+
+  for (const orientation of [ORIENTATIONS.HORIZONTAL, ORIENTATIONS.VERTICAL]) {
+    for (let y = 0; y < GRID_SIZE; y += 1) {
+      for (let x = 0; x < GRID_SIZE; x += 1) {
+        if (getShipCells(ship, x, y, orientation).every((cell) => isInBounds(cell.x, cell.y))) {
+          placements.push({ x, y, orientation });
+        }
+      }
+    }
+  }
+
+  for (let index = placements.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [placements[index], placements[swapIndex]] = [placements[swapIndex], placements[index]];
+  }
+
+  return placements;
 }
 
 export function receiveShot(fleet, shots, x, y) {
@@ -146,6 +202,7 @@ export function buildBoardMatrix({
   shots,
   revealShips = false,
   preview = null,
+  blockedCells = [],
   recentShot = null,
 }) {
   const board = createEmptyBoard();
@@ -177,6 +234,14 @@ export function buildBoardMatrix({
 
       if (preview?.cells?.some((previewCell) => previewCell.x === cell.x && previewCell.y === cell.y)) {
         cell.preview = preview.valid ? "valid" : "invalid";
+      }
+
+      if (
+        !cell.shipId &&
+        !cell.preview &&
+        blockedCells.some((blockedCell) => blockedCell.x === cell.x && blockedCell.y === cell.y)
+      ) {
+        cell.isPlacementBlocked = true;
       }
     });
   });

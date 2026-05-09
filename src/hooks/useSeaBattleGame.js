@@ -13,6 +13,7 @@ import {
   allShipsSunk,
   buildBoardMatrix,
   canPlaceShip,
+  getFleetBufferCells,
   placeShip,
   randomizeFleet,
   receiveShot,
@@ -141,6 +142,14 @@ export default function useSeaBattleGame() {
     };
   }, [focus.player, orientation, phase, playerFleet, selectedShipId]);
 
+  const playerPlacementBlockedCells = useMemo(() => {
+    if (phase !== GAME_PHASES.SETUP) {
+      return [];
+    }
+
+    return getFleetBufferCells(playerFleet);
+  }, [phase, playerFleet]);
+
   const playerBoard = useMemo(
     () =>
       buildBoardMatrix({
@@ -148,9 +157,10 @@ export default function useSeaBattleGame() {
         shots: aiShots,
         revealShips: true,
         preview,
+        blockedCells: playerPlacementBlockedCells,
         recentShot: aiShots.at(-1) ?? null,
       }),
-    [aiShots, playerFleet, preview]
+    [aiShots, playerFleet, playerPlacementBlockedCells, preview]
   );
 
   const enemyBoard = useMemo(
@@ -361,7 +371,7 @@ export default function useSeaBattleGame() {
     const ship = getShipDefinition(selectedShipId);
 
     if (!canPlaceShip(playerFleet, ship, x, y, orientation)) {
-      setAnnouncement(`The ${ship.name} does not fit there.`);
+      setAnnouncement(`The ${ship.name} needs one empty square around every ship.`);
       return false;
     }
 

@@ -7,6 +7,7 @@ import {
 import {
   allShipsSunk,
   canPlaceShip,
+  getFleetBufferCells,
   placeShip,
   randomizeFleet,
   receiveShot,
@@ -21,29 +22,67 @@ import {
 } from "../src/utils/keyboard.js";
 
 test("ships can be placed legally without overlap and out-of-bounds placements are rejected", () => {
-  const carrier = SHIP_DEFINITIONS.find((ship) => ship.id === "carrier");
-  const destroyer = SHIP_DEFINITIONS.find((ship) => ship.id === "destroyer");
+  const flagship = SHIP_DEFINITIONS.find((ship) => ship.id === "flagship");
+  const patrol = SHIP_DEFINITIONS.find((ship) => ship.id === "patrol-1");
 
-  assert.equal(canPlaceShip([], carrier, 0, 0, ORIENTATIONS.HORIZONTAL), true);
-  assert.equal(canPlaceShip([], carrier, 8, 0, ORIENTATIONS.HORIZONTAL), false);
+  assert.equal(canPlaceShip([], flagship, 0, 0, ORIENTATIONS.HORIZONTAL), true);
+  assert.equal(canPlaceShip([], flagship, 7, 0, ORIENTATIONS.HORIZONTAL), false);
 
-  const fleet = placeShip([], carrier, 0, 0, ORIENTATIONS.HORIZONTAL);
-  assert.equal(canPlaceShip(fleet, destroyer, 0, 0, ORIENTATIONS.VERTICAL), false);
-  assert.equal(canPlaceShip(fleet, destroyer, 6, 0, ORIENTATIONS.VERTICAL), true);
+  const fleet = placeShip([], flagship, 0, 0, ORIENTATIONS.HORIZONTAL);
+  assert.equal(canPlaceShip(fleet, patrol, 0, 0, ORIENTATIONS.VERTICAL), false);
+  assert.equal(canPlaceShip(fleet, patrol, 5, 0, ORIENTATIONS.VERTICAL), true);
 });
 
-test("all five ships must be placed before the fleet is considered ready", () => {
-  let fleet = [];
+test("ship definitions match the 10-ship fleet composition", () => {
+  assert.equal(SHIP_DEFINITIONS.length, 10);
+  assert.deepEqual(
+    SHIP_DEFINITIONS.map((ship) => ship.size).sort((left, right) => right - left),
+    [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
+  );
+});
 
-  fleet = placeShip(fleet, SHIP_DEFINITIONS[0], 0, 0, ORIENTATIONS.HORIZONTAL);
-  fleet = placeShip(fleet, SHIP_DEFINITIONS[1], 0, 2, ORIENTATIONS.HORIZONTAL);
-  fleet = placeShip(fleet, SHIP_DEFINITIONS[2], 0, 4, ORIENTATIONS.HORIZONTAL);
-  fleet = placeShip(fleet, SHIP_DEFINITIONS[3], 0, 6, ORIENTATIONS.HORIZONTAL);
-
-  assert.equal(areAllShipsPlaced(fleet, SHIP_DEFINITIONS), false);
-
-  fleet = placeShip(fleet, SHIP_DEFINITIONS[4], 0, 8, ORIENTATIONS.HORIZONTAL);
+test("all 10 ships must be placed before the fleet is considered ready", () => {
+  const fleet = randomizeFleet(SHIP_DEFINITIONS);
+  assert.equal(areAllShipsPlaced(fleet.slice(0, -1), SHIP_DEFINITIONS), false);
   assert.equal(areAllShipsPlaced(fleet, SHIP_DEFINITIONS), true);
+});
+
+test("ships cannot touch horizontally, vertically, or diagonally", () => {
+  const flagship = SHIP_DEFINITIONS.find((ship) => ship.id === "flagship");
+  const patrol = SHIP_DEFINITIONS.find((ship) => ship.id === "patrol-1");
+  const fleet = placeShip([], flagship, 0, 0, ORIENTATIONS.HORIZONTAL);
+
+  assert.equal(canPlaceShip(fleet, patrol, 4, 0, ORIENTATIONS.HORIZONTAL), false);
+  assert.equal(canPlaceShip(fleet, patrol, 0, 1, ORIENTATIONS.HORIZONTAL), false);
+  assert.equal(canPlaceShip(fleet, patrol, 4, 1, ORIENTATIONS.HORIZONTAL), false);
+  assert.equal(canPlaceShip(fleet, patrol, 5, 1, ORIENTATIONS.HORIZONTAL), true);
+});
+
+test("size-one ships obey the same one-square buffer rule", () => {
+  const firstPatrol = SHIP_DEFINITIONS.find((ship) => ship.id === "patrol-1");
+  const secondPatrol = SHIP_DEFINITIONS.find((ship) => ship.id === "patrol-2");
+  const fleet = placeShip([], firstPatrol, 4, 4, ORIENTATIONS.HORIZONTAL);
+
+  assert.equal(canPlaceShip(fleet, secondPatrol, 5, 5, ORIENTATIONS.HORIZONTAL), false);
+  assert.equal(canPlaceShip(fleet, secondPatrol, 6, 4, ORIENTATIONS.HORIZONTAL), true);
+});
+
+test("fleet buffer cells identify the blocked squares around placed ships", () => {
+  const flagship = SHIP_DEFINITIONS.find((ship) => ship.id === "flagship");
+  const fleet = placeShip([], flagship, 0, 0, ORIENTATIONS.HORIZONTAL);
+  const bufferKeys = new Set(getFleetBufferCells(fleet).map((cell) => `${cell.x},${cell.y}`));
+
+  assert.equal(bufferKeys.has("4,0"), true);
+  assert.equal(bufferKeys.has("0,1"), true);
+  assert.equal(bufferKeys.has("4,1"), true);
+  assert.equal(bufferKeys.has("0,0"), false);
+});
+
+test("randomized fleets contain 10 ships that do not overlap or touch", () => {
+  const fleet = randomizeFleet(SHIP_DEFINITIONS);
+
+  assert.equal(fleet.length, 10);
+  assertNoOverlapOrTouching(fleet);
 });
 
 test("the same target cell cannot be fired on more than once", () => {
@@ -70,6 +109,24 @@ test("the player wins only after the entire enemy fleet is sunk", () => {
 
   assert.equal(allShipsSunk(sunkFleet), true);
 });
+
+function assertNoOverlapOrTouching(fleet) {
+  for (let leftIndex = 0; leftIndex < fleet.length; leftIndex += 1) {
+    for (let rightIndex = leftIndex + 1; rightIndex < fleet.length; rightIndex += 1) {
+      const leftShip = fleet[leftIndex];
+      const rightShip = fleet[rightIndex];
+
+      for (const leftCell of leftShip.cells) {
+        for (const rightCell of rightShip.cells) {
+          assert.ok(
+            Math.abs(leftCell.x - rightCell.x) > 1 || Math.abs(leftCell.y - rightCell.y) > 1,
+            `${leftShip.id} touches ${rightShip.id}`
+          );
+        }
+      }
+    }
+  }
+}
 
 test("arrow keys map to board movement and enter/space trigger confirmation", () => {
   assert.deepEqual(getBoardNavigationDelta("ArrowUp"), { dx: 0, dy: -1 });

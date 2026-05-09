@@ -65,7 +65,7 @@ export default function InstructionsModal({ open, onClose }) {
 
             <div id={descriptionId} className="mt-4 grid gap-3 sm:mt-6 sm:gap-5">
               <Section title="Rules">
-                <p>Place your five ships on the player grid without overlap.</p>
+                <p>Place your 10 ships on the player grid with at least one empty square around each ship.</p>
                 <p>Click the opponent grid to fire one shot per turn.</p>
                 <p>Sink the entire enemy fleet before the enemy sinks yours.</p>
               </Section>

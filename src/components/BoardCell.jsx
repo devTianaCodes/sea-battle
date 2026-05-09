@@ -24,6 +24,10 @@ function getCellState(cell) {
     return "invalid";
   }
 
+  if (cell.isPlacementBlocked) {
+    return "blocked";
+  }
+
   if (cell.shipId) {
     return "ship";
   }
@@ -85,6 +89,7 @@ function BoardCell({
         "board-cell animate-reveal-cell group focus:outline-none focus:ring-2 focus:ring-cyan/70 focus:ring-inset",
         cell.preview === "invalid" && "border-coral/50 bg-coral/20",
         cell.preview === "valid" && "border-cyan/[0.55] bg-cyan/[0.18]",
+        cell.isPlacementBlocked && "placement-blocked-cell",
         cell.isRecentShot && cell.isHit && "animate-hit",
         cell.isRecentShot && cell.isMiss && "animate-miss",
         cell.isRecentShot &&

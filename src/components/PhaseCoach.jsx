@@ -27,7 +27,7 @@ export default function PhaseCoach({
           hints: [
             {
               label: "Fleet Progress",
-              detail: `${playerFleetCount}/5 ships placed before launch.`,
+              detail: `${playerFleetCount}/10 ships placed before launch.`,
             },
             {
               label: "Controls",

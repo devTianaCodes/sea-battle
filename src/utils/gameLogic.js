@@ -65,7 +65,11 @@ export function isValidShipPlacement(positions, fleet) {
   return positions.every((position) => {
     const x = position.x ?? position.col;
     const y = position.y ?? position.row;
-    return isInBounds(x, y) && !occupied.has(coordinateKey(x, y));
+    const touchesAnotherShip = fleet.some((ship) =>
+      ship.cells.some((cell) => Math.abs(cell.x - x) <= 1 && Math.abs(cell.y - y) <= 1)
+    );
+
+    return isInBounds(x, y) && !occupied.has(coordinateKey(x, y)) && !touchesAnotherShip;
   });
 }
 

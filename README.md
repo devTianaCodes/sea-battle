@@ -5,7 +5,7 @@ Sea Battle is a modern single-player Battleship experience built with React and 
 ## Features
 
 - Single-player fleet battles against Easy, Medium, and Hard AI
-- Manual or randomized ship placement on a 10x10 grid
+- Manual or randomized placement for a 10-ship fleet on a 10x10 grid
 - Animated hit, miss, sunk, and AI-thinking feedback
 - Match history with local statistics and difficulty breakdowns
 - Keyboard shortcuts and board navigation support
@@ -55,7 +55,7 @@ npm run preview
 
 1. Open `Play` from the main menu.
 2. Choose a difficulty.
-3. Place all five ships or randomize your fleet.
+3. Place all 10 ships with one empty square around each ship, or randomize your fleet.
 4. Confirm deployment to begin combat.
 5. Fire on the enemy grid until all opposing ships are sunk.
 

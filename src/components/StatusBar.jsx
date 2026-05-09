@@ -70,12 +70,14 @@ export default function StatusBar({
 }
 
 function ShipTrack({ label, active, dimmed = false }) {
+  const totalShips = 10;
+
   return (
     <div className="flex items-center gap-1.5" title={`${label}: ${active} ships afloat`}>
-      {Array.from({ length: 5 }).map((_, index) => (
+      {Array.from({ length: totalShips }).map((_, index) => (
         <span
           key={`${label}-${index}`}
-          className={`h-1.5 w-4 rounded-full border ${
+          className={`h-1.5 w-2 rounded-full border sm:w-3 ${
             index < active
               ? dimmed
                 ? "border-white/25 bg-white/[0.18]"
