@@ -218,32 +218,33 @@ export default function GameShell() {
       ) : null}
       <TurnBanner visible={game.isAiThinking} label="Opponent Turn" />
       <div className="relative z-10 flex flex-1 flex-col gap-2 overflow-hidden">
-        <StatusBar
-          turnLabel={game.turnLabel}
-          announcement={game.announcement}
-          shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
-          onPause={game.togglePause}
-          onOpenGuide={game.openInstructions}
-          onOpenSettings={() => game.openSettings("settings")}
-          isPaused={game.isPaused}
-        />
-
         {game.phase === GAME_PHASES.SETUP ? (
-          <section className="setup-layout grid min-h-0 w-full max-w-full gap-3 overflow-x-hidden md:grid-cols-[13rem_minmax(0,1fr)] md:items-stretch md:gap-4 lg:grid-cols-[14.5rem_minmax(0,1fr)] lg:gap-5">
-            <div className="setup-controls min-w-0 w-full max-w-full space-y-1.5 md:flex md:h-full md:flex-col">
-              <ShipPlacer
-                phase={game.phase}
-                availableShips={game.availableShips}
-                playerFleet={game.playerFleet}
-                selectedShipId={game.selectedShipId}
-                placementAnchor={game.placementAnchor}
-                onSelectShip={game.selectShip}
-                canConfirm={canConfirm}
-                onRandomize={game.randomizePlayerFleet}
-                onClear={game.clearPlayerFleet}
-                selectedShipName={selectedShipName}
-                selectedShipSize={selectedShipSize}
+          <section className="setup-layout responsive-game-layout grid min-h-0 w-full max-w-full gap-3 overflow-x-hidden">
+            <div className="game-left-panel setup-left-panel min-w-0 w-full max-w-full">
+              <StatusBar
+                turnLabel={game.turnLabel}
+                announcement={game.announcement}
+                shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
+                onPause={game.togglePause}
+                onOpenGuide={game.openInstructions}
+                onOpenSettings={() => game.openSettings("settings")}
+                isPaused={game.isPaused}
               />
+              <div className="setup-controls min-w-0 w-full max-w-full space-y-1.5 md:flex md:flex-col">
+                <ShipPlacer
+                  phase={game.phase}
+                  availableShips={game.availableShips}
+                  playerFleet={game.playerFleet}
+                  selectedShipId={game.selectedShipId}
+                  placementAnchor={game.placementAnchor}
+                  onSelectShip={game.selectShip}
+                  canConfirm={canConfirm}
+                  onRandomize={game.randomizePlayerFleet}
+                  onClear={game.clearPlayerFleet}
+                  selectedShipName={selectedShipName}
+                  selectedShipSize={selectedShipSize}
+                />
+              </div>
             </div>
             <div
               className="board-stage setup-board-stage grid min-h-0 w-full max-w-full justify-items-center overflow-x-hidden md:h-full md:justify-items-stretch"
@@ -267,7 +268,6 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("player", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("player", x, y)}
                 onActivateCell={(x, y) => game.handlePlayerBoardAction(x, y)}
-                showHeading={false}
                 showActiveCell={!canConfirm}
                 overlay={
                   canConfirm ? (
@@ -297,7 +297,6 @@ export default function GameShell() {
                 onMoveFocus={(dx, dy) => game.moveBoardFocus("enemy", dx, dy)}
                 onSetFocus={(x, y) => game.setBoardFocus("enemy", x, y)}
                 onActivateCell={(x, y) => game.fireAtEnemy(x, y)}
-                showHeading={false}
                 showActiveCell={false}
                 className={`setup-board mobile-board-panel h-full w-full max-w-full ${
                   setupBoardView === "enemy" ? "is-active" : ""
@@ -314,20 +313,39 @@ export default function GameShell() {
             </div>
           </section>
         ) : (
-          <div className="battle-play-layout flex min-h-0 flex-1 flex-col">
-            <section className="viewport-main board-stage grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-2">
-              <BoardStageTabs
-                activeView={activeBoardView}
-                onChange={setActiveBoardView}
-                className="battle-board-switcher"
-                views={[
-                  { id: "enemy", label: "Opponent Waters" },
-                  { id: "player", label: "Your Fleet" },
-                ]}
+          <div className="battle-play-layout responsive-game-layout flex min-h-0 flex-1 flex-col">
+            <div className="game-left-panel battle-left-panel">
+              <StatusBar
+                turnLabel={game.turnLabel}
+                announcement={game.announcement}
+                shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
+                onPause={game.togglePause}
+                onOpenGuide={game.openInstructions}
+                onOpenSettings={() => game.openSettings("settings")}
+                isPaused={game.isPaused}
               />
+              <div className="battle-controls-panel">
+                <BoardStageTabs
+                  activeView={activeBoardView}
+                  onChange={setActiveBoardView}
+                  className="battle-board-switcher"
+                  views={[
+                    { id: "enemy", label: "Opponent Waters" },
+                    { id: "player", label: "Your Fleet" },
+                  ]}
+                />
+                <BattleActionBar
+                  latestEvent={latestEventMessage}
+                  playerAccuracy={game.playerMetrics.accuracy}
+                  opponentAccuracy={game.enemyMetrics.accuracy}
+                  shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
+                />
+              </div>
+            </div>
+            <section className="viewport-main board-stage grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-2">
               <GameBoard
                 title="Your Fleet"
-                boardId="Player Grid"
+                boardId="Your Fleet"
                 board={game.playerBoard}
                 focusCell={game.focus.player}
                 interactive={false}
@@ -340,8 +358,8 @@ export default function GameShell() {
                 }`}
               />
               <GameBoard
-                title="Target Grid"
-                boardId="Target Grid"
+                title="Opponent Waters"
+                boardId="Opponent Waters"
                 board={game.enemyBoard}
                 focusCell={game.focus.enemy}
                 interactive={
@@ -368,12 +386,6 @@ export default function GameShell() {
                 }
               />
             </section>
-            <BattleActionBar
-              latestEvent={latestEventMessage}
-              playerAccuracy={game.playerMetrics.accuracy}
-              opponentAccuracy={game.enemyMetrics.accuracy}
-              shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
-            />
           </div>
         )}
       </div>

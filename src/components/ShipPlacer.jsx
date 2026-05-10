@@ -18,6 +18,7 @@ export default function ShipPlacer({
   return (
     <div className="flex h-full flex-col gap-1.5 md:gap-2">
       <motion.div
+        className="ship-list-panel"
         initial={{ opacity: 0, x: -16 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.25 }}

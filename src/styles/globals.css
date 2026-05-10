@@ -416,6 +416,10 @@ select {
   align-content: center;
 }
 
+.game-left-panel {
+  display: contents;
+}
+
 .viewport-container::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -477,6 +481,7 @@ select {
 }
 
 .battle-play-layout .viewport-main {
+  order: 2;
   flex: 0 0 auto;
   min-height: 0;
 }
@@ -485,6 +490,30 @@ select {
   position: relative;
   z-index: 2;
   flex: 0 0 auto;
+}
+
+.battle-controls-panel {
+  display: contents;
+  width: 100%;
+  min-width: 0;
+}
+
+.battle-controls-panel .mobile-board-switcher {
+  display: block;
+}
+
+.battle-controls-panel .battle-action-bar {
+  grid-column: 1 / -1;
+  order: 3;
+  width: 100%;
+}
+
+.battle-controls-panel .battle-board-switcher {
+  order: 1;
+}
+
+.battle-play-layout .battle-board {
+  order: 2;
 }
 
 .game-board-container {
@@ -878,6 +907,124 @@ select {
     --board-size: min(100%, calc((var(--viewport-width, 100vw) - 92px) / 2), calc(var(--viewport-height, 100svh) - 235px));
   }
 
+  .difficulty-screen {
+    align-items: center;
+    text-align: center;
+  }
+
+  .difficulty-screen > div:first-child {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .responsive-game-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.25fr) minmax(0, 0.75fr);
+    align-items: start;
+    gap: 14px;
+  }
+
+  .game-left-panel {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .game-left-panel .status-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: stretch;
+  }
+
+  .game-left-panel .status-top-row,
+  .game-left-panel .status-control-row {
+    display: contents;
+  }
+
+  .game-left-panel .status-control-row > div:first-child {
+    order: 2;
+  }
+
+  .game-left-panel .status-bar p[role="status"] {
+    order: 3;
+    margin-top: 0;
+  }
+
+  .game-left-panel .status-turn {
+    order: 4;
+    margin-left: 0;
+    padding-inline: 0;
+  }
+
+  .game-left-panel .status-actions {
+    order: 5;
+    justify-content: flex-start;
+  }
+
+  .setup-controls .ship-list-panel {
+    display: none;
+  }
+
+  .setup-controls {
+    align-self: start;
+  }
+
+  .setup-layout .setup-board-stage {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 10px;
+  }
+
+  .setup-board-switcher,
+  .battle-board-switcher {
+    display: none !important;
+  }
+
+  .setup-layout .setup-board .game-board-frame {
+    width: min(100%, calc((var(--viewport-width, 100vw) * 0.75 - 2rem) / 2), calc(var(--viewport-height, 100svh) - 230px));
+  }
+
+  .battle-play-layout .viewport-main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 10px;
+  }
+
+  .battle-controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: start;
+    order: 0;
+  }
+
+  .battle-play-layout .battle-board {
+    order: 0;
+  }
+
+  .battle-controls-panel .battle-action-bar > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .battle-controls-panel .battle-stat-grid {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+
+  .battle-controls-panel .battle-board-switcher {
+    max-width: none;
+  }
+
+  .battle-play-layout .battle-board .game-board-frame {
+    width: min(100%, calc((var(--viewport-width, 100vw) * 0.75 - 2rem) / 2), calc(var(--viewport-height, 100svh) - 230px));
+  }
+
   .mobile-board-panel,
   .mobile-board-panel.is-active {
     display: flex;
@@ -887,6 +1034,18 @@ select {
 @media (min-width: 1024px) {
   :root {
     --board-size: min(100%, calc((var(--viewport-width, 100vw) - 120px) / 2), calc(var(--viewport-height, 100svh) - 230px));
+  }
+
+  .battle-play-layout .viewport-main {
+    gap: 14px;
+  }
+
+  .battle-play-layout .battle-board .game-board-frame {
+    width: min(100%, calc((var(--viewport-width, 100vw) * 0.75 - 3rem) / 2), calc(var(--viewport-height, 100svh) - 225px));
+  }
+
+  .setup-layout .setup-board .game-board-frame {
+    width: min(100%, calc((var(--viewport-width, 100vw) * 0.75 - 3rem) / 2), calc(var(--viewport-height, 100svh) - 225px));
   }
 }
 
@@ -1366,4 +1525,22 @@ select {
 
 .setup-layout .setup-board-stage .mobile-board-panel.is-active {
   display: flex;
+}
+
+@media (min-width: 768px) {
+  .setup-layout .setup-board-stage {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 10px;
+  }
+
+  .setup-layout .setup-board-stage .mobile-board-panel,
+  .setup-layout .setup-board-stage .mobile-board-panel.is-active {
+    display: flex;
+  }
+
+  .setup-layout .setup-board-stage .setup-board-switcher {
+    grid-column: 1 / -1;
+  }
 }
