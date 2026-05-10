@@ -23,6 +23,7 @@ export default function BoardStageTabs({
               key={view.id}
               type="button"
               onClick={() => onChange(view.id)}
+              data-view={view.id}
               className={`rounded-full px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.08em] transition sm:text-xs ${
                 active
                   ? "bg-cyan/16 text-foam shadow-[0_0_0_1px_rgba(0,212,255,0.35)]"

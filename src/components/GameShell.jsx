@@ -314,11 +314,12 @@ export default function GameShell() {
             </div>
           </section>
         ) : (
-          <div className="flex min-h-0 flex-1 flex-col gap-2">
+          <div className="battle-play-layout flex min-h-0 flex-1 flex-col">
             <section className="viewport-main board-stage grid min-h-0 w-full max-w-full justify-items-center gap-2 overflow-x-hidden md:grid-cols-2 md:justify-items-stretch md:gap-2">
               <BoardStageTabs
                 activeView={activeBoardView}
                 onChange={setActiveBoardView}
+                className="battle-board-switcher"
                 views={[
                   { id: "enemy", label: "Opponent Waters" },
                   { id: "player", label: "Your Fleet" },
@@ -372,7 +373,6 @@ export default function GameShell() {
               playerAccuracy={game.playerMetrics.accuracy}
               opponentAccuracy={game.enemyMetrics.accuracy}
               shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
-              currentTurnLabel={game.turnLabel}
             />
           </div>
         )}

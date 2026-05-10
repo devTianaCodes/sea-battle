@@ -1,8 +1,15 @@
-function StatChip({ label, value, accent = "text-slate-200" }) {
+function StatPair({ label, playerLabel, playerValue, opponentLabel, opponentValue }) {
   return (
-    <div className="rounded-full border border-cyan/20 bg-white/[0.04] px-2.5 py-1">
-      <span className="text-[0.58rem] uppercase tracking-[0.1em] text-slate-300">{label}</span>
-      <span className={`ml-1.5 text-[0.78rem] font-medium ${accent}`}>{value}</span>
+    <div className="battle-stat-pair">
+      <span className="battle-stat-title">{label}</span>
+      <span className="battle-stat-values">
+        <span>
+          {playerLabel} <strong>{playerValue}</strong>
+        </span>
+        <span>
+          {opponentLabel} <strong>{opponentValue}</strong>
+        </span>
+      </span>
     </div>
   );
 }
@@ -12,7 +19,6 @@ export default function BattleActionBar({
   playerAccuracy,
   opponentAccuracy,
   shipsRemaining,
-  currentTurnLabel,
 }) {
   return (
     <footer
@@ -23,9 +29,6 @@ export default function BattleActionBar({
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-[0.62rem] uppercase tracking-[0.12em] text-cyan-100">Action Bar</span>
-            <span className="rounded-full border border-cyan/15 bg-cyan/[0.06] px-2 py-0.5 text-[0.58rem] uppercase tracking-[0.1em] text-cyan-50">
-              {currentTurnLabel}
-            </span>
           </div>
           <p
             className="mt-1 text-[0.82rem] leading-5 text-slate-200 sm:text-[0.88rem]"
@@ -36,11 +39,21 @@ export default function BattleActionBar({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
-          <StatChip label="Your Acc" value={`${playerAccuracy}%`} accent="text-cyan-100" />
-          <StatChip label="Enemy Acc" value={`${opponentAccuracy}%`} accent="text-coral-100" />
-          <StatChip label="Your Fleet" value={shipsRemaining.player} accent="text-mint" />
-          <StatChip label="Enemy Fleet" value={shipsRemaining.opponent} accent="text-slate-100" />
+        <div className="battle-stat-grid">
+          <StatPair
+            label="Accuracy"
+            playerLabel="You"
+            playerValue={`${playerAccuracy}%`}
+            opponentLabel="Enemy"
+            opponentValue={`${opponentAccuracy}%`}
+          />
+          <StatPair
+            label="Fleet"
+            playerLabel="You"
+            playerValue={shipsRemaining.player}
+            opponentLabel="Enemy"
+            opponentValue={shipsRemaining.opponent}
+          />
         </div>
       </div>
     </footer>
