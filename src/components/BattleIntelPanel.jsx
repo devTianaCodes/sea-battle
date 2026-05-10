@@ -81,7 +81,7 @@ export default function BattleIntelPanel({
 
       <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
         <MetricCard label="Your accuracy" value={`${playerMetrics.accuracy}%`} accent="text-cyan-50" />
-        <MetricCard label="Opponent accuracy" value={`${enemyMetrics.accuracy}%`} accent="text-coral-50" />
+        <MetricCard label="Enemy accuracy" value={`${enemyMetrics.accuracy}%`} accent="text-coral-50" />
         <MetricCard label="Best streak" value={playerMetrics.bestStreak} />
         <MetricCard label="Enemy best streak" value={enemyMetrics.bestStreak} />
         <MetricCard label="Ships sunk" value={playerMetrics.sinks} />

@@ -21,7 +21,7 @@ export function getPhaseLabel(phase) {
 
 export function getTurnLabel(turn, isAiThinking) {
   if (isAiThinking || turn === TURN_STATES.AI) {
-    return "Opponent plotting";
+    return "Enemy plotting";
   }
 
   return "Your turn";

@@ -27,7 +27,7 @@ export default function StatusBar({
       <div className="status-control-row mt-1 flex flex-wrap items-center justify-between gap-2 sm:mt-1.5">
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
           <ShipTrack label="Your Fleet" active={shipsRemaining.player} />
-          <ShipTrack label="Enemy Fleet" active={shipsRemaining.opponent} dimmed />
+          <ShipTrack label="Enemy Fleet" active={shipsRemaining.enemy} dimmed />
         </div>
 
         <div className="status-actions flex shrink-0 flex-wrap items-center justify-end gap-1">

@@ -1,4 +1,4 @@
-function StatPair({ label, playerLabel, playerValue, opponentLabel, opponentValue }) {
+function StatPair({ label, playerLabel, playerValue, enemyLabel, enemyValue }) {
   return (
     <div className="battle-stat-pair">
       <span className="battle-stat-title">{label}</span>
@@ -7,7 +7,7 @@ function StatPair({ label, playerLabel, playerValue, opponentLabel, opponentValu
           {playerLabel} <strong>{playerValue}</strong>
         </span>
         <span>
-          {opponentLabel} <strong>{opponentValue}</strong>
+          {enemyLabel} <strong>{enemyValue}</strong>
         </span>
       </span>
     </div>
@@ -15,9 +15,8 @@ function StatPair({ label, playerLabel, playerValue, opponentLabel, opponentValu
 }
 
 export default function BattleActionBar({
-  latestEvent,
   playerAccuracy,
-  opponentAccuracy,
+  enemyAccuracy,
   shipsRemaining,
 }) {
   return (
@@ -30,13 +29,6 @@ export default function BattleActionBar({
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-[0.62rem] uppercase tracking-[0.12em] text-cyan-100">Action Bar</span>
           </div>
-          <p
-            className="mt-1 text-[0.82rem] leading-5 text-slate-200 sm:text-[0.88rem]"
-            role="status"
-            aria-live="polite"
-          >
-            {latestEvent}
-          </p>
         </div>
 
         <div className="battle-stat-grid">
@@ -44,15 +36,15 @@ export default function BattleActionBar({
             label="Accuracy"
             playerLabel="You"
             playerValue={`${playerAccuracy}%`}
-            opponentLabel="Enemy"
-            opponentValue={`${opponentAccuracy}%`}
+            enemyLabel="Enemy"
+            enemyValue={`${enemyAccuracy}%`}
           />
           <StatPair
             label="Fleet"
             playerLabel="You"
             playerValue={shipsRemaining.player}
-            opponentLabel="Enemy"
-            opponentValue={shipsRemaining.opponent}
+            enemyLabel="Enemy"
+            enemyValue={shipsRemaining.enemy}
           />
         </div>
       </div>

@@ -53,11 +53,11 @@ function getPageSlug(game, activeBoardView, setupBoardView) {
   }
 
   if (game.phase === GAME_PHASES.SETUP) {
-    return setupBoardView === "enemy" ? "setup-opponent-waters" : "setup-your-fleet";
+    return setupBoardView === "enemy" ? "setup-enemy-waters" : "setup-your-fleet";
   }
 
   if (game.phase === GAME_PHASES.BATTLE) {
-    return activeBoardView === "player" ? "battle-your-fleet" : "battle-opponent-waters";
+    return activeBoardView === "player" ? "battle-your-fleet" : "battle-enemy-waters";
   }
 
   return "game";
@@ -137,8 +137,6 @@ export default function GameShell() {
   const selectedShipSize = selectedShip?.size ?? null;
   const playerShipsAfloat = game.playerFleetStatus.filter((ship) => !ship.isSunk).length;
   const enemyShipsAfloat = game.enemyFleetStatus.filter((ship) => !ship.isSunk).length;
-  const latestEventMessage = game.eventLog[0]?.message ?? game.announcement;
-
   if (game.screen === "menu") {
     return (
       <main
@@ -216,7 +214,7 @@ export default function GameShell() {
       {game.backgroundEffectsEnabled ? (
         <BackgroundEffects energetic={game.phase === GAME_PHASES.BATTLE} />
       ) : null}
-      <TurnBanner visible={game.isAiThinking} label="Opponent Turn" />
+      <TurnBanner visible={game.isAiThinking} label="Enemy Turn" />
       <div className="relative z-10 flex flex-1 flex-col gap-2 overflow-hidden">
         {game.phase === GAME_PHASES.SETUP ? (
           <section className="setup-layout responsive-game-layout grid min-h-0 w-full max-w-full gap-3 overflow-x-hidden">
@@ -224,7 +222,7 @@ export default function GameShell() {
               <StatusBar
                 turnLabel={game.turnLabel}
                 announcement={game.announcement}
-                shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
+                shipsRemaining={{ player: playerShipsAfloat, enemy: enemyShipsAfloat }}
                 onPause={game.togglePause}
                 onOpenGuide={game.openInstructions}
                 onOpenSettings={() => game.openSettings("settings")}
@@ -255,7 +253,7 @@ export default function GameShell() {
                 className="setup-board-switcher"
                 views={[
                   { id: "player", label: "Your Fleet" },
-                  { id: "enemy", label: "Opponent Waters" },
+                  { id: "enemy", label: "Enemy Waters" },
                 ]}
               />
               <GameBoard
@@ -288,8 +286,8 @@ export default function GameShell() {
                 }`}
               />
               <GameBoard
-                title="Opponent Waters"
-                boardId="Opponent Waters"
+                title="Enemy Waters"
+                boardId="Enemy Waters"
                 board={game.enemyBoard}
                 focusCell={game.focus.enemy}
                 interactive={false}
@@ -302,9 +300,9 @@ export default function GameShell() {
                   setupBoardView === "enemy" ? "is-active" : ""
                 }`}
                 overlay={
-                  <div className="opponent-waters-warning absolute inset-0 z-10 flex items-center justify-center p-4">
+                  <div className="enemy-waters-warning absolute inset-0 z-10 flex items-center justify-center p-4">
                     <div className="glass-light rounded-[1rem] border border-coral/35 px-4 py-3 text-center text-[0.72rem] font-semibold uppercase tracking-[0.13em] text-coral shadow-[0_0_24px_rgba(255,107,107,0.2)] sm:px-5 sm:py-4 sm:text-xs">
-                      Opponent waters are dark and dangerous
+                      Enemy waters are dark and dangerous
                       <span className="ml-2 text-base leading-none text-coral sm:text-lg">X</span>
                     </div>
                   </div>
@@ -318,7 +316,7 @@ export default function GameShell() {
               <StatusBar
                 turnLabel={game.turnLabel}
                 announcement={game.announcement}
-                shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
+                shipsRemaining={{ player: playerShipsAfloat, enemy: enemyShipsAfloat }}
                 onPause={game.togglePause}
                 onOpenGuide={game.openInstructions}
                 onOpenSettings={() => game.openSettings("settings")}
@@ -330,15 +328,14 @@ export default function GameShell() {
                   onChange={setActiveBoardView}
                   className="battle-board-switcher"
                   views={[
-                    { id: "enemy", label: "Opponent Waters" },
+                    { id: "enemy", label: "Enemy Waters" },
                     { id: "player", label: "Your Fleet" },
                   ]}
                 />
                 <BattleActionBar
-                  latestEvent={latestEventMessage}
                   playerAccuracy={game.playerMetrics.accuracy}
-                  opponentAccuracy={game.enemyMetrics.accuracy}
-                  shipsRemaining={{ player: playerShipsAfloat, opponent: enemyShipsAfloat }}
+                  enemyAccuracy={game.enemyMetrics.accuracy}
+                  shipsRemaining={{ player: playerShipsAfloat, enemy: enemyShipsAfloat }}
                 />
               </div>
             </div>
@@ -358,8 +355,8 @@ export default function GameShell() {
                 }`}
               />
               <GameBoard
-                title="Opponent Waters"
-                boardId="Opponent Waters"
+                title="Enemy Waters"
+                boardId="Enemy Waters"
                 board={game.enemyBoard}
                 focusCell={game.focus.enemy}
                 interactive={
@@ -379,7 +376,7 @@ export default function GameShell() {
                   game.showShootPrompt ? (
                     <div className="shoot-prompt-overlay absolute inset-0 z-20 flex items-center justify-center p-4">
                       <div className="glass-light rounded-[1rem] border border-cyan/35 px-5 py-3 text-center text-[0.74rem] font-semibold uppercase tracking-[0.14em] text-cyan-50 shadow-[0_0_26px_rgba(0,212,255,0.18)] sm:text-xs">
-                        Shoot the opponent waters
+                        Shoot the enemy waters
                       </div>
                     </div>
                   ) : null

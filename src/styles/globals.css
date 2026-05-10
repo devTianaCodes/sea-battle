@@ -335,7 +335,7 @@ select {
   pointer-events: auto;
 }
 
-.opponent-waters-warning {
+.enemy-waters-warning {
   pointer-events: none;
   box-shadow:
     0 0 24px rgba(255, 107, 107, 0.18),

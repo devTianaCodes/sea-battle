@@ -122,7 +122,7 @@ export default function GameBoard({
                 <span className="thinking-dot" />
                 <span className="thinking-dot" />
                 <span className="thinking-dot" />
-                Opponent turn
+                Enemy turn
               </div>
             </div>
           ) : null}

@@ -557,7 +557,7 @@ export default function useSeaBattleGame() {
     setTurn(TURN_STATES.PLAYER);
     setMatchStartTime(Date.now());
     setShowShootPrompt(true);
-    setAnnouncement("Shoot the opponent waters.");
+    setAnnouncement("Shoot the enemy waters.");
     pushEvent(`Battle started on ${difficulty.toUpperCase()} difficulty.`, "system");
     soundEffects.play("start");
     return true;
@@ -672,10 +672,10 @@ export default function useSeaBattleGame() {
       setPlayerFleet(outcome.fleet);
       setAiShots(nextAiShots);
       setAnnouncement(
-        getAnnouncementForShot(outcome.shot, shipName, "Opponent")
+        getAnnouncementForShot(outcome.shot, shipName, "Enemy")
       );
       pushEvent(
-        `Opponent fired at ${formatCoordinate(nextShot.x, nextShot.y)}: ${
+        `Enemy fired at ${formatCoordinate(nextShot.x, nextShot.y)}: ${
           outcome.shot.result === "miss"
             ? "miss"
             : outcome.shot.result === "sunk"

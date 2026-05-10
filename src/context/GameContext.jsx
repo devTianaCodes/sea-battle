@@ -20,9 +20,9 @@ function createInitialStoreState() {
   return {
     gamePhase: "placement",
     playerBoard: initializeEmptyBoard(),
-    opponentBoard: initializeEmptyBoard(),
+    enemyBoard: initializeEmptyBoard(),
     playerShips: [],
-    opponentShips: [],
+    enemyShips: [],
     currentTurn: "player",
     playerScore: { hits: 0, misses: 0, accuracy: 0 },
     gameResult: null,
@@ -37,12 +37,12 @@ export const useGameStore = create(
       setGamePhase: (gamePhase) => set({ gamePhase }),
       placeShip: (shipPositions, isPlayer = true) =>
         set((state) => {
-          const key = isPlayer ? "playerShips" : "opponentShips";
+          const key = isPlayer ? "playerShips" : "enemyShips";
           return {
             [key]: [
               ...state[key],
               {
-                id: `${isPlayer ? "player" : "opponent"}-${state[key].length + 1}`,
+                id: `${isPlayer ? "player" : "enemy"}-${state[key].length + 1}`,
                 positions: shipPositions,
                 sunk: false,
               },
@@ -51,7 +51,7 @@ export const useGameStore = create(
         }),
       fireShot: (row, col, isPlayer = true) =>
         set((state) => {
-          const key = isPlayer ? "opponentBoard" : "playerBoard";
+          const key = isPlayer ? "enemyBoard" : "playerBoard";
           const board = state[key].map((boardRow) => boardRow.map((cell) => ({ ...cell })));
           const target = board[row]?.[col];
 
@@ -70,7 +70,7 @@ export const useGameStore = create(
       resetGame: () => set(createInitialStoreState()),
       toggleTurn: () =>
         set((state) => ({
-          currentTurn: state.currentTurn === "player" ? "opponent" : "player",
+          currentTurn: state.currentTurn === "player" ? "enemy" : "player",
         })),
       syncFromSnapshot: (snapshot) =>
         set({
@@ -83,7 +83,7 @@ export const useGameStore = create(
               state: cell.isHit ? "hit" : cell.isMiss ? "miss" : cell.shipId ? "ship" : "empty",
             }))
           ),
-          opponentBoard: snapshot.enemyBoard.map((row) =>
+          enemyBoard: snapshot.enemyBoard.map((row) =>
             row.map((cell) => ({
               row: cell.y,
               col: cell.x,
@@ -92,8 +92,8 @@ export const useGameStore = create(
             }))
           ),
           playerShips: normalizeFleetForStore(snapshot.playerFleet),
-          opponentShips: normalizeFleetForStore(snapshot.enemyFleet),
-          currentTurn: snapshot.turn === "ai" ? "opponent" : "player",
+          enemyShips: normalizeFleetForStore(snapshot.enemyFleet),
+          currentTurn: snapshot.turn === "ai" ? "enemy" : "player",
           playerScore: {
             hits: snapshot.playerMetrics.hits,
             misses: snapshot.playerMetrics.misses,
